@@ -5,11 +5,11 @@
 using namespace std;
 
 int main(int argc,
-    char* argv[])
+         char *argv[])
 {
     cout << "Hello World!" << endl;
 
-    vector<vector<int>> map = parseMap("../../../data/map.ppm");
+    vector<vector<int>> map = parseMap("../data/map.ppm");
 
     for (int y = 0; y < map.size(); y++)
     {

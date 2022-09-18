@@ -1,17 +1,17 @@
 #include <iostream>
 #include "parser.hpp"
 
-
-int getColorCode(int r, int g, int b){
-    if (r==255 && g==0 && b==0)
+int getColorCode(int r, int g, int b)
+{
+    if (r == 255 && g == 0 && b == 0)
         return 0;
-    else if (r==0 && g==255 && b==0)
+    else if (r == 0 && g == 255 && b == 0)
         return 1;
-    else if (r==0 && g==0 && b==0)
+    else if (r == 0 && g == 0 && b == 0)
         return 2;
-    else if (r==0 && g==0 && b==255)
+    else if (r == 0 && g == 0 && b == 255)
         return 3;
-    else if (r==255 && g==255 && b==0)
+    else if (r == 255 && g == 255 && b == 0)
         return 4;
     return -1;
 }
@@ -53,7 +53,8 @@ std::vector<std::vector<int>> processMapFile(std::ifstream &file)
     // skip the 4th line
     std::getline(file, line);
 
-    for (int y = 0; y < h; y++){
+    for (int y = 0; y < h; y++)
+    {
         for (int x = 0; x < w; x++)
         {
             std::getline(file, line);
@@ -63,7 +64,7 @@ std::vector<std::vector<int>> processMapFile(std::ifstream &file)
             line.erase(0, line.find(delimiter) + 1);
             int b = std::stoi(line.substr(0, line.find(delimiter)));
 
-            row.push_back(getColorCode(r,g,b));
+            row.push_back(getColorCode(r, g, b));
         }
         map.push_back(row);
         row.clear();
