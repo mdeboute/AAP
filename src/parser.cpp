@@ -1,29 +1,32 @@
 #include <iostream>
 #include "parser.hpp"
 
+enum Color
+{
+    RED = 0,
+    BLACK = 1,
+    BLUE = 2,
+    YELLOW = 3,
+    GREEN = 4,
+};
+
 int getColorCode(int r, int g, int b)
 {
     if (r == 255 && g == 0 && b == 0)
-        return 0;
-    else if (r == 0 && g == 255 && b == 0)
-        return 1;
+        return RED;
     else if (r == 0 && g == 0 && b == 0)
-        return 2;
+        return BLACK;
     else if (r == 0 && g == 0 && b == 255)
-        return 3;
+        return BLUE;
     else if (r == 255 && g == 255 && b == 0)
-        return 4;
+        return YELLOW;
     return -1;
 }
 
 void openFile(std::ifstream &file, std::string filePath)
 {
     file.open(filePath);
-    if (file.is_open())
-    {
-        std::cout << "File opened successfully" << std::endl;
-    }
-    else
+    if (!file.is_open())
     {
         std::cerr << "File open failed\n"
                   << std::endl;
@@ -79,4 +82,27 @@ std::vector<std::vector<int>> parseMap(std::string filePath)
     std::vector<std::vector<int>> map = processMapFile(file);
     file.close();
     return map;
+}
+
+std::vector<float> processConfig(std::ifstream &filePath)
+{
+    std::vector<float> config;
+    std::string line;
+    char const delimiter = ' ';
+
+    for (int i = 0; i < 3; i++)
+    {
+        std::getline(filePath, line);
+        config.push_back(std::stof(line.substr(0, line.find(delimiter))));
+    }
+    return config;
+}
+
+std::vector<float> parseConfig(std::string filePath)
+{
+    std::ifstream file;
+    openFile(file, filePath);
+    std::vector<float> config = processConfig(file);
+    file.close();
+    return config;
 }

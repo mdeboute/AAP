@@ -1,15 +1,28 @@
 //#include "gurobi_c++.h"
 #include "parser.hpp"
-#include <cstring>
+#include <string>
 #include <iostream>
+#include <filesystem>
+
 using namespace std;
+namespace fs = std::__fs::filesystem;
 
-int main(int argc,
-         char *argv[])
+int main(int argc, char *argv[])
 {
-    cout << "Hello World!" << endl;
+    const string root_dir = fs::current_path().parent_path();
+    const string data_dir = root_dir + "/data";
 
-    vector<vector<int>> map = parseMap("../data/map.ppm");
+    string map_file = data_dir + "/map.ppm";
+    string config_file = data_dir + "/config.txt";
+
+    vector<float> config = parseConfig(config_file);
+    vector<vector<int>> map = parseMap(map_file);
+
+    cout << "Discretization step of angles in degrees: " << config[0] << endl;
+    cout << "Furnace radius: " << config[1] << endl;
+    cout << "Radius of action of a firefighter: " << config[2] << endl;
+    cout << endl;
+    cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
 
     for (int y = 0; y < map.size(); y++)
     {
