@@ -4,10 +4,10 @@
 enum Color
 {
     RED = 0,
-    BLACK = 1,
-    BLUE = 2,
-    YELLOW = 3,
-    GREEN = 4,
+    GREEN = 1,
+    BLACK = 2,
+    BLUE = 3,
+    YELLOW = 4,
 };
 
 int getColorCode(int r, int g, int b)

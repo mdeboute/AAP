@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     vector<float> config = parseConfig(config_file);
     vector<vector<int>> map = parseMap(map_file);
 
-    cout << "Discretization step of angles in degrees: " << config[0] << endl;
+    cout << "Number of angles: " << config[0] << endl;
     cout << "Furnace radius: " << config[1] << endl;
     cout << "Radius of action of a firefighter: " << config[2] << endl;
     cout << endl;
