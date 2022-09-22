@@ -8,7 +8,7 @@ enum direction
     RIGHT = 1,
 };
 
-struct point
+struct pixel
 {
     int x;
     int y;
@@ -16,12 +16,55 @@ struct point
 
 struct ray
 {
-    point source;
+    pixel source;
     float slope;
     float intercept;
     direction dir;
+    pixel target;
 };
 
+
+vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height){
+    // possibly switch to float center coordinates and cast (int) to get pixels
+    int x_bound_a = (int) floor(center.x + 0.5 - radius);
+    int x_bound_b = (int) ceil(center.x + 0.5 + radius);
+    int y_bound_a = (int) floor(center.y + 0.5 - radius);
+    int y_bound_b = (int) ceil(center.y + 0.5 + radius);
+
+    vector<pixel> pixels;
+
+    for (int y = y_bound_a; y < y_bound_b; y++){
+        for (int x = x_bound_a; x < x_bound_b; x++){
+            if (x == center.x || y == center.y ||
+                (x < center.x && y > center.y &&    // North-West
+                pow(x+1-(center.x+0.5), 2) + pow(y-(center.y+0.5), 2) <= pow(radius,2)) ||
+                (x < center.x && y < center.y &&    // South-West
+                pow(x+1-(center.x+0.5), 2) + pow(y+1-(center.y+0.5), 2) <= pow(radius,2)) ||
+                (x > center.x && y < center.y &&    // South-East
+                pow(x-(center.x+0.5), 2) + pow(y+1-(center.y+0.5), 2) <= pow(radius,2)) ||
+                (x > center.x && y > center.y &&    // North-East
+                pow(x-(center.x+0.5), 2) + pow(y-(center.y+0.5), 2) <= pow(radius,2))
+            ){
+                if (x >= 0 && x < width && y >= 0 && y < height){
+                    pixel pixel;
+                    pixel.x = x;
+                    pixel.y = y;
+                    pixels.push_back(pixel);
+                }
+            }
+        }
+    }
+
+    return pixels;
+}
+
+vector<pixel> calculate_ray_path(vector<vector<int>> map, ray ray){
+    vector<pixel> path;
+
+    // To Do
+
+    return path;
+}
 
 vector<vector<int>> solve(vector<vector<int>> map, vector<float> config)
 {
@@ -32,13 +75,13 @@ vector<vector<int>> solve(vector<vector<int>> map, vector<float> config)
     int height = map.size();
     int width = map[0].size();
 
-    vector<point> fire_centers;
+    vector<pixel> fire_centers;
 
     for (int y = 0 ; y < height ; y++){
         for (int x = 0 ; x < width ; x++){
             if (map[y][x] == 0) //RED
             {
-                point fire;
+                pixel fire;
                 fire.x = x;
                 fire.y = y;
                 fire_centers.push_back(fire);
@@ -57,10 +100,10 @@ vector<vector<int>> solve(vector<vector<int>> map, vector<float> config)
         for (int r = 0; r < nb_rays; r++)
         {
             float degrees = r * 360.0 / nb_rays;
-            float x_r = fire_centers[f].x + furnace_radius + cos(degrees * (M_PI / 180));
-            float y_r = fire_centers[f].y + furnace_radius + sin(degrees * (M_PI / 180));
+            float x_r = fire_centers[f].x + 0.5 + furnace_radius + cos(degrees * (M_PI / 180));
+            float y_r = fire_centers[f].y + 0.5 + furnace_radius + sin(degrees * (M_PI / 180));
             ray ray;
-            ray.slope = (y_r - fire_centers[f].y) / (x_r - fire_centers[f].x);
+            ray.slope = (y_r - fire_centers[f].y+0.5) / (x_r - fire_centers[f].x+0.5);
             ray.intercept = y_r - ray.slope * x_r;
             ray.source = fire_centers[f];   //possible copy of data. Can be improved later
             if (degrees >= 90 && degrees < 270)
@@ -68,6 +111,8 @@ vector<vector<int>> solve(vector<vector<int>> map, vector<float> config)
             else
                 ray.dir = RIGHT;
             
+            vector<pixel> ray_path = calculate_ray_path(map, ray);
+
             rays.push_back(ray);
         }
         fire_rays.push_back(rays);
