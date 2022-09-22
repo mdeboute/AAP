@@ -60,8 +60,27 @@ vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height
 
 vector<pixel> calculate_ray_path(vector<vector<int>> map, ray ray){
     vector<pixel> path;
+    bool obstacle_reached = false;
+    if (ray.dir == RIGHT){
+        for(int x = ray.source.x; x < map[0].size()-1; x++){
+            int curr_y = (int) floor(ray.slope * x + ray.intercept);
+            int next_y = (int) ceil(ray.slope * x+1 + ray.intercept);
 
-    // To Do
+            for(int y = curr_y; y < next_y; y++){
+                pixel pixel;
+                pixel.x = x;
+                pixel.y = y;
+                path.push_back(pixel);
+
+                if(map[y][x] != YELLOW || y+1 >= map.size()){
+                    obstacle_reached = true;
+                    break;
+                }
+            }
+
+            if (obstacle_reached) break;
+        }
+    }
 
     return path;
 }

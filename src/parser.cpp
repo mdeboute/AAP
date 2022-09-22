@@ -1,14 +1,6 @@
 #include <iostream>
 #include "parser.hpp"
 
-enum Color
-{
-    RED = 0,
-    GREEN = 1,
-    BLACK = 2,
-    BLUE = 3,
-    YELLOW = 4,
-};
 
 int getColorCode(int r, int g, int b)
 {
