@@ -5,7 +5,7 @@
 #include <filesystem>
 
 using namespace std;
-namespace fs = std::__fs::filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char *argv[])
 {
