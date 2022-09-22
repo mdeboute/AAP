@@ -64,9 +64,15 @@ namespace std {
 #   else
 // Include it
 #       include <filesystem>
-        namespace std {
-            namespace fs = __fs::filesystem;
-        }
+#       ifdef __APPLE__
+namespace std {
+    namespace fs = __fs::filesystem;
+}
+#       else
+namespace std {
+    namespace fs = filesystem;
+}
+#       endif
 #   endif
 
 #endif // #ifndef INCLUDE_STD_FILESYSTEM_EXPERIMENTAL
