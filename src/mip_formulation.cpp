@@ -4,7 +4,7 @@ using namespace std;
 
 enum direction
 {
-    LEFT = 0,
+    LEFT = -1,
     RIGHT = 1,
 };
 
@@ -61,28 +61,39 @@ vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height
 vector<pixel> calculate_ray_path(vector<vector<int>> map, ray ray){
     vector<pixel> path;
     bool obstacle_reached = false;
-    if (ray.dir == RIGHT){
-        for(int x = ray.source.x; x < map[0].size()-1; x++){
-            int curr_y = (int) floor(ray.slope * x + ray.intercept);
-            int next_y = (int) ceil(ray.slope * x+1 + ray.intercept);
+    int x = ray.source.x;
+    int curr_y = (int) floor(ray.slope * x + ray.intercept);
 
-            for(int y = curr_y; y < next_y; y++){
-                pixel pixel;
-                pixel.x = x;
-                pixel.y = y;
-                path.push_back(pixel);
+    while (!obstacle_reached){
+        int next_x = x + ray.dir;
+        int next_y = (int) ceil(ray.slope * next_x + ray.intercept);
 
-                if(map[y][x] != YELLOW || y+1 >= map.size()){
-                    obstacle_reached = true;
-                    break;
-                }
+        int step = (int) (next_y - curr_y) / abs(next_y - curr_y);
+
+        for(int y = curr_y; y != next_y; y += step){
+            pixel pixel;
+            pixel.x = x;
+            pixel.y = y;
+            path.push_back(pixel);
+
+            if(map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size()){
+                obstacle_reached = true;
+                break;
             }
-
-            if (obstacle_reached) break;
         }
+        x = next_x;
+        curr_y = next_y;
     }
 
     return path;
+}
+
+vector<pixel> calculate_ray_neighborhood(vector<vector<int>> feasibility_map, ray ray, vector<pixel> ray_path){
+    vector<pixel> neighborhood;
+
+    // get feasible placements for fire fighters to stop ray ray
+
+    return neighborhood;
 }
 
 vector<vector<int>> solve(vector<vector<int>> map, vector<float> config)
@@ -95,10 +106,16 @@ vector<vector<int>> solve(vector<vector<int>> map, vector<float> config)
     int width = map[0].size();
 
     vector<pixel> fire_centers;
-
+    vector<vector<int>> feasibility_map;
+    // We get the fire centers and a map overlay of places we can't put firefighters
     for (int y = 0 ; y < height ; y++){
+        vector<int> line;
         for (int x = 0 ; x < width ; x++){
-            if (map[y][x] == 0) //RED
+            if (map[y][x] == YELLOW)
+                line.push_back(1);
+            else
+                line.push_back(0); //to changer if firefighters can be in cities
+            if (map[y][x] == RED) //
             {
                 pixel fire;
                 fire.x = x;
@@ -107,9 +124,16 @@ vector<vector<int>> solve(vector<vector<int>> map, vector<float> config)
             }
             
         }
+        feasibility_map.push_back(line);
     }
 
     int nb_fires = fire_centers.size();
+
+    for (int f = 0; f < nb_fires; f++){
+        vector<pixel> furnace = circle_to_pixels(fire_centers[f], furnace_radius, width, height);
+        for (auto &&pixel : furnace)
+            feasibility_map[pixel.y][pixel.x] = 0;      
+    }
 
     vector<vector<ray>> fire_rays;
 
