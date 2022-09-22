@@ -3,7 +3,7 @@ project(APP)
 set(CMAKE_BUILD_TYPE Debug)
 add_compile_options(-std=c++17)
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-add_compile_options(stdc++fs)
+link_libraries(stdc++fs)
 endif()
 
 # find_library(GUROBI_LIBRARY_CPLUS libgurobi_c++.a OR gurobi_c++mdd2019.lib PATHS /opt/local/stow/gurobi910/linux64/lib/ /Library/gurobi903/mac64/lib/ C:/gurobi951/win64/lib/)
