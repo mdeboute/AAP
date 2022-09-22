@@ -1,11 +1,10 @@
 //#include "gurobi_c++.h"
 #include "parser.hpp"
+#include "filesystem.hpp"
 #include <string>
 #include <iostream>
-#include <filesystem>
 
 using namespace std;
-namespace fs = std::filesystem;
 
 int main(int argc, char *argv[])
 {
