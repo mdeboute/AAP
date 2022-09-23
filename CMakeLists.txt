@@ -17,7 +17,8 @@ endif()
 include_directories(include) # + ${GUROBI_INCLUDE_DIR}
 
 file(GLOB SRC src/*.cpp src/*/*.cpp)
-add_executable(a.out ${SRC})
+add_executable(a.out ${SRC} mains/main.cpp)
+add_executable(test ${SRC} mains/test.cpp)
 # target_link_libraries(a.out ${GUROBI_LIBRARIES})
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR}/data)

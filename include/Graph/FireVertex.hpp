@@ -7,9 +7,21 @@ class FireVertex : public Vertex {
     private :
         Position fireCenter;
     public :
-        FireVertex(){}
-        FireVertex(Position p, int id) : Vertex(p,id){}
-        Position getFireCenter(){return fireCenter;}
+        FireVertex();
+        FireVertex(Position fireCenter, Position collide, int id);
+        Position getFireCenter();
 };
+
+inline std::ostream& operator << (std::ostream& os, FireVertex v){
+    os << "fire of id : " << v.getID() << " from " << v.getFireCenter() << " to " << v.getPos();
+    return os;
+}
+
+inline bool operator == (FireVertex f1, FireVertex f2){
+    return 
+    (f1.getPos() == f2.getPos()) && 
+    (f1.getID() == f2.getID()) &&
+    (f1.getFireCenter() == f2.getFireCenter());
+}
 
 #endif

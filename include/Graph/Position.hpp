@@ -17,7 +17,7 @@ class Position{
 };
 
 inline std::ostream& operator << (std::ostream& os, Position p){
-    os << "(" << p.getX() << ")(" << p.getY() << ")";
+    os << "(" << p.getX() << ";" << p.getY() << ")";
     return os;
 }
 

@@ -17,7 +17,6 @@ class Vertex{
     public :
         Position getPos();
         int getID();
-
 };
 
 #endif

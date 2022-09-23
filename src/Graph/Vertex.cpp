@@ -6,7 +6,6 @@ Vertex::Vertex(Position p, int id){
 }
 
 Position Vertex::getPos(){
-    std::cout << &(p) << std::endl;
     return p;
 }
 
