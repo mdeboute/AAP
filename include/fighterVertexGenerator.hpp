@@ -10,5 +10,4 @@ std::vector<FighterVertex> generateFighter(std::vector<FireVertex> fireTab);
 // best fited in fireVertex class ??
 std::vector<FighterVertex> generateFightersOfFire(std::vector<FireVertex> subFireTab, FireVertex fire);
 
-
 #endif

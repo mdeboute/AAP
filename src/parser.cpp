@@ -1,7 +1,6 @@
 #include <iostream>
 #include "parser.hpp"
 
-
 int getColorCode(int r, int g, int b)
 {
     if (r == 255 && g == 0 && b == 0)

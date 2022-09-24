@@ -1,10 +1,10 @@
-#include "../../include/Graph/Graph.hpp"
+#include "Graph/Graph.hpp"
 
-Graph::Graph(){}
+Graph::Graph() {}
 
-Graph::Graph(std::vector<FireVertex> fireTab, 
-             std::vector<FighterVertex> fighterTab, 
-             std::vector<std::vector<int>> fighterAdjacencyList, 
+Graph::Graph(std::vector<FireVertex> fireTab,
+             std::vector<FighterVertex> fighterTab,
+             std::vector<std::vector<int>> fighterAdjacencyList,
              std::vector<std::vector<int>> fireAdjacencyList)
 {
     this->fireTab = fireTab;
@@ -13,17 +13,19 @@ Graph::Graph(std::vector<FireVertex> fireTab,
     this->fireAdjacencyList = fireAdjacencyList;
 }
 
-Graph::Graph(std::vector<FireVertex> fireTab, 
+Graph::Graph(std::vector<FireVertex> fireTab,
              std::vector<FighterVertex> fighterTab,
              std::vector<Edge> edges)
 {
     this->fireTab = fireTab;
     this->fighterTab = fighterTab;
-    for (int i=0; i<fireTab.size(); i++){
+    for (int i = 0; i < fireTab.size(); i++)
+    {
         this->fireAdjacencyList.push_back(std::vector<int>());
     }
 
-    for (int i=0; i<fighterTab.size(); i++){
+    for (int i = 0; i < fighterTab.size(); i++)
+    {
         this->fighterAdjacencyList.push_back(std::vector<int>());
     }
 
@@ -31,10 +33,11 @@ Graph::Graph(std::vector<FireVertex> fireTab,
     {
         int fireID = e.getFireVertex().getID();
         int fighterID = e.getFighterVertex().getID();
-        
-        if (fireID >= fireTab.size() || fighterID >= fighterTab.size()){
+
+        if (fireID >= fireTab.size() || fighterID >= fighterTab.size())
+        {
             std::cout << "!!! in graph creation, edge " << e.getID() << " given have fire and fighter id of " << fireID
-            << " and " << fighterID << " while max id are " << fireTab.size() << " and " << fighterTab.size() << " !!! " << std::endl;
+                      << " and " << fighterID << " while max id are " << fireTab.size() << " and " << fighterTab.size() << " !!! " << std::endl;
         }
 
         this->fighterAdjacencyList[fighterID].push_back(fireID);
@@ -42,34 +45,42 @@ Graph::Graph(std::vector<FireVertex> fireTab,
     }
 }
 
-const std::vector<FireVertex>& Graph::getFireVertexTab(){
+const std::vector<FireVertex> &Graph::getFireVertexTab()
+{
     return fireTab;
 }
 
-const FireVertex& Graph::getFireVertex(int id){
+const FireVertex &Graph::getFireVertex(int id)
+{
     return fireTab[id];
 }
 
-const std::vector<FighterVertex>& Graph::getFigtherVertexTab(){
+const std::vector<FighterVertex> &Graph::getFigtherVertexTab()
+{
     return fighterTab;
 }
 
-const FighterVertex& Graph::getFigtherVertex(int id){
+const FighterVertex &Graph::getFigtherVertex(int id)
+{
     return fighterTab[id];
 }
 
-const std::vector<std::vector<int>>& Graph::getFighterAdjacencyList(){
+const std::vector<std::vector<int>> &Graph::getFighterAdjacencyList()
+{
     return fighterAdjacencyList;
 }
 
-const std::vector<int>& Graph::getFighterAdjacencyList(int id){
+const std::vector<int> &Graph::getFighterAdjacencyList(int id)
+{
     return fighterAdjacencyList[id];
 }
 
-const std::vector<std::vector<int>>& Graph::getFireAdjacencyList(){
+const std::vector<std::vector<int>> &Graph::getFireAdjacencyList()
+{
     return fireAdjacencyList;
 }
 
-const std::vector<int>& Graph::getFireAdjacencyList(int id){
+const std::vector<int> &Graph::getFireAdjacencyList(int id)
+{
     return fireAdjacencyList[id];
 }

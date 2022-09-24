@@ -1,5 +1,5 @@
-#include "../../include/Graph/FireFighterVertex.hpp"
+#include "Graph/FireFighterVertex.hpp"
 
-FighterVertex::FighterVertex(){}
+FighterVertex::FighterVertex() {}
 
-FighterVertex::FighterVertex(Position p, int id) : Vertex(p,id){}
+FighterVertex::FighterVertex(Position p, int id) : Vertex(p, id) {}

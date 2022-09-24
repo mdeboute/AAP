@@ -1,14 +1,17 @@
-#include "../../include/Graph/Vertex.hpp"
+#include "Graph/Vertex.hpp"
 
-Vertex::Vertex(Position p, int id){
+Vertex::Vertex(Position p, int id)
+{
     this->p = p;
     this->id = id;
 }
 
-Position Vertex::getPos(){
+Position Vertex::getPos()
+{
     return p;
 }
 
-int Vertex::getID(){
+int Vertex::getID()
+{
     return this->id;
 }

@@ -6,7 +6,6 @@
 #include <fstream>
 #include <vector>
 
-
 enum Color
 {
     RED = 0,

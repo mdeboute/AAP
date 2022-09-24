@@ -1,21 +1,25 @@
-#include "../../include/Graph/Edge.hpp"
+#include "Graph/Edge.hpp"
 
-Edge::Edge(){}
+Edge::Edge() {}
 
-Edge::Edge(FighterVertex fighter, FireVertex fire, int id){
+Edge::Edge(FighterVertex fighter, FireVertex fire, int id)
+{
     this->fighter = fighter;
     this->fire = fire;
     this->id = id;
 }
 
-FireVertex Edge::getFireVertex(){
+FireVertex Edge::getFireVertex()
+{
     return fire;
 }
 
-FighterVertex Edge::getFighterVertex(){
+FighterVertex Edge::getFighterVertex()
+{
     return fighter;
 }
 
-int Edge::getID(){
+int Edge::getID()
+{
     return id;
 }

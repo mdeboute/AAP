@@ -3,20 +3,20 @@
 
 #include "Position.hpp"
 
-
 // abstract class
-class Vertex{
-    private :
-        Position p;
-        int id = -42;
+class Vertex
+{
+private:
+    Position p;
+    int id = -42;
 
-    protected :
-        Vertex(){}
-        Vertex(Position p, int id);
+protected:
+    Vertex() {}
+    Vertex(Position p, int id);
 
-    public :
-        Position getPos();
-        int getID();
+public:
+    Position getPos();
+    int getID();
 };
 
 #endif

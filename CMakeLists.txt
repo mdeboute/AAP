@@ -15,10 +15,14 @@ endif()
 # set(GUROBI_INCLUDE_DIR /opt/local/stow/gurobi910/linux64/include/ /Library/gurobi903/mac64/include/ C:/gurobi951/win64/include/)
 
 include_directories(include) # + ${GUROBI_INCLUDE_DIR}
+file(GLOB SRC src/*.cpp src/Graph/*.cpp)
 
-file(GLOB SRC src/*.cpp src/*/*.cpp)
-add_executable(a.out ${SRC} mains/main.cpp)
-add_executable(test ${SRC} mains/test.cpp)
+file(GLOB MAIN src/exec/main.cpp)
+add_executable(main.out ${SRC} ${MAIN})
+
+file(GLOB TEST src/exec/test.cpp)
+add_executable(test.out ${SRC} ${TEST})
+
 # target_link_libraries(a.out ${GUROBI_LIBRARIES})
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR}/data)
