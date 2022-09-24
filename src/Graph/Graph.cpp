@@ -1,4 +1,4 @@
-#include "../../include/Graph/graph.hpp"
+#include "../../include/Graph/Graph.hpp"
 
 Graph::Graph(){}
 
@@ -33,8 +33,8 @@ Graph::Graph(std::vector<FireVertex> fireTab,
         int fighterID = e.getFighterVertex().getID();
         
         if (fireID >= fireTab.size() || fighterID >= fighterTab.size()){
-            std::cout << "/!\ in graph creation, edge " << e.getID() << " given have fire and fighter id of " << fireID
-            << " and " << fighterID << " while max id are " << fireTab.size() << " and " << fighterTab.size() << " /!\ " << std::endl;
+            std::cout << "!!! in graph creation, edge " << e.getID() << " given have fire and fighter id of " << fireID
+            << " and " << fighterID << " while max id are " << fireTab.size() << " and " << fighterTab.size() << " !!! " << std::endl;
         }
 
         this->fighterAdjacencyList[fighterID].push_back(fireID);

@@ -5,14 +5,14 @@
 
 class Position{
     private :
-        int x = -42;
-        int y = -42;
+        double x = -42;
+        double y = -42;
 
     public :
-        int getX();
-        int getY();
+        double getX();
+        double getY();
         Position(){}
-        Position(int x,int y);
+        Position(double x,double y);
         double dist(Position p);
 };
 

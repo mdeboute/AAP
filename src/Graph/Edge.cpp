@@ -15,3 +15,7 @@ FireVertex Edge::getFireVertex(){
 FighterVertex Edge::getFighterVertex(){
     return fighter;
 }
+
+int Edge::getID(){
+    return id;
+}

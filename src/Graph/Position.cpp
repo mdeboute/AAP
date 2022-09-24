@@ -1,16 +1,16 @@
 #include "../../include/Graph/Position.hpp"
 #include <cmath>
 
-Position::Position(int x, int y){
+Position::Position(double x, double y){
     this->x = x;
     this->y = y;
 }
 
-int Position::getX(){
+double Position::getX(){
     return this->x;
 }
 
-int Position::getY(){
+double Position::getY(){
     return this->y;
 }
 
