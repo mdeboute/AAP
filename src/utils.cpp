@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include "parser.hpp"
 
 
 std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height)
