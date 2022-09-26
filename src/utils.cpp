@@ -42,15 +42,20 @@ std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int h
 
 std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray)
 {
+    //std::cout << "Ray(" << ray.source.x << "," << ray.source.y << ")" << ray.dir << ": y = " << ray.slope << "*x + " << ray.intercept << " in path vector" << std::endl;  //display current ray degrees
+
     std::vector<pixel> path;
     bool obstacle_reached = false;
     int x = ray.source.x;
-    int curr_y = (int)floor(ray.slope * x + ray.intercept);
-
+    int curr_y = ray.source.y;
+    // Check these to make sure all values are accounted for
     while (!obstacle_reached)
     {
         int next_x = x + ray.dir;
         int next_y = (int)ceil(ray.slope * next_x + ray.intercept);
+
+        if (next_y == curr_y)
+            next_y = curr_y + 1;
 
         int step = (int)(next_y - curr_y) / abs(next_y - curr_y);
 
@@ -60,7 +65,7 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray
             pixel.x = x;
             pixel.y = y;
             path.push_back(pixel);
-
+            //std::cout << "put pixel " << x << "," << y << " in path vector" << std::endl;  //display current ray degrees
             if (map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size())
             {
                 obstacle_reached = true;
@@ -68,17 +73,33 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray
             }
         }
         x = next_x;
-        curr_y = next_y;
+        if (x < 0 || x >= map[0].size())
+            break;
+        curr_y = (int)floor(ray.slope * x + ray.intercept);
     }
 
     return path;
 }
 
-std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, ray ray, std::vector<pixel> ray_path)
+std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, std::vector<pixel> ray_path, float action_radius)
 {
+    // make sure feasibility_map is a copy
     std::vector<pixel> neighborhood;
+    int height = feasibility_map.size();
+    int width = feasibility_map[0].size();
 
-    // get feasible placements for fire fighters to stop ray ray
+    for (int p = 0; p < ray_path.size(); p++)
+    {
+        std::vector<pixel> circle_pixels = circle_to_pixels(ray_path[p], action_radius, width, height);
+        for each (pixel pixel in circle_pixels)
+        {
+            if (feasibility_map[pixel.y][pixel.x] == 1)
+            {
+                neighborhood.push_back(pixel);
+                feasibility_map[pixel.y][pixel.x] = 0;
+            }
+        }
+    }
 
     return neighborhood;
 }

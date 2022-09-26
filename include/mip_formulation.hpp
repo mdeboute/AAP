@@ -1,7 +1,7 @@
 #ifndef MIP_FORMULATION_HPP
 #define MIP_FORMULATION_HPP
 
-//#include "gurobi_c++.h"
+#include "gurobi_c++.h"
 #include "parser.hpp"
 #include <cstring>
 #include <cmath>
