@@ -6,7 +6,7 @@ using namespace std;
 std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vector<float> config)
 {
     //int nb_rays = (int)config[0];
-    int nb_rays = 6;
+    int nb_rays = 25;
     float furnace_radius = config[1];
     float action_radius = config[2];
 
@@ -60,8 +60,8 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
         {
             float degrees = r * 360.0 / nb_rays;
             std::cout << degrees << std::endl;  //display current ray degrees
-            float x_r = fire_centers[f].x + 0.5 + furnace_radius + cos(degrees * (M_PI / 180));
-            float y_r = fire_centers[f].y + 0.5 + furnace_radius + sin(degrees * (M_PI / 180));
+            float x_r = fire_centers[f].x + 0.5 + furnace_radius * cos(degrees * (M_PI / 180));
+            float y_r = fire_centers[f].y + 0.5 + furnace_radius * sin(degrees * (M_PI / 180));
             ray ray;
             ray.slope = (y_r - fire_centers[f].y + 0.5) / (x_r - fire_centers[f].x + 0.5);
             ray.intercept = y_r - ray.slope * x_r;
@@ -74,10 +74,10 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
             std::cout << "Ray " << r << ": y = " << ray.slope << " * x + " << ray.intercept << " from(" << ray.source.x << ", " << ray.source.y << ")";
 
             std::vector<pixel> ray_path = calculate_ray_path(map, ray);
+
             for (size_t i = 1; i < ray_path.size()-1; i++)
-            {
                 map[ray_path[i].y][ray_path[i].x] = ORANGE;
-            }
+
             ray.target = ray_path[ray_path.size() - 1];
 
             std::cout << " to(" << ray.target.x << ", " << ray.target.y << ") in direction " << ray.dir << std::endl;  //display current ray
@@ -217,6 +217,12 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
                     {
                         if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
                         {
+                            pixel firefighter;
+                            firefighter.x = i;
+                            firefighter.y = j;
+                            vector<pixel> action_area = circle_to_pixels(firefighter, action_radius, width, height);
+                            for (pixel p : action_area)
+                                map[p.y][p.x] = LIME;
                             cout << "We place a firefigher at position (" << i << ", " << j << ")" << endl;
                             map[j][i] = GREEN;
                         }

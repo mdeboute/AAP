@@ -7,6 +7,30 @@
 
 using namespace std;
 
+void display_map(vector<vector<int>> map) {
+    for (int y = 0; y < map.size(); y++)
+    {
+        for (int x = 0; x < map[y].size(); x++)
+        {
+            if (map[y][x] == BLUE)
+                cout << "~";
+            if (map[y][x] == YELLOW)
+                cout << " ";
+            if (map[y][x] == BLACK)
+                cout << "$";
+            if (map[y][x] == RED)
+                cout << "X";
+            if (map[y][x] == GREEN)
+                cout << "O";
+            if (map[y][x] == ORANGE)
+                cout << "*";
+            if (map[y][x] == LIME)
+                cout << "@";
+        }
+        cout << endl;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     const fs::path root_dir = fs::current_path().parent_path();
@@ -27,7 +51,9 @@ int main(int argc, char *argv[])
 
     display_map(map);
 
-    // map = solve(map, config);
+    map = solve(map, config);
+
+    display_map(map);
 
     return 0;
 }

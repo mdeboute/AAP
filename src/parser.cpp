@@ -14,6 +14,59 @@ int getColorCode(int r, int g, int b)
     return -1;
 }
 
+void getCodeColor(Color code, int* r, int* g, int* b) {
+    switch (code)
+    {
+    case RED:
+        *r = 255;
+        *g = 0;
+        *b = 0;
+        break;
+    case GREEN:
+        *r = 0;
+        *g = 255;
+        *b = 0;
+        break;
+    case BLACK:
+        *r = 0;
+        *g = 0;
+        *b = 0;
+        break;
+    case BLUE:
+        *r = 0;
+        *g = 0;
+        *b = 255;
+        break;
+    case YELLOW:
+        *r = 255;
+        *g = 255;
+        *b = 0;
+        break;
+    case ORANGE:
+        *r = 255;
+        *g = 165;
+        *b = 0;
+        break;
+    case MAGENTA:
+        *r = 255;
+        *g = 0;
+        *b = 255;
+        break;
+    case LIME:
+        *r = 165;
+        *g = 255;
+        *b = 0;
+        break;
+    case CYAN:
+        *r = 0;
+        *g = 255;
+        *b = 255;
+        break;
+    default:
+        break;
+    }
+}
+
 void openFile(std::ifstream &file, std::string filePath)
 {
     file.open(filePath);
