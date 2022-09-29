@@ -9,9 +9,8 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    const fs::path root_dir = fs::current_path().parent_path();
-    const string data_dir = string(root_dir) + "/data";
-    // const string data_dir = "../data";
+    const string root_dir = fs::current_path().parent_path().string();
+    const string data_dir = root_dir + "/data";
 
     string map_file = data_dir + "/map.ppm";
     string config_file = data_dir + "/config.txt";
