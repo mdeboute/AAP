@@ -1,7 +1,6 @@
 #include "utils.hpp"
 #include "parser.hpp"
 
-
 std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height)
 {
     // possibly switch to float center coordinates and cast (int) to get pixels
@@ -42,7 +41,7 @@ std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int h
 
 std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray)
 {
-    //std::cout << "Ray(" << ray.source.x << "," << ray.source.y << ")" << ray.dir << ": y = " << ray.slope << "*x + " << ray.intercept << " in path vector" << std::endl;  //display current ray degrees
+    // std::cout << "Ray(" << ray.source.x << "," << ray.source.y << ")" << ray.dir << ": y = " << ray.slope << "*x + " << ray.intercept << " in path vector" << std::endl;  //display current ray degrees
 
     std::vector<pixel> path;
     bool obstacle_reached = false;
@@ -65,7 +64,7 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray
             pixel.x = x;
             pixel.y = y;
             path.push_back(pixel);
-            //std::cout << "put pixel " << x << "," << y << " in path vector" << std::endl;  //display current ray degrees
+            // std::cout << "put pixel " << x << "," << y << " in path vector" << std::endl;  //display current ray degrees
             if (map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size())
             {
                 obstacle_reached = true;
@@ -91,7 +90,7 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feas
     for (int p = 0; p < ray_path.size(); p++)
     {
         std::vector<pixel> circle_pixels = circle_to_pixels(ray_path[p], action_radius, width, height);
-        for each (pixel pixel in circle_pixels)
+        for (const pixel &pixel : circle_pixels)
         {
             if (feasibility_map[pixel.y][pixel.x] == 1)
             {
