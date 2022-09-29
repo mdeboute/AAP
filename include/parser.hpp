@@ -8,11 +8,15 @@
 
 enum Color
 {
-    RED = 0,
-    GREEN = 1,
-    BLACK = 2,
-    BLUE = 3,
-    YELLOW = 4,
+    RED = 0,    // color to mark fire center
+    GREEN = 1,  // color to mark firefighter position
+    BLACK = 2,  // color to mark city area
+    BLUE = 3,   // color to mark inaccessible area
+    YELLOW = 4, // color to visualize ray paths
+    ORANGE = 5, // color to visualize ray paths
+    VIOLET = 6, // color to visualize fire furnace areas
+    LIME = 7,   // color to visualize firefigter action areas
+    CYAN = 8,   // color to visualize ray neighborhoods
 };
 
 void openFile(std::ifstream &file, std::string filePath);
