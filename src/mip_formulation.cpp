@@ -44,8 +44,11 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
     for (size_t f = 0; f < nb_fires; f++)
     {
         std::vector<pixel> furnace = circle_to_pixels(fire_centers[f], furnace_radius, width, height);
-        for (auto &&pixel : furnace)
+        for (auto &&pixel : furnace){
             feasibility_map[pixel.y][pixel.x] = 0;
+            if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
+                map[pixel.y][pixel.x] = MAGENTA;
+        }
     }
 
     std::cout << "Finished gathering fire furnace areas and removed them from feasible placements" << std::endl;

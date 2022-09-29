@@ -135,7 +135,9 @@ void display_map(std::vector<std::vector<int>> map)
             if (map[y][x] == ORANGE)
                 std::cout << "*";
             if (map[y][x] == LIME)
-                std::cout << "@";
+                std::cout << "0";
+            if (map[y][x] == MAGENTA)
+                std::cout << "%";
         }
         std::cout << std::endl;
     }
