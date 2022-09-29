@@ -70,6 +70,8 @@ namespace std
 {
     namespace fs = __fs::filesystem;
 }
+#elif _WIN32 || _WIN64
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1
 #else
 namespace std
 {

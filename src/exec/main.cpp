@@ -1,7 +1,7 @@
-//#include "gurobi_c++.h"
 #include "parser.hpp"
-//#include "filesystem.hpp"
+#include "filesystem.hpp"
 #include "mip_formulation.hpp"
+#include "utils.hpp"
 #include <string>
 #include <iostream>
 
@@ -33,9 +33,9 @@ void display_map(vector<vector<int>> map) {
 
 int main(int argc, char *argv[])
 {
-    //const string root_dir = fs::current_path().parent_path(); // doesn't work on windows
-    //const string data_dir = root_dir + "/data";
-    const string data_dir = "../data";
+    const string root_dir = fs::current_path().parent_path();
+    const string data_dir = root_dir + "/data";
+    // const string data_dir = "../data";
 
     string map_file = data_dir + "/map.ppm";
     string config_file = data_dir + "/config.txt";
