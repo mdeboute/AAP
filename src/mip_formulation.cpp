@@ -5,7 +5,8 @@ using namespace std;
 
 std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vector<float> config)
 {
-    int nb_rays = (int)config[0];
+    //int nb_rays = (int)config[0];
+    int nb_rays = 6;
     float furnace_radius = config[1];
     float action_radius = config[2];
 
@@ -14,6 +15,7 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
 
     std::vector<pixel> fire_centers;
     std::vector<std::vector<int>> feasibility_map;
+    std::cout << "Start gathering data" << std::endl;
     // We get the fire centers and a map overlay of places we can't put firefighters
     for (size_t y = 0; y < height; y++)
     {
@@ -37,12 +39,16 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
 
     size_t nb_fires = fire_centers.size();
 
+    std::cout << "Finished gathering firecenters and partial feasible placement data" << std::endl;
+
     for (size_t f = 0; f < nb_fires; f++)
     {
         std::vector<pixel> furnace = circle_to_pixels(fire_centers[f], furnace_radius, width, height);
         for (auto &&pixel : furnace)
             feasibility_map[pixel.y][pixel.x] = 0;
     }
+
+    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements" << std::endl;
 
     std::vector<std::vector<ray>> fire_rays;   
     std::vector<std::vector<pixel>> ray_neighborhoods;
@@ -53,7 +59,7 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
         for (size_t r = 0; r < nb_rays; r++)
         {
             float degrees = r * 360.0 / nb_rays;
-            //std::cout << degrees << std::endl;  //display current ray degrees
+            std::cout << degrees << std::endl;  //display current ray degrees
             float x_r = fire_centers[f].x + 0.5 + furnace_radius + cos(degrees * (M_PI / 180));
             float y_r = fire_centers[f].y + 0.5 + furnace_radius + sin(degrees * (M_PI / 180));
             ray ray;
@@ -65,9 +71,17 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
             else
                 ray.dir = RIGHT;
 
+            std::cout << "Ray " << r << ": y = " << ray.slope << " * x + " << ray.intercept << " from(" << ray.source.x << ", " << ray.source.y << ")";
+
             std::vector<pixel> ray_path = calculate_ray_path(map, ray);
-            //std::cout << "ray_path calculated" << std::endl;  //display current ray degrees
+            for (size_t i = 1; i < ray_path.size()-1; i++)
+            {
+                map[ray_path[i].y][ray_path[i].x] = ORANGE;
+            }
             ray.target = ray_path[ray_path.size() - 1];
+
+            std::cout << " to(" << ray.target.x << ", " << ray.target.y << ") in direction " << ray.dir << std::endl;  //display current ray
+
             if (map[ray.target.y][ray.target.x] == BLACK) //ray is directed to a city
             {
                 std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius);
@@ -77,6 +91,9 @@ std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vect
         }
         fire_rays.push_back(rays);
     }
+
+    std::cout << "Finished calculating ray paths and neighborhoods" << std::endl;
+
 
     /** TODO:
      * - mip

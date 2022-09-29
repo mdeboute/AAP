@@ -102,3 +102,26 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feas
 
     return neighborhood;
 }
+
+void display_map(std::vector<std::vector<int>> map)
+{
+    for (int y = 0; y < map.size(); y++)
+    {
+        for (int x = 0; x < map[y].size(); x++)
+        {
+            if (map[y][x] == BLUE)
+                std::cout << "~";
+            if (map[y][x] == YELLOW)
+                std::cout << " ";
+            if (map[y][x] == BLACK)
+                std::cout << "$";
+            if (map[y][x] == RED)
+                std::cout << "X";
+            if (map[y][x] == GREEN)
+                std::cout << "O";
+            if (map[y][x] == ORANGE)
+                std::cout << "*";
+        }
+        std::cout << std::endl;
+    }
+}
