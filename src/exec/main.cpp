@@ -24,6 +24,8 @@ void display_map(vector<vector<int>> map) {
                 cout << "O";
             if (map[y][x] == ORANGE)
                 cout << "*";
+            if (map[y][x] == LIME)
+                cout << "@";
         }
         cout << endl;
     }
