@@ -14,7 +14,7 @@ enum Color
     BLUE = 3,   // color to mark inaccessible area
     YELLOW = 4, // color to visualize ray paths
     ORANGE = 5, // color to visualize ray paths
-    VIOLET = 6, // color to visualize fire furnace areas
+    MAGENTA = 6, // color to visualize fire furnace areas
     LIME = 7,   // color to visualize firefigter action areas
     CYAN = 8,   // color to visualize ray neighborhoods
 };
