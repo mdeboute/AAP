@@ -51,30 +51,43 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray
     while (!obstacle_reached)
     {
         int next_x = x + ray.dir;
-        int next_y = (int)ceil(ray.slope * next_x + ray.intercept);
+        int next_y;
+        
+        if (ray.slope == INFINITY)
+            next_y = map.size();
+        else if (ray.slope == -INFINITY)
+            next_y = 0;
+        else
+            next_y = (int)ceil(ray.slope * next_x + ray.intercept);
 
         if (next_y == curr_y)
             next_y = curr_y + 1;
 
-        int step = (int)(next_y - curr_y) / abs(next_y - curr_y);
+        int step = (int)(next_y - curr_y) / abs(next_y - curr_y); // +1 or -1 depending on the direction of the ray
 
+        
         for (int y = curr_y; y != next_y; y += step)
         {
+            //std::cout << " y is " << y << " next y is " << y + step << " >/< " << next_y << std::endl;
             pixel pixel;
             pixel.x = x;
             pixel.y = y;
+            //std::cout << "Trying to put pixel " << x << "," << y << " in path vector : ";
             path.push_back(pixel);
-            // std::cout << "put pixel " << x << "," << y << " in path vector" << std::endl;  //display current ray degrees
+            //std::cout << "Success!" << std::endl;
             if (map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size())
             {
                 obstacle_reached = true;
                 break;
             }
         }
+
         x = next_x;
         if (x < 0 || x >= map[0].size())
             break;
         curr_y = (int)floor(ray.slope * x + ray.intercept);
+        if (curr_y < 0 || curr_y >= map.size())
+            break;
     }
 
     return path;
@@ -121,6 +134,10 @@ void display_map(std::vector<std::vector<int>> map)
                 std::cout << "O";
             if (map[y][x] == ORANGE)
                 std::cout << "*";
+            if (map[y][x] == LIME)
+                std::cout << "0";
+            if (map[y][x] == MAGENTA)
+                std::cout << "%";
         }
         std::cout << std::endl;
     }
