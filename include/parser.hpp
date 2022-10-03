@@ -17,12 +17,14 @@ enum Color
     MAGENTA = 6, // color to visualize fire furnace areas
     LIME = 7,   // color to visualize firefigter action areas
     CYAN = 8,   // color to visualize ray neighborhoods
+    ERROR = -1
 };
 
 void openFile(std::ifstream &file, std::string filePath);
-std::vector<std::vector<int>> processMapFile(std::ifstream &file);
-std::vector<std::vector<int>> parseMap(std::string filePath);
+std::vector<std::vector<Color>> processMapFile(std::ifstream &file);
+std::vector<std::vector<Color>> parseMap(std::string filePath);
 std::vector<float> processConfig(std::ifstream &filePath);
 std::vector<float> parseConfig(std::string filePath);
+void writeMap(std::string filePath, std::vector<std::vector<Color>> map);
 
 #endif

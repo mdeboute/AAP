@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <vector>
+#include "parser.hpp"
 
 enum direction
 {
@@ -26,8 +27,8 @@ struct ray
 };
 
 std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height);
-std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray);
+std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray ray);
 std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, std::vector<pixel> ray_path, float action_radius);
-void display_map(std::vector<std::vector<int>> map);
+void display_map(std::vector<std::vector<Color>> map);
 
 #endif

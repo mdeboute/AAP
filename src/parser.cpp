@@ -1,7 +1,7 @@
 #include <iostream>
 #include "parser.hpp"
 
-int getColorCode(int r, int g, int b)
+Color getColorCode(int r, int g, int b)
 {
     if (r == 255 && g == 0 && b == 0)
         return RED;
@@ -11,7 +11,7 @@ int getColorCode(int r, int g, int b)
         return BLUE;
     else if (r == 255 && g == 255 && b == 0)
         return YELLOW;
-    return -1;
+    return ERROR;
 }
 
 void getCodeColor(Color code, int* r, int* g, int* b) {
@@ -78,12 +78,12 @@ void openFile(std::ifstream &file, std::string filePath)
     }
 }
 
-std::vector<std::vector<int>> processMapFile(std::ifstream &file)
+std::vector<std::vector<Color>> processMapFile(std::ifstream &file)
 {
     // data format:
     std::string line;
-    std::vector<std::vector<int>> map;
-    std::vector<int> row;
+    std::vector<std::vector<Color>> map;
+    std::vector<Color> row;
     char const delimiter = ' ';
 
     // skip the 2 first lines
@@ -119,11 +119,11 @@ std::vector<std::vector<int>> processMapFile(std::ifstream &file)
     return map;
 }
 
-std::vector<std::vector<int>> parseMap(std::string filePath)
+std::vector<std::vector<Color>> parseMap(std::string filePath)
 {
     std::ifstream file;
     openFile(file, filePath);
-    std::vector<std::vector<int>> map = processMapFile(file);
+    std::vector<std::vector<Color>> map = processMapFile(file);
     file.close();
     return map;
 }
@@ -149,4 +149,29 @@ std::vector<float> parseConfig(std::string filePath)
     std::vector<float> config = processConfig(file);
     file.close();
     return config;
+}
+
+
+void writeMap(std::string filePath, std::vector<std::vector<Color>> map){
+    std::ofstream file(filePath);
+
+    size_t height = map.size();
+    size_t width = map[0].size();
+
+    file << "P3" << std::endl;
+    file << width << " " << height << std::endl;
+    file << "255" << std::endl;
+
+    for (size_t y = 0; y < height; y++)
+    {
+        for (size_t x = 0; x < width; x++)
+        {
+            int r, g, b;
+            getCodeColor(map[y][x], &r, &g, &b);
+            file << r << " " << g << " " << b << std::endl;
+        }
+        
+    }
+
+    file.close();
 }

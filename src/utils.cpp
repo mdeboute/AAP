@@ -1,5 +1,4 @@
 #include "utils.hpp"
-#include "parser.hpp"
 
 std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height)
 {
@@ -39,7 +38,7 @@ std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int h
     return pixels;
 }
 
-std::vector<pixel> calculate_ray_path(std::vector<std::vector<int>> map, ray ray)
+std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray ray)
 {
     // std::cout << "Ray(" << ray.source.x << "," << ray.source.y << ")" << ray.dir << ": y = " << ray.slope << "*x + " << ray.intercept << " in path vector" << std::endl;  //display current ray degrees
 
@@ -116,7 +115,7 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feas
     return neighborhood;
 }
 
-void display_map(std::vector<std::vector<int>> map)
+void display_map(std::vector<std::vector<Color>> map)
 {
     for (int y = 0; y < map.size(); y++)
     {

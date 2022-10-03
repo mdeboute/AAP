@@ -3,7 +3,7 @@
 #include "utils.hpp"
 using namespace std;
 
-std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vector<float> config)
+std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::vector<float> config)
 {
     int nb_rays = (int)config[0];
     //int nb_rays = 25;

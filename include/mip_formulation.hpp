@@ -7,6 +7,6 @@
 #include <cmath>
 #include <vector>
 
-std::vector<std::vector<int>> solve(std::vector<std::vector<int>> map, std::vector<float> config);
+std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::vector<float> config);
 
 #endif
