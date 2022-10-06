@@ -1,5 +1,5 @@
 #include <iostream>
-#include "parser.hpp"
+#include "file_io.hpp"
 
 Color getColorCode(int r, int g, int b)
 {
@@ -14,7 +14,8 @@ Color getColorCode(int r, int g, int b)
     return ERROR;
 }
 
-void getCodeColor(Color code, int* r, int* g, int* b) {
+void getCodeColor(Color code, int *r, int *g, int *b)
+{
     switch (code)
     {
     case RED:
@@ -151,8 +152,8 @@ std::vector<float> parseConfig(std::string filePath)
     return config;
 }
 
-
-void writeMap(std::string filePath, std::vector<std::vector<Color>> map){
+void writeMap(std::string filePath, std::vector<std::vector<Color>> map)
+{
     std::ofstream file(filePath);
 
     size_t height = map.size();
@@ -170,7 +171,6 @@ void writeMap(std::string filePath, std::vector<std::vector<Color>> map){
             getCodeColor(map[y][x], &r, &g, &b);
             file << r << " " << g << " " << b << std::endl;
         }
-        
     }
 
     file.close();
