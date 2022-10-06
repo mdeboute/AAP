@@ -92,7 +92,7 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
     return path;
 }
 
-std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, std::vector<pixel> ray_path, float action_radius)
+std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, std::vector<pixel> ray_path, float action_radius, int ray_index, std::vector<std::vector<std::vector<int>>> &ray_fighting_map)
 {
     // make sure feasibility_map is a copy
     std::vector<pixel> neighborhood;
@@ -108,6 +108,7 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feas
             {
                 neighborhood.push_back(pixel);
                 feasibility_map[pixel.y][pixel.x] = 0;
+                ray_fighting_map[pixel.y][pixel.x].push_back(ray_index);
             }
         }
     }
