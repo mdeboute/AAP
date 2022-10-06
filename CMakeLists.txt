@@ -15,15 +15,16 @@ message(STATUS "GUROBI_LIBRARIES : ${GUROBI_LIBRARIES}")
 set(GUROBI_INCLUDE_DIR /opt/local/stow/gurobi910/linux64/include/ /Library/gurobi903/mac64/include/ C:/gurobi951/win64/include/)
 
 include_directories(include + ${GUROBI_INCLUDE_DIR})
-file(GLOB SRC src/*.cpp src/Graph/*.cpp)
+file(GLOB SRC_MAIN src/*.cpp src/Graph/*.cpp)
+file(GLOB SRC_TEST src/Graph/*.cpp)     # ne mettre que les fichiers sources utiles qui n'utilisent pas gurobi
 
 file(GLOB MAIN src/exec/main.cpp)
-add_executable(main.out ${SRC} ${MAIN})
+add_executable(main.out ${SRC_MAIN} ${MAIN})
 
 file(GLOB TEST src/exec/test.cpp)
-add_executable(test.out ${SRC} ${TEST})
+add_executable(test.out ${SRC_TEST} ${TEST})
 
 target_link_libraries(main.out ${GUROBI_LIBRARIES})
-target_link_libraries(test.out ${GUROBI_LIBRARIES})
+#target_link_libraries(test.out ${GUROBI_LIBRARIES})
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR}/data)
