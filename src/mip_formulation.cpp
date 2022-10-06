@@ -13,19 +13,23 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
     size_t height = map.size();
     size_t width = map[0].size();
 
+    map[35][25] = RED;
+
     std::vector<pixel> fire_centers;
     std::vector<std::vector<int>> feasibility_map;
+    std::vector<std::vector<std::vector<int>>> ray_fighting_map;
     std::cout << "Start gathering data" << std::endl;
     // We get the fire centers and a map overlay of places we can't put firefighters
     for (size_t y = 0; y < height; y++)
     {
-        std::vector<int> line;
+        std::vector<int> feasibility_map_line;
+        std::vector<std::vector<int>> ray_fighting_map_line;
         for (size_t x = 0; x < width; x++)
         {
             if (map[y][x] == YELLOW)
-                line.push_back(1);
+                feasibility_map_line.push_back(1);
             else
-                line.push_back(0); // to changer if firefighters can be in cities
+                feasibility_map_line.push_back(0); // to changer if firefighters can be in cities
             if (map[y][x] == RED)  //
             {
                 pixel fire;
@@ -33,8 +37,11 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                 fire.y = y;
                 fire_centers.push_back(fire);
             }
+            std::vector<int> ray_fighting_pos;
+            ray_fighting_map_line.push_back(ray_fighting_pos);
         }
-        feasibility_map.push_back(line);
+        feasibility_map.push_back(feasibility_map_line);
+        ray_fighting_map.push_back(ray_fighting_map_line);
     }
 
     size_t nb_fires = fire_centers.size();
@@ -92,7 +99,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
 
             if (map[ray.target.y][ray.target.x] == BLACK) // ray is directed to a city
             {
-                std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius);
+                std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius, (int) fatal_ray_neighborhoods.size(), ray_fighting_map);
                 fatal_ray_neighborhoods.push_back(ray_neighborhood);
             }
             rays.push_back(ray);
@@ -225,7 +232,12 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                 {
                     for (size_t i = 0; i < width; ++i)
                     {
-                        if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
+                        if (ray_fighting_map[j][i].size() > 0) cout << "Rays ";
+                        for (size_t k = 0; k < ray_fighting_map[j][i].size(); k++)
+                            cout << ray_fighting_map[j][i][k] << ", ";
+                        if (ray_fighting_map[j][i].size() > 0) cout << " can be stopped in position (" << i << ", " << j << ")" << endl;
+
+                        /*if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
                         {
                             pixel firefighter;
                             firefighter.x = i;
@@ -236,7 +248,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                                     map[p.y][p.x] = LIME;
                             cout << "We place a firefigher at position (" << i << ", " << j << ")" << endl;
                             map[j][i] = GREEN;
-                        }
+                        }*/
                     }
                 }
                 for (vector<vector<pixel>> ray_paths : fire_ray_paths)
@@ -246,7 +258,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                         for (size_t i = 1; i < ray_path.size() - 1; i++)
                         {
                             pixel p = ray_path[i];
-                            if (map[p.y][p.x] == LIME)
+                            if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN)
                                 break;
                             if (map[p.y][p.x] == YELLOW)
                                 map[p.y][p.x] = ORANGE;

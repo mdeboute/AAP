@@ -91,7 +91,7 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
     return path;
 }
 
-std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, std::vector<pixel> ray_path, float action_radius)
+std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, std::vector<pixel> ray_path, float action_radius, int ray_index, std::vector<std::vector<std::vector<int>>> &ray_fighting_map)
 {
     // make sure feasibility_map is a copy
     std::vector<pixel> neighborhood;
@@ -107,6 +107,7 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feas
             {
                 neighborhood.push_back(pixel);
                 feasibility_map[pixel.y][pixel.x] = 0;
+                ray_fighting_map[pixel.y][pixel.x].push_back(ray_index);
             }
         }
     }
@@ -139,4 +140,33 @@ void display_map(std::vector<std::vector<Color>> map)
         }
         std::cout << std::endl;
     }
+}
+
+std::vector<FighterVertex> cutUselessFighters(std::vector<FighterVertex> fighterList){
+    std::vector<FighterVertex> usefullFighters;
+
+    for (FighterVertex f : fighterList){
+        int fUsefullness = (f.getFireLignes().size()!=0);
+        
+        if(fUsefullness){
+            for (int i=0; i<usefullFighters.size(); i++){
+                FighterVertex f2 = usefullFighters[i];
+                if (fUsefullness){
+                    if (f2.containsFighter(f)){
+                        fUsefullness = 0;
+                    }else{
+                        if (f.containsFighter(f2)){
+                            usefullFighters.erase(usefullFighters.begin()+i);
+                            usefullFighters.push_back(f);
+                            fUsefullness = 0;
+                        }
+                    }          
+                }
+            }
+        }
+        if (fUsefullness){
+            usefullFighters.push_back(f);
+        }
+    }
+    return usefullFighters;
 }

@@ -1,7 +1,7 @@
 #ifndef EDGE
 #define EDGE
 
-#include "FireFighterVertex.hpp"
+#include "FighterVertex.hpp"
 #include "FireVertex.hpp"
 
 class Edge
