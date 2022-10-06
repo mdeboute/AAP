@@ -24,7 +24,7 @@ std::vector<FireVertex> FighterVertex::getFireLignes(){
 true : tous les feu de f sont contenus dans la liste
 false : un des feux de f n'est pas dans la liste
 */
-bool FighterVertex::containesFighter(FighterVertex f){
+bool FighterVertex::containsFighter(FighterVertex f){
     std::vector<FireVertex> fLignes = f.getFireLignes();
     for (FireVertex fire : fLignes){
         bool find = false;

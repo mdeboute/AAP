@@ -16,7 +16,7 @@ public:
     void addFire(FireVertex f);
     FireVertex getFireAt(int index);
     std::vector<FireVertex> getFireLignes();
-    bool containesFighter(FighterVertex f);
+    bool containsFighter(FighterVertex f);
 
 };
 

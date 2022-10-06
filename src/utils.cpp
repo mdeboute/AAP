@@ -146,7 +146,7 @@ std::vector<FighterVertex> cutUselessFighters(std::vector<FighterVertex> fighter
     std::vector<FighterVertex> usefullFighters;
 
     for (FighterVertex f : fighterList){
-        int fUsefullness = (f.getFireLignes().size()==0);
+        int fUsefullness = (f.getFireLignes().size()!=0);
         
         if(fUsefullness){
             for (int i=0; i<usefullFighters.size(); i++){

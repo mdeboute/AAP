@@ -2,7 +2,7 @@
 #define GRAPH
 
 #include "FireVertex.hpp"
-#include "FireFighterVertex.hpp"
+#include "FighterVertex.hpp"
 #include "Edge.hpp"
 
 #include <vector>
