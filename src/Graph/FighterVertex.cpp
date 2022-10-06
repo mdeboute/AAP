@@ -1,4 +1,4 @@
-#include "Graph/FireFighterVertex.hpp"
+#include "Graph/FighterVertex.hpp"
 
 FighterVertex::FighterVertex() {}
 

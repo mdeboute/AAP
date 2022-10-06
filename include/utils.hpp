@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include "file_io.hpp"
+#include "FighterVertex.hpp"
 
 enum direction
 {

@@ -1,5 +1,5 @@
-#ifndef FIREFIGHTERVERTEX
-#define FIREFIGHTERVERTEX
+#ifndef FIGHTERVERTEX
+#define FIGHTERVERTEX
 
 #include "FireVertex.hpp"
 #include <vector>
