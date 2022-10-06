@@ -1,5 +1,4 @@
 #include "file_io.hpp"
-#include "filesystem.hpp"
 #include "mip_formulation.hpp"
 #include "utils.hpp"
 #include <string>
@@ -9,11 +8,15 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    const string root_dir = fs::current_path().parent_path().string();
-    const string data_dir = root_dir + "/data";
+    if (argc != 2)
+    {
+        cout << "Usage: ./mip.out <input_dir>" << endl;
+        return 1;
+    }
 
-    string map_file = data_dir + "/map.ppm";
-    string config_file = data_dir + "/config.txt";
+    const string data_dir = argv[1];
+    const string map_file = data_dir + "/map.ppm";
+    const string config_file = data_dir + "/config.txt";
 
     vector<float> config = parseConfig(config_file);
     vector<vector<Color>> map = parseMap(map_file);
@@ -28,8 +31,9 @@ int main(int argc, char *argv[])
 
     map = solve(map, config);
 
-    const string result_dir = root_dir + "/results";
-    string result_map_file = result_dir + "/result.ppm";
+    const string result_dir = "../solutions";
+    const string result_map_file = result_dir + "/result.ppm";
+    cout << "Writing result to " << result_map_file << endl;
     writeMap(result_map_file, map);
 
     display_map(map);
