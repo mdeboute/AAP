@@ -1,13 +1,22 @@
 #ifndef FIREFIGHTERVERTEX
 #define FIREFIGHTERVERTEX
 
-#include "Vertex.hpp"
+#include "FireVertex.hpp"
+#include <vector>
 
 class FighterVertex : public Vertex
 {
+private :
+    std::vector<FireVertex> fireLignes;
+    bool parssingDone = false;
 public:
     FighterVertex();
     FighterVertex(Position p, int id);
+    void doneParssing();
+    void addFire(FireVertex f);
+    FireVertex getFireAt(int index);
+    std::vector<FireVertex> getFireLignes();
+
 };
 
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)
