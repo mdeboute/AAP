@@ -51,7 +51,7 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
     {
         int next_x = x + ray.dir;
         int next_y;
-        
+
         if (ray.slope == INFINITY)
             next_y = map.size();
         else if (ray.slope == -INFINITY)
@@ -64,16 +64,15 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
 
         int step = (int)(next_y - curr_y) / abs(next_y - curr_y); // +1 or -1 depending on the direction of the ray
 
-        
         for (int y = curr_y; y != next_y; y += step)
         {
-            //std::cout << " y is " << y << " next y is " << y + step << " >/< " << next_y << std::endl;
+            // std::cout << " y is " << y << " next y is " << y + step << " >/< " << next_y << std::endl;
             pixel pixel;
             pixel.x = x;
             pixel.y = y;
-            //std::cout << "Trying to put pixel " << x << "," << y << " in path vector : ";
+            // std::cout << "Trying to put pixel " << x << "," << y << " in path vector : ";
             path.push_back(pixel);
-            //std::cout << "Success!" << std::endl;
+            // std::cout << "Success!" << std::endl;
             if (map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size())
             {
                 obstacle_reached = true;

@@ -1,5 +1,5 @@
-#ifndef PARSER_HPP
-#define PARSER_HPP
+#ifndef FILE_IO_HPP
+#define FILE_IO_HPP
 
 #include <iostream>
 #include <sstream>
@@ -8,15 +8,15 @@
 
 enum Color
 {
-    RED = 0,    // color to mark fire center
-    GREEN = 1,  // color to mark firefighter position
-    BLACK = 2,  // color to mark city area
-    BLUE = 3,   // color to mark inaccessible area
-    YELLOW = 4, // color to visualize ray paths
-    ORANGE = 5, // color to visualize ray paths
+    RED = 0,     // color to mark fire center
+    GREEN = 1,   // color to mark firefighter position
+    BLACK = 2,   // color to mark city area
+    BLUE = 3,    // color to mark inaccessible area
+    YELLOW = 4,  // color to visualize ray paths
+    ORANGE = 5,  // color to visualize ray paths
     MAGENTA = 6, // color to visualize fire furnace areas
-    LIME = 7,   // color to visualize firefigter action areas
-    CYAN = 8,   // color to visualize ray neighborhoods
+    LIME = 7,    // color to visualize firefigter action areas
+    CYAN = 8,    // color to visualize ray neighborhoods
     ERROR = -1
 };
 
