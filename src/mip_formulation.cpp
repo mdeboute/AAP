@@ -30,7 +30,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                 feasibility_map_line.push_back(1);
             else
                 feasibility_map_line.push_back(0); // to changer if firefighters can be in cities
-            if (map[y][x] == RED)  //
+            if (map[y][x] == RED)                  //
             {
                 pixel fire;
                 fire.x = x;
@@ -99,7 +99,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
 
             if (map[ray.target.y][ray.target.x] == BLACK) // ray is directed to a city
             {
-                std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius, (int) fatal_ray_neighborhoods.size(), ray_fighting_map);
+                std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius, (int)fatal_ray_neighborhoods.size(), ray_fighting_map);
                 fatal_ray_neighborhoods.push_back(ray_neighborhood);
             }
             rays.push_back(ray);
@@ -232,10 +232,12 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                 {
                     for (size_t i = 0; i < width; ++i)
                     {
-                        if (ray_fighting_map[j][i].size() > 0) cout << "Rays ";
+                        if (ray_fighting_map[j][i].size() > 0)
+                            cout << "Rays ";
                         for (size_t k = 0; k < ray_fighting_map[j][i].size(); k++)
                             cout << ray_fighting_map[j][i][k] << ", ";
-                        if (ray_fighting_map[j][i].size() > 0) cout << " can be stopped in position (" << i << ", " << j << ")" << endl;
+                        if (ray_fighting_map[j][i].size() > 0)
+                            cout << " can be stopped in position (" << i << ", " << j << ")" << endl;
 
                         /*if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
                         {

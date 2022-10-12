@@ -152,9 +152,10 @@ std::vector<float> parseConfig(std::string filePath)
     return config;
 }
 
-void writeMap(std::string filePath, std::vector<std::vector<Color>> map)
+void writeMap(const std::string &filePath, std::vector<std::vector<Color>> map)
 {
-    std::ofstream file(filePath);
+    std::ofstream file;
+    file.open(filePath);
 
     size_t height = map.size();
     size_t width = map[0].size();

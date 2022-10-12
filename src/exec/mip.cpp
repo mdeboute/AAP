@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
 
     map = solve(map, config);
 
-    const string result_dir = "../solutions";
-    const string result_map_file = result_dir + "/result.ppm";
-    cout << "Writing result to " << result_map_file << endl;
-    writeMap(result_map_file, map);
+    vector<string> splittedString = splitString(data_dir, "/");
+    const string result_file = "../solutions/result_" + splittedString[1] + ".ppm";
+    cout << "Writing result to " << result_file << endl;
+    writeMap(result_file, map);
 
     display_map(map);
 

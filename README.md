@@ -10,7 +10,7 @@
 mkdir -p build
 cd build
 cmake ..
-make
+make <target>
 ```
 
 ## How to run executable files?

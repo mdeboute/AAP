@@ -25,6 +25,6 @@ std::vector<std::vector<Color>> processMapFile(std::ifstream &file);
 std::vector<std::vector<Color>> parseMap(std::string filePath);
 std::vector<float> processConfig(std::ifstream &filePath);
 std::vector<float> parseConfig(std::string filePath);
-void writeMap(std::string filePath, std::vector<std::vector<Color>> map);
+void writeMap(const std::string &filePath, std::vector<std::vector<Color>> map);
 
 #endif
