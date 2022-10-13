@@ -7,42 +7,67 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
-    Position pos_1(0, 0);
-    Position pos_2(1, 0);
-    Position pos_3(2, 0);
-    Position pos_4(0, 1);
-    Position pos_5(0, 2);
-    Position pos_6(1, 1);
-    Position pos_7(1, 2);
-    Position pos_8(2, 1);
-    Position pos_9(2, 2);
+    if (argc != 2)
+    {
+        cout << "Usage: ./test.out <input_dir>" << endl;
+        return 1;
+    }
 
-    FireVertex fire_1(pos_1, pos_9, 1);
-    FireVertex fire_2(pos_5, pos_9, 2);
+    const string data_dir = argv[1];
+    const string map_file = data_dir + "/map.ppm";
+    const string config_file = data_dir + "/config.txt";
 
-    FighterVertex fighter_1(pos_6, 1);
-    FighterVertex fighter_2(pos_7, 2);
+    vector<float> config = parseConfig(config_file);
+    vector<vector<Color>> map = parseMap(map_file);
 
-    fighter_1.addFire(fire_1);
-    fighter_2.addFire(fire_2);
+    cout << "Number of angles: " << config[0] << endl;
+    cout << "Furnace radius: " << config[1] << endl;
+    cout << "Radius of action of a firefighter: " << config[2] << endl;
+    cout << endl;
+    cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
 
-    vector<FighterVertex> fighters;
-    fighters.push_back(fighter_1);
-    fighters.push_back(fighter_2);
+    // display_map(map);
 
-    // fighters = cutUselessFighters(fighters);
+    Graph graph = calculate_graph_data(map, config);
 
-    vector<vector<FighterVertex>> partitions = findPartitions(fighters);
+    vector<FireVertex> fireVertices = graph.getFireVertexTab();
+    vector<FighterVertex> fighterVertices = graph.getFigtherVertexTab();
 
+    for (FireVertex fireVertex : fireVertices)
+    {
+        cout << "FireVertex: " << fireVertex << endl;
+    }
+
+    vector<vector<FighterVertex>> partitions = findPartitions(fighterVertices);
+
+    // print the partitions
     // for (int i = 0; i < partitions.size(); i++)
     // {
-    //     cout << "Partition " << i << " : ";
+    //     cout << "Partition " << i << ": ";
     //     for (int j = 0; j < partitions[i].size(); j++)
     //     {
-    //         cout << partitions[i][j] << " ; ";
+    //         cout << partitions[i][j] << " ";
     //     }
     //     cout << endl;
     // }
+
+    // vector<FighterVertex> bestTeam = solve(partitions, fireVertices);
+
+    // cout << "Best team: \n"
+    //      << endl;
+    // for (FighterVertex fighter : bestTeam)
+    // {
+    //     cout << fighter << endl;
+    // }
+
+    // vector<string> splittedString = splitString(data_dir, "/");
+    // const string result_file = "../solutions/result_" + splittedString[1] + ".ppm";
+    // cout << "Writing result to " << result_file << endl;
+    // writeMap(result_file, map);
+
+    // display_map(map);
+
+    return 0;
 }

@@ -18,7 +18,7 @@ make <target>
 In the build directory:
 
 ```shell
-./a.out
+./a.out <dir>
 ```
 
 ### Second report, **deadline: Friday, October 28th**
