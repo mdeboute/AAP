@@ -4,7 +4,7 @@ FighterVertex::FighterVertex() {}
 
 FighterVertex::FighterVertex(Position p, int id) : Vertex(p, id) {}
 
-void FighterVertex::doneParssing()
+void FighterVertex::doneParsing()
 {
     parssingDone = true;
 }

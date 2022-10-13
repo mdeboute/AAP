@@ -13,7 +13,7 @@ private:
 public:
     FighterVertex();
     FighterVertex(Position p, int id);
-    void doneParssing();
+    void doneParsing();
     void addFire(FireVertex f);
     FireVertex getFireAt(int index);
     std::vector<FireVertex> getFireLignes();
@@ -22,7 +22,7 @@ public:
 
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)
 {
-    os << "vertex of id : " << v.getID() << " and position " << v.getPos();
+    os << "Vertex of id : " << v.getID();
     return os;
 }
 
