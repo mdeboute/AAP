@@ -32,6 +32,10 @@ int main()
     fighters.push_back(fighter_1);
     fighters.push_back(fighter_2);
 
+    vector<FireVertex> fires;
+    fires.push_back(fire_1);
+    fires.push_back(fire_2);
+
     // fighters = cutUselessFighters(fighters);
 
     vector<vector<FighterVertex>> partitions = findPartitions(fighters);
@@ -45,4 +49,20 @@ int main()
     //     }
     //     cout << endl;
     // }
+
+    // check the faisability of the partitions
+    // int cpt = 0;
+    // for (vector<FighterVertex> fighters : partitions)
+    // {
+    //     cpt++;
+    //     cout << "Partition " << cpt << ": " << checker(fighters, fires) << endl;
+    // }
+
+    vector<FighterVertex> bestTeam = solve(partitions, fires);
+
+    cout << "Best team:\n";
+    for (FighterVertex fighter : bestTeam)
+    {
+        cout << fighter << endl;
+    }
 }

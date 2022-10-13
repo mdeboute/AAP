@@ -50,3 +50,15 @@ bool FighterVertex::containsFighter(FighterVertex f)
     }
     return true;
 }
+
+bool FighterVertex::stopFire(FireVertex f)
+{
+    for (FireVertex fire : fireLignes)
+    {
+        if (fire == f)
+        {
+            return true;
+        }
+    }
+    return false;
+}
