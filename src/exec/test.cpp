@@ -32,7 +32,7 @@ int main()
     fighters.push_back(fighter_1);
     fighters.push_back(fighter_2);
 
-    fighters = cutUselessFighters(fighters);
+    // fighters = cutUselessFighters(fighters);
 
     vector<vector<FighterVertex>> partitions = findPartitions(fighters);
 

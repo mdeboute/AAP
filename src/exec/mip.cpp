@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
 
     display_map(map);
 
+    Graph graph = calculate_graph_data(map, config);
+
     map = solve(map, config);
 
     vector<string> splittedString = splitString(data_dir, "/");
