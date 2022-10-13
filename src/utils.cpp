@@ -194,3 +194,137 @@ std::vector<std::string> splitString(const std::string &s, const std::string &de
     elems.push_back(s.substr(last));
     return elems;
 }
+
+Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<float> config)
+{
+    int nb_rays = (int)config[0];
+    // int nb_rays = 25;
+    float furnace_radius = config[1];
+    float action_radius = config[2];
+
+    size_t height = map.size();
+    size_t width = map[0].size();
+
+    map[35][25] = RED;
+
+    std::vector<pixel> fire_centers;
+    std::vector<std::vector<int>> feasibility_map;
+    std::vector<std::vector<std::vector<int>>> ray_fighting_map;
+    std::cout << "Start gathering data" << std::endl;
+    // We get the fire centers and a map overlay of places we can't put firefighters
+    for (size_t y = 0; y < height; y++)
+    {
+        std::vector<int> feasibility_map_line;
+        std::vector<std::vector<int>> ray_fighting_map_line;
+        for (size_t x = 0; x < width; x++)
+        {
+            if (map[y][x] == YELLOW)
+                feasibility_map_line.push_back(1);
+            else
+                feasibility_map_line.push_back(0); // to changer if firefighters can be in cities
+            if (map[y][x] == RED)                  //
+            {
+                pixel fire;
+                fire.x = x;
+                fire.y = y;
+                fire_centers.push_back(fire);
+            }
+            std::vector<int> ray_fighting_pos;
+            ray_fighting_map_line.push_back(ray_fighting_pos);
+        }
+        feasibility_map.push_back(feasibility_map_line);
+        ray_fighting_map.push_back(ray_fighting_map_line);
+    }
+
+    size_t nb_fires = fire_centers.size();
+
+    std::cout << "Finished gathering firecenters and partial feasible placement data" << std::endl;
+
+    for (size_t f = 0; f < nb_fires; f++)
+    {
+        std::vector<pixel> furnace = circle_to_pixels(fire_centers[f], furnace_radius, width, height);
+        for (auto &&pixel : furnace)
+        {
+            feasibility_map[pixel.y][pixel.x] = 0;
+            if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
+                map[pixel.y][pixel.x] = MAGENTA;
+        }
+    }
+
+    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements" << std::endl;
+
+    std::vector<std::vector<ray>> fire_rays;
+    std::vector<std::vector<std::vector<pixel>>> fire_ray_paths;
+    std::vector<std::vector<pixel>> fatal_ray_neighborhoods;
+    std::vector<ray> fatal_rays;
+
+    for (size_t f = 0; f < nb_fires; f++)
+    {
+        std::vector<ray> rays;
+        std::vector<std::vector<pixel>> ray_paths;
+        for (size_t r = 0; r < nb_rays; r++)
+        {
+            float degrees = r * 360.0 / nb_rays;
+            // std::cout << degrees;  //display current ray degrees
+            float x_r = fire_centers[f].x + 0.5 + furnace_radius * cos(degrees * (M_PI / 180.0));
+            float y_r = fire_centers[f].y + 0.5 + furnace_radius * sin(degrees * (M_PI / 180.0));
+            // std::cout << " 2(" << x_r << ", " << y_r << ")" << std::endl;
+            ray ray;
+            ray.slope = (y_r - (fire_centers[f].y + 0.5)) / (x_r - (fire_centers[f].x + 0.5));
+            ray.intercept = y_r - ray.slope * x_r;
+            ray.source = fire_centers[f]; // possible copy of data. Can be improved later
+            if (degrees > 90 && degrees <= 270)
+                ray.dir = LEFT;
+            else
+                ray.dir = RIGHT;
+
+            // std::cout << "Ray " << r << ": y = " << ray.slope << " * x + " << ray.intercept << " from(" << ray.source.x << ", " << ray.source.y << ")";
+
+            std::vector<pixel> ray_path = calculate_ray_path(map, ray);
+
+            // for (size_t i = 1; i < ray_path.size()-1; i++)
+            //     if(map[ray_path[i].y][ray_path[i].x] == YELLOW)
+            //         map[ray_path[i].y][ray_path[i].x] = ORANGE;
+
+            ray.target = ray_path[ray_path.size() - 1];
+
+            // std::cout << " to(" << ray.target.x << ", " << ray.target.y << ") in direction " << ray.dir << std::endl;  //display current ray
+
+            if (map[ray.target.y][ray.target.x] == BLACK) // ray is directed to a city
+            {
+                std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius, (int)fatal_ray_neighborhoods.size(), ray_fighting_map);
+                fatal_ray_neighborhoods.push_back(ray_neighborhood);
+                fatal_rays.push_back(ray);
+            }
+            rays.push_back(ray);
+            ray_paths.push_back(ray_path);
+        }
+        fire_rays.push_back(rays);
+        fire_ray_paths.push_back(ray_paths);
+    }
+
+    std::vector<FireVertex> fireTab;
+    std::vector<FighterVertex> fighterTab;
+
+    for (int r=0; r<fatal_rays.size(); r++){
+        ray ray = fatal_rays[r];
+        Position fireCenter(ray.source.x, ray.source.y);
+        Position collide(ray.target.x, ray.target.y);
+        fireTab.push_back(FireVertex(fireCenter, collide, r));
+    }
+    int fighterID = 0;
+    for (int y = 0; y < height; y++){
+        for (int x=0; x < width; x++){
+            if (ray_fighting_map[y][x].size() > 0){
+                Position p(x, y);
+                FighterVertex fighter(p, fighterID);
+                for(int r : ray_fighting_map[y][x]){
+                    fighter.addFire(fireTab[r]);
+                }
+                fighterTab.push_back(fighter);
+                fighterID++;
+            }
+        }
+    }
+    return Graph(fireTab, fighterTab)
+}

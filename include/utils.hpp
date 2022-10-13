@@ -5,6 +5,9 @@
 #include <vector>
 #include "file_io.hpp"
 #include "Graph/FighterVertex.hpp"
+#include "Graph/FireVertex.hpp"
+#include "Graph/Position.hpp"
+#include "Graph/Graph.hpp"
 
 enum direction
 {
@@ -33,5 +36,6 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feas
 void display_map(std::vector<std::vector<Color>> map);
 std::vector<FighterVertex> cutUselessFighters(std::vector<FighterVertex> fighterList);
 std::vector<std::string> splitString(const std::string &s, const std::string &delim);
+Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<float> config);
 
 #endif

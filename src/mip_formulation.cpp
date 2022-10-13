@@ -64,6 +64,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
     std::vector<std::vector<ray>> fire_rays;
     std::vector<std::vector<std::vector<pixel>>> fire_ray_paths;
     std::vector<std::vector<pixel>> fatal_ray_neighborhoods;
+    std::vector<ray> fatal_rays;
 
     for (size_t f = 0; f < nb_fires; f++)
     {
@@ -101,6 +102,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
             {
                 std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius, (int)fatal_ray_neighborhoods.size(), ray_fighting_map);
                 fatal_ray_neighborhoods.push_back(ray_neighborhood);
+                fatal_rays.push_back(ray);
             }
             rays.push_back(ray);
             ray_paths.push_back(ray_path);
