@@ -36,8 +36,6 @@ int main()
     fighters.push_back(f2);
     fighters.push_back(f25);
 
-    fighters = cutUselessFighters(fighters);
-
     std::cout << "here" << std::endl;
     for (int i = 0; i < fighters.size(); i++)
     {
