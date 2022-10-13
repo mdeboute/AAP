@@ -295,5 +295,6 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<floa
             }
         }
     }
+    std::cout << fireTab.size() << " " << fighterTab.size() << std::endl;
     return Graph(fireTab, fighterTab);
 }

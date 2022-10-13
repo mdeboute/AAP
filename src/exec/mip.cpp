@@ -27,18 +27,18 @@ int main(int argc, char *argv[])
     cout << endl;
     cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
 
-    display_map(map);
+    //display_map(map);
 
     Graph graph = calculate_graph_data(map, config);
 
-    map = solve(map, config);
+    map = solve_using_graph(map, config);
 
     vector<string> splittedString = splitString(data_dir, "/");
     const string result_file = "../solutions/result_" + splittedString[1] + ".ppm";
     cout << "Writing result to " << result_file << endl;
     writeMap(result_file, map);
 
-    display_map(map);
+    //display_map(map);
 
     return 0;
 }
