@@ -5,15 +5,15 @@ using namespace std;
 
 std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::vector<float> config)
 {
-    //int nb_rays = (int)config[0];
-    int nb_rays = 5;
+    int nb_rays = (int)config[0];
+    //int nb_rays = 25;
     float furnace_radius = config[1];
     float action_radius = config[2];
 
     size_t height = map.size();
     size_t width = map[0].size();
 
-    map[35][25] = RED;
+    //map[35][25] = RED;
 
     std::vector<pixel> fire_centers;
     std::vector<std::vector<int>> feasibility_map;
@@ -241,7 +241,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                         if (ray_fighting_map[j][i].size() > 0)
                             cout << " can be stopped in position (" << i << ", " << j << ")" << endl;
                         */
-                        /*if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
+                        if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
                         {
                             pixel firefighter;
                             firefighter.x = i;
@@ -252,17 +252,17 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                                     map[p.y][p.x] = LIME;
                             cout << "We place a firefigher at position (" << i << ", " << j << ")" << endl;
                             map[j][i] = GREEN;
-                        }*/
+                        }
                     }
                 }
                 for (vector<vector<pixel>> ray_paths : fire_ray_paths)
                 {
                     for (vector<pixel> ray_path : ray_paths)
                     {
-                        for (size_t i = 1; i < ray_path.size() - 1; i++)
+                        for (size_t i = 1; i < ray_path.size(); i++)
                         {
                             pixel p = ray_path[i];
-                            if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN)
+                            if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
                                 break;
                             if (map[p.y][p.x] == YELLOW)
                                 map[p.y][p.x] = ORANGE;
