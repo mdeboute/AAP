@@ -142,45 +142,6 @@ void display_map(std::vector<std::vector<Color>> map)
     }
 }
 
-std::vector<FighterVertex> cutUselessFighters(std::vector<FighterVertex> fighterList)
-{
-    std::vector<FighterVertex> usefullFighters;
-
-    for (FighterVertex f : fighterList)
-    {
-        int fUsefullness = (f.getFireLignes().size() != 0);
-
-        if (fUsefullness)
-        {
-            for (int i = 0; i < usefullFighters.size(); i++)
-            {
-                FighterVertex f2 = usefullFighters[i];
-                if (fUsefullness)
-                {
-                    if (f2.containsFighter(f))
-                    {
-                        fUsefullness = 0;
-                    }
-                    else
-                    {
-                        if (f.containsFighter(f2))
-                        {
-                            usefullFighters.erase(usefullFighters.begin() + i);
-                            usefullFighters.push_back(f);
-                            fUsefullness = 0;
-                        }
-                    }
-                }
-            }
-        }
-        if (fUsefullness)
-        {
-            usefullFighters.push_back(f);
-        }
-    }
-    return usefullFighters;
-}
-
 std::vector<std::string> splitString(const std::string &s, const std::string &delim)
 {
     std::vector<std::string> elems;

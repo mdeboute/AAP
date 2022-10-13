@@ -14,6 +14,12 @@ Graph::Graph(std::vector<FireVertex> fireTab,
 }
 
 Graph::Graph(std::vector<FireVertex> fireTab,
+             std::vector<FighterVertex> fighterTab)
+{
+    cutUselessFighters();
+}
+
+Graph::Graph(std::vector<FireVertex> fireTab,
              std::vector<FighterVertex> fighterTab,
              std::vector<Edge> edges)
 {
@@ -43,6 +49,45 @@ Graph::Graph(std::vector<FireVertex> fireTab,
         this->fighterAdjacencyList[fighterID].push_back(fireID);
         this->fireAdjacencyList[fireID].push_back(fighterID);
     }
+}
+
+void Graph::cutUselessFighters()
+{
+    std::vector<FighterVertex> usefullFighters;
+
+    for (FighterVertex f : this->fighterTab)
+    {
+        int fUsefullness = (f.getFireLignes().size() != 0);
+
+        if (fUsefullness)
+        {
+            for (int i = 0; i < usefullFighters.size(); i++)
+            {
+                FighterVertex f2 = usefullFighters[i];
+                if (fUsefullness)
+                {
+                    if (f2.containsFighter(f))
+                    {
+                        fUsefullness = 0;
+                    }
+                    else
+                    {
+                        if (f.containsFighter(f2))
+                        {
+                            usefullFighters.erase(usefullFighters.begin() + i);
+                            usefullFighters.push_back(f);
+                            fUsefullness = 0;
+                        }
+                    }
+                }
+            }
+        }
+        if (fUsefullness)
+        {
+            usefullFighters.push_back(f);
+        }
+    }
+    this->fighterTab = usefullFighters;
 }
 
 const std::vector<FireVertex> &Graph::getFireVertexTab()
