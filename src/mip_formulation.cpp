@@ -193,7 +193,7 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
 
             stringstream ss;
             ss << "Ray_cover(" << r << ")";
-            model.addConstr(ray_cover == 1, ss.str());
+            model.addConstr(ray_cover >= 1, ss.str());
         }
 
         // Optimize model

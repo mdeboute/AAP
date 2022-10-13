@@ -59,6 +59,12 @@ void Graph::cutUselessFighters()
         }
     }
     this->fighterTab = usefullFighters;
+    for (int i=0; i<fighterTab.size(); ++i){
+        fighterTab[i].setID(i);
+    }
+    for (int i=0; i<fireTab.size(); ++i){
+        fireTab[i].setID(i);
+    }
 }
 
 const std::vector<FighterVertex> Graph::getFireNeightborhood(int ID)
@@ -117,6 +123,7 @@ const std::vector<FighterVertex> &Graph::getFireAdjacencyList(int id)
 void Graph::generateAdjacency()
 {
     // init matrix and lists:
+    std::cout << "artichaud " << fighterTab.size() << std::endl;
     for (int i = 0; i < fighterTab.size(); ++i)
     {
         adjacencyMatrix.push_back(std::vector<int>());
@@ -131,10 +138,13 @@ void Graph::generateAdjacency()
         }
     }
 
+     std::cout << "artimichaud" << std::endl;
+
     for (FighterVertex figther : fighterTab)
     {
         std::vector<FireVertex> fires = figther.getFireLignes();
         int figtherID = figther.getID();
+        std::cout << "fighter ID : " << figtherID << std::endl;
         for (FireVertex fire : fires)
         {
             int fireId = fire.getID();
@@ -143,4 +153,5 @@ void Graph::generateAdjacency()
             fighterAdjacencyList[figtherID].push_back(fire);
         }
     }
+    std::cout << "artifroid" << std::endl;
 }
