@@ -59,11 +59,11 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
             exact_next_y = 0;
         else
             exact_next_y = ray.slope * next_x + ray.intercept;
-        
-        if ((ray.slope >=0 && ray.dir==RIGHT) || (ray.slope <0 && ray.dir==LEFT))
-            next_y = (int) ceil(exact_next_y);
+
+        if ((ray.slope >= 0 && ray.dir == RIGHT) || (ray.slope < 0 && ray.dir == LEFT))
+            next_y = (int)ceil(exact_next_y);
         else
-            next_y = (int) floor(exact_next_y);
+            next_y = (int)floor(exact_next_y);
 
         if (next_y == curr_y)
             next_y = curr_y + ray.dir;
@@ -89,11 +89,11 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
         x = next_x;
         if (x < 0 || x >= map[0].size())
             break;
-        
-        if ((ray.slope >=0 && ray.dir==RIGHT) || (ray.slope <0 && ray.dir==LEFT))
-            curr_y = (int) floor(exact_next_y);
+
+        if ((ray.slope >= 0 && ray.dir == RIGHT) || (ray.slope < 0 && ray.dir == LEFT))
+            curr_y = (int)floor(exact_next_y);
         else
-            curr_y = (int) ceil(exact_next_y);
+            curr_y = (int)ceil(exact_next_y);
         if (curr_y < 0 || curr_y >= map.size())
             break;
     }
@@ -275,19 +275,24 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<floa
     std::vector<FireVertex> fireTab;
     std::vector<FighterVertex> fighterTab;
 
-    for (int r=0; r<fatal_rays.size(); r++){
+    for (int r = 0; r < fatal_rays.size(); r++)
+    {
         ray ray = fatal_rays[r];
         Position fireCenter(ray.source.x, ray.source.y);
         Position collide(ray.target.x, ray.target.y);
         fireTab.push_back(FireVertex(fireCenter, collide, r));
     }
     int fighterID = 0;
-    for (int y = 0; y < height; y++){
-        for (int x=0; x < width; x++){
-            if (ray_fighting_map[y][x].size() > 0){
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            if (ray_fighting_map[y][x].size() > 0)
+            {
                 Position p(x, y);
                 FighterVertex fighter(p, fighterID);
-                for(int r : ray_fighting_map[y][x]){
+                for (int r : ray_fighting_map[y][x])
+                {
                     fighter.addFire(fireTab[r]);
                 }
                 fighterTab.push_back(fighter);

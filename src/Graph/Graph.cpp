@@ -16,7 +16,10 @@ Graph::Graph(std::vector<FireVertex> fireTab,
 Graph::Graph(std::vector<FireVertex> fireTab,
              std::vector<FighterVertex> fighterTab)
 {
+    this->fireTab = fireTab;
+    this->fighterTab = fighterTab;
     cutUselessFighters();
+    generateAdjacency();
 }
 
 void Graph::cutUselessFighters()
@@ -58,13 +61,16 @@ void Graph::cutUselessFighters()
     this->fighterTab = usefullFighters;
 }
 
-const std::vector<FighterVertex> Graph::getFireNeightborhood(int ID){
+const std::vector<FighterVertex> Graph::getFireNeightborhood(int ID)
+{
     return this->fireAdjacencyList.at(ID);
 }
-const std::vector<FireVertex> Graph::getFighterNeightborhood(int ID){
+const std::vector<FireVertex> Graph::getFighterNeightborhood(int ID)
+{
     return this->fighterAdjacencyList.at(ID);
 }
-const int Graph::isAdjacent(int fighterID, int fireID){
+const int Graph::isAdjacent(int fighterID, int fireID)
+{
     return adjacencyMatrix.at(fighterID).at(fireID);
 }
 
@@ -108,23 +114,29 @@ const std::vector<FighterVertex> &Graph::getFireAdjacencyList(int id)
     return fireAdjacencyList.at(id);
 }
 
-void Graph::generateAdjacency(){
-    //init matrix and lists: 
-    for(int i = 0; i < fighterTab.size() ; ++i){
+void Graph::generateAdjacency()
+{
+    // init matrix and lists:
+    for (int i = 0; i < fighterTab.size(); ++i)
+    {
         adjacencyMatrix.push_back(std::vector<int>());
         fighterAdjacencyList.push_back(std::vector<FireVertex>());
-        for(int j = 0; j < fireTab.size() ; ++j){
+        for (int j = 0; j < fireTab.size(); ++j)
+        {
             adjacencyMatrix[i].push_back(0);
-            if (i == 0){
-               fireAdjacencyList.push_back(std::vector<FighterVertex>()); 
+            if (i == 0)
+            {
+                fireAdjacencyList.push_back(std::vector<FighterVertex>());
             }
         }
     }
-    
-    for(FighterVertex figther : fighterTab){
+
+    for (FighterVertex figther : fighterTab)
+    {
         std::vector<FireVertex> fires = figther.getFireLignes();
         int figtherID = figther.getID();
-        for (FireVertex fire : fires){
+        for (FireVertex fire : fires)
+        {
             int fireId = fire.getID();
             adjacencyMatrix[figtherID][fireId] = 1;
             fireAdjacencyList[fireId].push_back(figther);

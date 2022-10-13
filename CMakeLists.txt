@@ -27,7 +27,7 @@ if(GUROBI_LIBRARY_CPLUS AND GUROBI_LIBRARY)
 endif()
 
 # test executable
-file(GLOB SRC_TEST src/Graph/*.cpp src/utils.cpp src/brute_force.cpp)
+file(GLOB SRC_TEST src/brute_force.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
 file(GLOB TEST src/exec/test.cpp)
 add_executable(test.out ${SRC_TEST} ${TEST})
 

@@ -6,14 +6,14 @@ using namespace std;
 std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::vector<float> config)
 {
     int nb_rays = (int)config[0];
-    //int nb_rays = 25;
+    // int nb_rays = 25;
     float furnace_radius = config[1];
     float action_radius = config[2];
 
     size_t height = map.size();
     size_t width = map[0].size();
 
-    //map[35][25] = RED;
+    // map[35][25] = RED;
 
     std::vector<pixel> fire_centers;
     std::vector<std::vector<int>> feasibility_map;
