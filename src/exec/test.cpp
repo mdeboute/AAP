@@ -39,7 +39,9 @@ int main()
     fighters = cutUselessFighters(fighters);
 
     std::cout << "here" << std::endl;
-    for (int i=0; i<fighters.size(); i++){
-        std::cout << fighters[i] << std::endl << std::endl;
+    for (int i = 0; i < fighters.size(); i++)
+    {
+        std::cout << fighters[i] << std::endl
+                  << std::endl;
     }
 }

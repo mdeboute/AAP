@@ -6,9 +6,10 @@
 
 class FighterVertex : public Vertex
 {
-private :
+private:
     std::vector<FireVertex> fireLignes;
     bool parssingDone = false;
+
 public:
     FighterVertex();
     FighterVertex(Position p, int id);
@@ -17,7 +18,6 @@ public:
     FireVertex getFireAt(int index);
     std::vector<FireVertex> getFireLignes();
     bool containsFighter(FighterVertex f);
-
 };
 
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)
