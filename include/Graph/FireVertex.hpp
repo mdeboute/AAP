@@ -13,7 +13,7 @@ public:
     FireVertex(Position fireCenter, Position collide, int id);
     Position getFireCenter();
 };
-inline std::ostream &operator<<(Vertex&os, FireVertex v)
+inline std::ostream &operator<<(std::ostream &os, FireVertex v)
 {
     os << "fire of id : " << v.getID() << " from " << v.getFireCenter() << " to " << v.getPos();
     return os;

@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     display_map(map);
 
-    Graph = calculate_graph_data(map, config);
+    Graph graph = calculate_graph_data(map, config);
 
     map = solve(map, config);
 

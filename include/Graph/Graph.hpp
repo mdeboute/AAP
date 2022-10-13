@@ -31,16 +31,13 @@ public:
           std::vector<std::vector<int>> fighterAdjacencyList,
           std::vector<std::vector<int>> fireAdjacencyList);
 
-    Graph::Graph(std::vector<FireVertex> fireTab,
+    Graph(std::vector<FireVertex> fireTab,
                  std::vector<FighterVertex> fighterTab);
 
     Graph(std::vector<FireVertex> fireTab,
           std::vector<FighterVertex> fighterTab,
           std::vector<Edge> edges);
 
-    Graph(std::vector<FireVertex> fireTab,
-          std::vector<FighterVertex> fighterTab,
-          std::vector<Edge> edges);d(int ID);
     const int isAdjacent(int fireID, int fighterID);
     const std::vector<FireVertex> &getFireVertexTab();
     const FireVertex &getFireVertex(int id);
