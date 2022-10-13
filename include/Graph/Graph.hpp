@@ -16,20 +16,19 @@ private:
     std::vector<std::vector<int>> AdjacencyMatrix;
 
     // a list of adjacent FireVertex for each firefighter. stocking id (position in list).
-    std::vector<std::vector<int>> fighterAdjacencyList;
+    std::vector<std::vector<FireVertex>> fighterAdjacencyList;
 
     // a list of adjacent FighterVertex for each fire. stocking id (position in list).
-    std::vector<std::vector<int>> fireAdjacencyList;
+    std::vector<std::vector<FighterVertex>> fireAdjacencyList;
     void cutUselessFighters();
-    void generateAdjacencyList();
-    void generateAdjacencyMatrix();
+    void generateAdjacency();
 
 public:
     Graph();
     Graph(std::vector<FireVertex> fireTab,
           std::vector<FighterVertex> fighterTab,
-          std::vector<std::vector<int>> fighterAdjacencyList,
-          std::vector<std::vector<int>> fireAdjacencyList);
+          std::vector<std::vector<FireVertex>> fighterAdjacencyList,
+          std::vector<std::vector<FighterVertex>> fireAdjacencyList);
 
     Graph(std::vector<FireVertex> fireTab,
                  std::vector<FighterVertex> fighterTab);
@@ -43,10 +42,10 @@ public:
     const FireVertex &getFireVertex(int id);
     const std::vector<FighterVertex> &getFigtherVertexTab();
     const FighterVertex &getFigtherVertex(int id);
-    const std::vector<std::vector<int>> &getFighterAdjacencyList();
-    const std::vector<int> &getFighterAdjacencyList(int id);
-    const std::vector<std::vector<int>> &getFireAdjacencyList();
-    const std::vector<int> &getFireAdjacencyList(int id);
+    const std::vector<std::vector<FireVertex>> &getFighterAdjacencyList();
+    const std::vector<FireVertex> &getFighterAdjacencyList(int id);
+    const std::vector<std::vector<FighterVertex>> &getFireAdjacencyList();
+    const std::vector<FighterVertex> &getFireAdjacencyList(int id);
 };
 
 #endif
