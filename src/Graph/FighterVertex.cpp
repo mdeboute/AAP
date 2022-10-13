@@ -13,17 +13,17 @@ void FighterVertex::addFire(FireVertex f)
 {
     if (parssingDone)
         return;
-    fireLignes.push_back(f);
+    fireLines.push_back(f);
 }
 
 FireVertex FighterVertex::getFireAt(int index)
 {
-    return fireLignes[index];
+    return fireLines[index];
 }
 
-std::vector<FireVertex> FighterVertex::getFireLignes()
+std::vector<FireVertex> FighterVertex::getFireLines()
 {
-    return fireLignes;
+    return fireLines;
 }
 /*
 true : tous les feu de f sont contenus dans la liste
@@ -31,11 +31,11 @@ false : un des feux de f n'est pas dans la liste
 */
 bool FighterVertex::containsFighter(FighterVertex f)
 {
-    std::vector<FireVertex> fLignes = f.getFireLignes();
+    std::vector<FireVertex> fLignes = f.getFireLines();
     for (FireVertex fire : fLignes)
     {
         bool find = false;
-        for (FireVertex myFire : fireLignes)
+        for (FireVertex myFire : fireLines)
         {
             if (fire == myFire)
             {
@@ -53,7 +53,7 @@ bool FighterVertex::containsFighter(FighterVertex f)
 
 bool FighterVertex::stopFire(FireVertex f)
 {
-    for (FireVertex fire : fireLignes)
+    for (FireVertex fire : fireLines)
     {
         if (fire == f)
         {

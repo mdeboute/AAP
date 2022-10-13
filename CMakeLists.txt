@@ -32,4 +32,4 @@ file(GLOB TEST src/exec/test.cpp)
 add_executable(test.out ${SRC_TEST} ${TEST})
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR}/data)
-execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/solutions/ ${CMAKE_CURRENT_BINARY_DIR}/solutions)
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/solution/ ${CMAKE_CURRENT_BINARY_DIR}/solution)

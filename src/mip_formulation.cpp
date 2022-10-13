@@ -296,8 +296,6 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
     return map;
 }
 
-
-
 std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>> map, std::vector<float> config)
 {
     size_t height = map.size();
@@ -308,7 +306,7 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
     std::vector<FighterVertex> fighterVertexTab = graph.getFigtherVertexTab();
     size_t nb_fatal_rays = fireVertexTab.size();
     size_t nb_firefighters = fighterVertexTab.size();
-    //cout << graph.getFireVertex(0) << " " << nb_firefighters << endl;
+    // cout << graph.getFireVertex(0) << " " << nb_firefighters << endl;
 
     bool verbose = true;
 
@@ -336,7 +334,7 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
         if (verbose)
             cout << "--> Creating the variables" << endl;
 
-        x = new GRBVar [nb_firefighters];
+        x = new GRBVar[nb_firefighters];
 
         for (size_t i = 0; i < nb_firefighters; ++i)
         {
@@ -344,7 +342,6 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
             stringstream ss;
             ss << "Fighter(" << p.getX() << ", " << p.getY() << ")";
             x[i] = model.addVar(0.0, 1.0, 0.0, GRB_BINARY, ss.str());
-
         }
 
         // --- Creation of the objective function ---
@@ -353,7 +350,7 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
         GRBLinExpr obj = 0;
         for (size_t i = 0; i < nb_firefighters; ++i)
             obj += x[i];
-        
+
         model.setObjective(obj, GRB_MINIMIZE);
 
         // --- Creation of the constraints ---
@@ -369,8 +366,10 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
             {
                 FighterVertex fighter = fighterVertexTab[i];
                 cout << fighter << endl;
-                for (FireVertex coveredRay : fighter.getFireLignes()){
-                    if (fireRay.getID() == coveredRay.getID()){
+                for (FireVertex coveredRay : fighter.getFireLines())
+                {
+                    if (fireRay.getID() == coveredRay.getID())
+                    {
                         cout << "here" << endl;
                         ray_cover += x[i];
                         break;
@@ -430,24 +429,23 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
                         cout << "We place a firefigher at position (" << firefighter.x << ", " << firefighter.y << ")" << endl;
                         map[firefighter.y][firefighter.x] = GREEN;
                     }
-                }/*
-                for (vector<vector<pixel>> ray_paths : fire_ray_paths)
-                {
-                    for (vector<pixel> ray_path : ray_paths)
-                    {
-                        for (size_t i = 1; i < ray_path.size(); i++)
-                        {
-                            pixel p = ray_path[i];
-                            if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
-                                break;
-                            if (map[p.y][p.x] == YELLOW)
-                                map[p.y][p.x] = ORANGE;
-                        }
-                    }
-                }*/
+                } /*
+                 for (vector<vector<pixel>> ray_paths : fire_ray_paths)
+                 {
+                     for (vector<pixel> ray_path : ray_paths)
+                     {
+                         for (size_t i = 1; i < ray_path.size(); i++)
+                         {
+                             pixel p = ray_path[i];
+                             if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
+                                 break;
+                             if (map[p.y][p.x] == YELLOW)
+                                 map[p.y][p.x] = ORANGE;
+                         }
+                     }
+                 }*/
             }
             // model.write("solution.sol"); //< Writes the solution in a file
-
         }
         else
         {

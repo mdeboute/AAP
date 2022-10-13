@@ -35,39 +35,32 @@ int main(int argc, char *argv[])
     vector<FireVertex> fireVertices = graph.getFireVertexTab();
     vector<FighterVertex> fighterVertices = graph.getFigtherVertexTab();
 
-    for (FireVertex fireVertex : fireVertices)
-    {
-        cout << "FireVertex: " << fireVertex << endl;
-    }
-
     vector<vector<FighterVertex>> partitions = findPartitions(fighterVertices);
 
-    // print the partitions
-    // for (int i = 0; i < partitions.size(); i++)
-    // {
-    //     cout << "Partition " << i << ": ";
-    //     for (int j = 0; j < partitions[i].size(); j++)
-    //     {
-    //         cout << partitions[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
+    const vector<FighterVertex> bestTeam = solve(partitions, fireVertices);
 
-    // vector<FighterVertex> bestTeam = solve(partitions, fireVertices);
+    for (FighterVertex fighter : bestTeam)
+    {
+        Position pos = fighter.getPos();
+        map[pos.getY()][pos.getX()] = GREEN;
+    }
 
-    // cout << "Best team: \n"
-    //      << endl;
-    // for (FighterVertex fighter : bestTeam)
-    // {
-    //     cout << fighter << endl;
-    // }
+    cout << "Best team: \n"
+         << endl;
+    for (FighterVertex fighter : bestTeam)
+    {
+        cout << fighter << endl;
+    }
 
-    // vector<string> splittedString = splitString(data_dir, "/");
-    // const string result_file = "../solutions/result_" + splittedString[1] + ".ppm";
-    // cout << "Writing result to " << result_file << endl;
-    // writeMap(result_file, map);
+    vector<string> splittedString = splitString(data_dir, "/");
+    const string result_file = "../solution/result_" + splittedString[1] + ".ppm";
+    cout << "Writing result to " << result_file << endl;
+
+    writeMap(result_file, map);
 
     // display_map(map);
+
+    // TODO: fix the bruteforce
 
     return 0;
 }

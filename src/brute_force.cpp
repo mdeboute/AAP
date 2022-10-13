@@ -8,17 +8,17 @@ std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex
     int n = fighters.size();
     std::vector<std::vector<FighterVertex>> partitions;
 
-    for (int i = 0; i < pow(2, n); i++)
+    for (int i = 0; i < std::pow(2, n); i++)
     {
-        std::vector<FighterVertex> partition;
+        std::vector<FighterVertex> subset;
         for (int j = 0; j < n; j++)
         {
             if (i & (1 << j))
             {
-                partition.push_back(fighters[j]);
+                subset.push_back(fighters[j]);
             }
         }
-        partitions.push_back(partition);
+        partitions.push_back(subset);
     }
     return partitions;
 }

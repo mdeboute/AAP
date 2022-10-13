@@ -169,7 +169,6 @@ std::vector<std::string> splitString(const std::string &s, const std::string &de
 Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<float> config)
 {
     int nb_rays = (int)config[0];
-    // int nb_rays = 25;
     float furnace_radius = config[1];
     float action_radius = config[2];
 
@@ -190,8 +189,8 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<floa
             if (map[y][x] == YELLOW)
                 feasibility_map_line.push_back(1);
             else
-                feasibility_map_line.push_back(0); // to changer if firefighters can be in cities
-            if (map[y][x] == RED)                  //
+                feasibility_map_line.push_back(0); // to change if firefighters can be in cities
+            if (map[y][x] == RED)
             {
                 pixel fire;
                 fire.x = x;
@@ -300,6 +299,6 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<floa
             }
         }
     }
-    std::cout << fireTab.size() << " " << fighterTab.size() << std::endl;
+    // std::cout << fireTab.size() << " " << fighterTab.size() << std::endl;
     return Graph(fireTab, fighterTab);
 }
