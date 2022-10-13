@@ -59,13 +59,13 @@ void Graph::cutUselessFighters()
 }
 
 const std::vector<FighterVertex> Graph::getFireNeightborhood(int ID){
-    //TO DO
+    return this->fireAdjacencyList.at(ID);
 }
 const std::vector<FireVertex> Graph::getFighterNeightborhood(int ID){
-    //TO DO
+    return this->fighterAdjacencyList.at(ID);
 }
-const int Graph::isAdjacent(int fireID, int fighterID){
-    //TO DO
+const int Graph::isAdjacent(int fighterID, int fireID){
+    return adjacencyMatrix.at(fighterID).at(fireID);
 }
 
 const std::vector<FireVertex> &Graph::getFireVertexTab()
@@ -75,7 +75,7 @@ const std::vector<FireVertex> &Graph::getFireVertexTab()
 
 const FireVertex &Graph::getFireVertex(int id)
 {
-    return fireTab[id];
+    return fireTab.at(id);
 }
 
 const std::vector<FighterVertex> &Graph::getFigtherVertexTab()
@@ -85,7 +85,7 @@ const std::vector<FighterVertex> &Graph::getFigtherVertexTab()
 
 const FighterVertex &Graph::getFigtherVertex(int id)
 {
-    return fighterTab[id];
+    return fighterTab.at(id);
 }
 
 const std::vector<std::vector<FireVertex>> &Graph::getFighterAdjacencyList()
@@ -95,7 +95,7 @@ const std::vector<std::vector<FireVertex>> &Graph::getFighterAdjacencyList()
 
 const std::vector<FireVertex> &Graph::getFighterAdjacencyList(int id)
 {
-    return fighterAdjacencyList[id];
+    return fighterAdjacencyList.at(id);
 }
 
 const std::vector<std::vector<FighterVertex>> &Graph::getFireAdjacencyList()
@@ -105,16 +105,16 @@ const std::vector<std::vector<FighterVertex>> &Graph::getFireAdjacencyList()
 
 const std::vector<FighterVertex> &Graph::getFireAdjacencyList(int id)
 {
-    return fireAdjacencyList[id];
+    return fireAdjacencyList.at(id);
 }
 
 void Graph::generateAdjacency(){
     //init matrix and lists: 
     for(int i = 0; i < fighterTab.size() ; ++i){
-        AdjacencyMatrix.push_back(std::vector<int>());
+        adjacencyMatrix.push_back(std::vector<int>());
         fighterAdjacencyList.push_back(std::vector<FireVertex>());
         for(int j = 0; j < fireTab.size() ; ++j){
-            AdjacencyMatrix[i].push_back(0);
+            adjacencyMatrix[i].push_back(0);
             if (i == 0){
                fireAdjacencyList.push_back(std::vector<FighterVertex>()); 
             }
@@ -126,7 +126,7 @@ void Graph::generateAdjacency(){
         int figtherID = figther.getID();
         for (FireVertex fire : fires){
             int fireId = fire.getID();
-            AdjacencyMatrix[figtherID][fireId] = 1;
+            adjacencyMatrix[figtherID][fireId] = 1;
             fireAdjacencyList[fireId].push_back(figther);
             fighterAdjacencyList[figtherID].push_back(fire);
         }
