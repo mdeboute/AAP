@@ -51,16 +51,22 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
     {
         int next_x = x + ray.dir;
         int next_y;
+        float exact_next_y;
 
         if (ray.slope == INFINITY)
-            next_y = map.size();
+            exact_next_y = map.size();
         else if (ray.slope == -INFINITY)
-            next_y = 0;
+            exact_next_y = 0;
         else
-            next_y = (int)ceil(ray.slope * next_x + ray.intercept);
+            exact_next_y = ray.slope * next_x + ray.intercept;
+        
+        if ((ray.slope >=0 && ray.dir==RIGHT) || (ray.slope <0 && ray.dir==LEFT))
+            next_y = (int) ceil(exact_next_y);
+        else
+            next_y = (int) floor(exact_next_y);
 
         if (next_y == curr_y)
-            next_y = curr_y + 1;
+            next_y = curr_y + ray.dir;
 
         int step = (int)(next_y - curr_y) / abs(next_y - curr_y); // +1 or -1 depending on the direction of the ray
 
@@ -83,7 +89,11 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
         x = next_x;
         if (x < 0 || x >= map[0].size())
             break;
-        curr_y = (int)floor(ray.slope * x + ray.intercept);
+        
+        if ((ray.slope >=0 && ray.dir==RIGHT) || (ray.slope <0 && ray.dir==LEFT))
+            curr_y = (int) floor(exact_next_y);
+        else
+            curr_y = (int) ceil(exact_next_y);
         if (curr_y < 0 || curr_y >= map.size())
             break;
     }
@@ -165,8 +175,6 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<floa
 
     size_t height = map.size();
     size_t width = map[0].size();
-
-    map[35][25] = RED;
 
     std::vector<pixel> fire_centers;
     std::vector<std::vector<int>> feasibility_map;

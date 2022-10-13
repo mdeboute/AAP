@@ -13,7 +13,7 @@ private:
     std::vector<FireVertex> fireTab;
     std::vector<FighterVertex> fighterTab;
     
-    std::vector<std::vector<int>> AdjacencyMatrix;
+    std::vector<std::vector<int>> adjacencyMatrix;
 
     // a list of adjacent FireVertex for each firefighter. stocking id (position in list).
     std::vector<std::vector<FireVertex>> fighterAdjacencyList;
@@ -35,7 +35,7 @@ public:
 
     const std::vector<FighterVertex> getFireNeightborhood(int ID);
     const std::vector<FireVertex> getFighterNeightborhood(int ID);
-    const int isAdjacent(int fireID, int fighterID);
+    const int isAdjacent(int fighterID, int fireID);
     const std::vector<FireVertex> &getFireVertexTab();
     const FireVertex &getFireVertex(int id);
     const std::vector<FighterVertex> &getFigtherVertexTab();
