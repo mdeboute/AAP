@@ -33,10 +33,8 @@ public:
     Graph(std::vector<FireVertex> fireTab,
                  std::vector<FighterVertex> fighterTab);
 
-    Graph(std::vector<FireVertex> fireTab,
-          std::vector<FighterVertex> fighterTab,
-          std::vector<Edge> edges);
-
+    const std::vector<FighterVertex> getFireNeightborhood(int ID);
+    const std::vector<FireVertex> getFighterNeightborhood(int ID);
     const int isAdjacent(int fireID, int fighterID);
     const std::vector<FireVertex> &getFireVertexTab();
     const FireVertex &getFireVertex(int id);

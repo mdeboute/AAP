@@ -19,38 +19,6 @@ Graph::Graph(std::vector<FireVertex> fireTab,
     cutUselessFighters();
 }
 
-Graph::Graph(std::vector<FireVertex> fireTab,
-             std::vector<FighterVertex> fighterTab,
-             std::vector<Edge> edges)
-{
-    this->fireTab = fireTab;
-    this->fighterTab = fighterTab;
-    for (int i = 0; i < fireTab.size(); i++)
-    {
-        this->fireAdjacencyList.push_back(std::vector<int>());
-    }
-
-    for (int i = 0; i < fighterTab.size(); i++)
-    {
-        this->fighterAdjacencyList.push_back(std::vector<int>());
-    }
-
-    for (Edge e : edges)
-    {
-        int fireID = e.getFireVertex().getID();
-        int fighterID = e.getFighterVertex().getID();
-
-        if (fireID >= fireTab.size() || fighterID >= fighterTab.size())
-        {
-            std::cout << "!!! in graph creation, edge " << e.getID() << " given have fire and fighter id of " << fireID
-                      << " and " << fighterID << " while max id are " << fireTab.size() << " and " << fighterTab.size() << " !!! " << std::endl;
-        }
-
-        this->fighterAdjacencyList[fighterID].push_back(fireID);
-        this->fireAdjacencyList[fireID].push_back(fighterID);
-    }
-}
-
 void Graph::cutUselessFighters()
 {
     std::vector<FighterVertex> usefullFighters;
@@ -88,12 +56,6 @@ void Graph::cutUselessFighters()
         }
     }
     this->fighterTab = usefullFighters;
-Graph::Graph(std::vector<FireVertex> fireTab,
-            std::vector<FighterVertex> fighterTab){
-    this->fireTab = fireTab;
-    this->fighterTab = fighterTab;
-    cutUselessFighters();
-    generateAdjacencyMatrix();
 }
 
 const std::vector<FighterVertex> Graph::getFireNeightborhood(int ID){
