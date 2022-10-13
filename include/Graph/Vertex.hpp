@@ -17,6 +17,7 @@ protected:
 public:
     Position getPos();
     int getID();
+    void setID(int id){this->id = id;}
 };
 
 #endif
