@@ -5,8 +5,8 @@ using namespace std;
 
 std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::vector<float> config)
 {
-    int nb_rays = (int)config[0];
-    // int nb_rays = 25;
+    //int nb_rays = (int)config[0];
+    int nb_rays = 5;
     float furnace_radius = config[1];
     float action_radius = config[2];
 
@@ -234,13 +234,13 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
                 {
                     for (size_t i = 0; i < width; ++i)
                     {
-                        if (ray_fighting_map[j][i].size() > 0)
+                        /*if (ray_fighting_map[j][i].size() > 0)
                             cout << "Rays ";
                         for (size_t k = 0; k < ray_fighting_map[j][i].size(); k++)
                             cout << ray_fighting_map[j][i][k] << ", ";
                         if (ray_fighting_map[j][i].size() > 0)
                             cout << " can be stopped in position (" << i << ", " << j << ")" << endl;
-
+                        */
                         /*if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
                         {
                             pixel firefighter;
