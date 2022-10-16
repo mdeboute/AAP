@@ -5,7 +5,7 @@
 #include "Graph/FighterVertex.hpp"
 #include "Graph/FireVertex.hpp"
 
-std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighterList);
+std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighterList, int upperBound, int lowerBound);
 bool checker(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
 std::vector<FighterVertex> solve(std::vector<std::vector<FighterVertex>> partitions, std::vector<FireVertex> fireList);
 

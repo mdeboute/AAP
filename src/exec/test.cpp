@@ -35,7 +35,14 @@ int main(int argc, char *argv[])
     vector<FireVertex> fireVertices = graph.getFireVertexTab();
     vector<FighterVertex> fighterVertices = graph.getFigtherVertexTab();
 
-    vector<vector<FighterVertex>> partitions = findPartitions(fighterVertices);
+    cout << "Number of fires: " << fireVertices.size() << endl;
+    cout << "Number of  potential fighters: " << fighterVertices.size() << endl;
+
+    // TODO: compute a lower bound on the number of fighters needed to extinguish all fires
+
+    vector<vector<FighterVertex>> partitions = findPartitions(fighterVertices, fireVertices.size(), 4);
+
+    cout << "Number of partitions: " << partitions.size() << endl;
 
     const vector<FighterVertex> bestTeam = solve(partitions, fireVertices);
 
@@ -59,8 +66,6 @@ int main(int argc, char *argv[])
     writeMap(result_file, map);
 
     // display_map(map);
-
-    // TODO: fix the bruteforce
 
     return 0;
 }

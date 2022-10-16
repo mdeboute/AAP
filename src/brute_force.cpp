@@ -3,7 +3,7 @@
 #include "Graph/FighterVertex.hpp"
 #include <cmath>
 
-std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighters)
+std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighters, int upperBound, int lowerBound)
 {
     int n = fighters.size();
     std::vector<std::vector<FighterVertex>> partitions;
@@ -11,14 +11,19 @@ std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex
     for (int i = 0; i < std::pow(2, n); i++)
     {
         std::vector<FighterVertex> subset;
-        for (int j = 0; j < n; j++)
+
+        // we want the subset of size at most upperBound and at least lowerBound
+        if (std::bitset<32>(i).count() <= upperBound && std::bitset<32>(i).count() >= lowerBound)
         {
-            if (i & (1 << j))
+            for (int j = 0; j < n; j++)
             {
-                subset.push_back(fighters[j]);
+                if (i & (1 << j))
+                {
+                    subset.push_back(fighters[j]);
+                }
             }
+            partitions.push_back(subset);
         }
-        partitions.push_back(subset);
     }
     return partitions;
 }
