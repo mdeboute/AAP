@@ -360,17 +360,14 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
         // Each ray must be in the action range of a firefigher
         for (FireVertex fireRay : fireVertexTab)
         {
-            cout << fireRay << endl;
             GRBLinExpr ray_cover = 0;
             for (size_t i = 0; i < nb_firefighters; ++i)
             {
                 FighterVertex fighter = fighterVertexTab[i];
-                cout << fighter << endl;
                 for (FireVertex coveredRay : fighter.getFireLines())
                 {
                     if (fireRay.getID() == coveredRay.getID())
                     {
-                        cout << "here" << endl;
                         ray_cover += x[i];
                         break;
                     }
@@ -422,28 +419,10 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
                         pixel firefighter;
                         firefighter.x = pos.getX();
                         firefighter.y = pos.getY();
-                        /*vector<pixel> action_area = circle_to_pixels(firefighter, action_radius, width, height);
-                        for (pixel p : action_area)
-                            if (map[p.y][p.x] == YELLOW || map[p.y][p.x] == ORANGE)
-                                map[p.y][p.x] = LIME;*/
                         cout << "We place a firefigher at position (" << firefighter.x << ", " << firefighter.y << ")" << endl;
                         map[firefighter.y][firefighter.x] = GREEN;
                     }
-                } /*
-                 for (vector<vector<pixel>> ray_paths : fire_ray_paths)
-                 {
-                     for (vector<pixel> ray_path : ray_paths)
-                     {
-                         for (size_t i = 1; i < ray_path.size(); i++)
-                         {
-                             pixel p = ray_path[i];
-                             if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
-                                 break;
-                             if (map[p.y][p.x] == YELLOW)
-                                 map[p.y][p.x] = ORANGE;
-                         }
-                     }
-                 }*/
+                }
             }
             // model.write("solution.sol"); //< Writes the solution in a file
         }

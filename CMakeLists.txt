@@ -21,8 +21,9 @@ if(GUROBI_LIBRARY_CPLUS AND GUROBI_LIBRARY)
 
     # mip executable
     file(GLOB SRC src/*.cpp src/Graph/*.cpp)
+    file(GLOB SRC_MIP   src/mip_formulation.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
     file(GLOB MIP src/exec/mip.cpp)
-    add_executable(mip.out ${SRC} ${MIP})
+    add_executable(mip.out ${SRC_MIP} ${MIP})
     target_link_libraries(mip.out ${GUROBI_LIBRARIES})
 endif()
 
