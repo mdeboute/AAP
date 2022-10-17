@@ -25,4 +25,4 @@ In the build directory:
 
 Write a small report (PDF file) explaining:
 
-BrutForce + Greedy algorithms.
+~~Brute-force~~ + Greedy algorithms.
