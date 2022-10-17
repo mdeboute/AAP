@@ -40,3 +40,6 @@ out/
 
 # Visual Studio Code
 .vscode/
+
+# output dir
+solution/
