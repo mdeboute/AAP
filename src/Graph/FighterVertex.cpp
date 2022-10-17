@@ -62,3 +62,8 @@ bool FighterVertex::stopFire(FireVertex f)
     }
     return false;
 }
+
+int FighterVertex::getFireCapacity()
+{
+    return fireLines.size();
+}

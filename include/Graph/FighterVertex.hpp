@@ -7,7 +7,7 @@
 class FighterVertex : public Vertex
 {
 private:
-    std::vector<FireVertex> fireLines;
+    std::vector<FireVertex> fireLines; // maybe to refactor because it's not a line
     bool parssingDone = false;
 
 public:
@@ -19,6 +19,7 @@ public:
     std::vector<FireVertex> getFireLines();
     bool containsFighter(FighterVertex f);
     bool stopFire(FireVertex f);
+    int getFireCapacity();
 };
 
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)

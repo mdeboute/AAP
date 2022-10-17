@@ -3,29 +3,18 @@
 #include "Graph/FighterVertex.hpp"
 #include <cmath>
 
-std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighters, int upperBound, int lowerBound)
+int computeLowerBound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList)
 {
-    int n = fighters.size();
-    std::vector<std::vector<FighterVertex>> partitions;
-
-    for (int i = 0; i < std::pow(2, n); i++)
+    int max = 0;
+    for (FighterVertex fighter : fighterList)
     {
-        std::vector<FighterVertex> subset;
-
-        // we want the subset of size at most upperBound and at least lowerBound
-        if (std::bitset<32>(i).count() <= upperBound && std::bitset<32>(i).count() >= lowerBound)
+        int capacity = fighter.getFireCapacity();
+        if (capacity > max)
         {
-            for (int j = 0; j < n; j++)
-            {
-                if (i & (1 << j))
-                {
-                    subset.push_back(fighters[j]);
-                }
-            }
-            partitions.push_back(subset);
+            max = capacity;
         }
     }
-    return partitions;
+    return ceil((double)fireList.size() / max);
 }
 
 bool checker(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
@@ -49,15 +38,47 @@ bool checker(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
     return true;
 }
 
+std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
+{
+    int n = fighters.size();
+    int upperBound = fires.size();
+    int lowerBound = computeLowerBound(fighters, fires);
+
+    std::vector<std::vector<FighterVertex>> partitions;
+
+    for (int i = 0; i < std::pow(2, n); i++)
+    {
+        std::vector<FighterVertex> subset;
+
+        // we want the subset of size at most upperBound and at least lowerBound that are feasible (using the checker)
+        if (std::bitset<32>(i).count() <= upperBound && std::bitset<32>(i).count() >= lowerBound)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (i & (1 << j))
+                {
+                    subset.push_back(fighters[j]);
+                }
+            }
+            if (checker(subset, fires))
+            {
+                partitions.push_back(subset);
+            }
+        }
+    }
+    return partitions;
+}
+
 std::vector<FighterVertex> solve(std::vector<std::vector<FighterVertex>> partitions, std::vector<FireVertex> fires)
 {
     std::vector<FighterVertex> bestTeam;
     int bestSize = fires.size();
     for (std::vector<FighterVertex> team : partitions)
     {
-        if (checker(team, fires) == true && team.size() <= bestSize)
+        if (team.size() <= bestSize)
         {
             bestTeam = team;
+            bestSize = team.size();
         }
     }
     return bestTeam;
