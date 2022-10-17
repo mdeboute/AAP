@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     const string map_file = data_dir + "/map.ppm";
     const string config_file = data_dir + "/config.txt";
 
-    vector<float> config = parseConfig(config_file);
-    vector<vector<Color>> map = parseMap(map_file);
+    vector<float> config = parse_config(config_file);
+    vector<vector<Color>> map = parse_map(map_file);
 
     cout << "Number of angles: " << config[0] << endl;
     cout << "Furnace radius: " << config[1] << endl;
@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
     Graph graph = calculate_graph_data(map, config);
 
     map = solve_using_graph(map, config);
-    map = draw_scenario(map, config);
+    map = draw_details(map, config);
 
-    vector<string> splittedString = splitString(data_dir, "/");
+    vector<string> splittedString = split_string(data_dir, "/");
     const string result_file = "../solution/result_" + splittedString[1] + ".ppm";
     cout << "Writing result to " << result_file << endl;
-    writeMap(result_file, map);
+    write_map(result_file, map);
 
     // display_map(map);
 

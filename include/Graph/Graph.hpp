@@ -12,7 +12,7 @@ class Graph
 private:
     std::vector<FireVertex> fireTab;
     std::vector<FighterVertex> fighterTab;
-    
+
     std::vector<std::vector<int>> adjacencyMatrix;
 
     // a list of adjacent FireVertex for each firefighter. stocking id (position in list).
@@ -31,7 +31,7 @@ public:
           std::vector<std::vector<FighterVertex>> fireAdjacencyList);
 
     Graph(std::vector<FireVertex> fireTab,
-                 std::vector<FighterVertex> fighterTab);
+          std::vector<FighterVertex> fighterTab);
 
     const std::vector<FighterVertex> getFireNeightborhood(int ID);
     const std::vector<FireVertex> getFighterNeightborhood(int ID);

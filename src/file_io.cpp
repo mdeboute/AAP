@@ -1,6 +1,7 @@
 #include <iostream>
 #include "file_io.hpp"
 #include "Graph/FighterVertex.hpp"
+#include "utils.hpp"
 
 Color getColorCode(int r, int g, int b)
 {
@@ -15,7 +16,7 @@ Color getColorCode(int r, int g, int b)
     return ERROR;
 }
 
-void getCodeColor(Color code, int *r, int *g, int *b)
+void getColorCode(Color code, int *r, int *g, int *b)
 {
     switch (code)
     {
@@ -69,7 +70,7 @@ void getCodeColor(Color code, int *r, int *g, int *b)
     }
 }
 
-void openFile(std::ifstream &file, std::string filePath)
+void open_file(std::ifstream &file, std::string filePath)
 {
     file.open(filePath);
     if (!file.is_open())
@@ -80,7 +81,7 @@ void openFile(std::ifstream &file, std::string filePath)
     }
 }
 
-std::vector<std::vector<Color>> processMapFile(std::ifstream &file)
+std::vector<std::vector<Color>> process_map_file(std::ifstream &file)
 {
     // data format:
     std::string line;
@@ -121,16 +122,16 @@ std::vector<std::vector<Color>> processMapFile(std::ifstream &file)
     return map;
 }
 
-std::vector<std::vector<Color>> parseMap(std::string filePath)
+std::vector<std::vector<Color>> parse_map(std::string filePath)
 {
     std::ifstream file;
-    openFile(file, filePath);
-    std::vector<std::vector<Color>> map = processMapFile(file);
+    open_file(file, filePath);
+    std::vector<std::vector<Color>> map = process_map_file(file);
     file.close();
     return map;
 }
 
-std::vector<float> processConfig(std::ifstream &filePath)
+std::vector<float> process_config(std::ifstream &filePath)
 {
     std::vector<float> config;
     std::string line;
@@ -144,16 +145,16 @@ std::vector<float> processConfig(std::ifstream &filePath)
     return config;
 }
 
-std::vector<float> parseConfig(std::string filePath)
+std::vector<float> parse_config(std::string filePath)
 {
     std::ifstream file;
-    openFile(file, filePath);
-    std::vector<float> config = processConfig(file);
+    open_file(file, filePath);
+    std::vector<float> config = process_config(file);
     file.close();
     return config;
 }
 
-void writeMap(const std::string &filePath, std::vector<std::vector<Color>> map)
+void write_map(const std::string &filePath, std::vector<std::vector<Color>> map)
 {
     std::ofstream file;
     file.open(filePath);
@@ -170,10 +171,22 @@ void writeMap(const std::string &filePath, std::vector<std::vector<Color>> map)
         for (size_t x = 0; x < width; x++)
         {
             int r, g, b;
-            getCodeColor(map[y][x], &r, &g, &b);
+            getColorCode(map[y][x], &r, &g, &b);
             file << r << " " << g << " " << b << std::endl;
         }
     }
 
     file.close();
+}
+
+void write_solution(const std::string &filePath, std::vector<std::vector<Color>> map, std::vector<float> config, std::vector<FighterVertex> solution)
+{
+    for (FighterVertex fighter : solution)
+    {
+        Position pos = fighter.getPos();
+        map[pos.getY()][pos.getX()] = GREEN;
+    }
+
+    map = draw_details(map, config);
+    write_map(filePath, map);
 }

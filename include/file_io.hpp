@@ -21,11 +21,12 @@ enum Color
     ERROR = -1
 };
 
-void openFile(std::ifstream &file, std::string filePath);
-std::vector<std::vector<Color>> processMapFile(std::ifstream &file);
-std::vector<std::vector<Color>> parseMap(std::string filePath);
-std::vector<float> processConfig(std::ifstream &filePath);
-std::vector<float> parseConfig(std::string filePath);
-void writeMap(const std::string &filePath, std::vector<std::vector<Color>> map);
+void open_file(std::ifstream &file, std::string filePath);
+std::vector<std::vector<Color>> process_map_file(std::ifstream &file);
+std::vector<std::vector<Color>> parse_map(std::string filePath);
+std::vector<float> process_config(std::ifstream &filePath);
+std::vector<float> parse_config(std::string filePath);
+void write_map(const std::string &filePath, std::vector<std::vector<Color>> map);
+void write_solution(const std::string &filePath, std::vector<std::vector<Color>> map, std::vector<float> config, std::vector<FighterVertex> solution);
 
 #endif

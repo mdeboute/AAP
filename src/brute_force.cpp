@@ -3,7 +3,7 @@
 #include "Graph/FighterVertex.hpp"
 #include <cmath>
 
-int computeLowerBound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList)
+int compute_lower_bound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList)
 {
     int max = 0;
     for (FighterVertex fighter : fighterList)
@@ -17,7 +17,7 @@ int computeLowerBound(std::vector<FighterVertex> fighterList, std::vector<FireVe
     return ceil((double)fireList.size() / max);
 }
 
-bool checker(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
+bool check_feasibility(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
 {
     for (FireVertex fire : fires)
     {
@@ -38,11 +38,11 @@ bool checker(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
     return true;
 }
 
-std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
+std::vector<std::vector<FighterVertex>> find_partitions(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
 {
     int n = fighters.size();
     int upperBound = fires.size();
-    int lowerBound = computeLowerBound(fighters, fires);
+    int lowerBound = compute_lower_bound(fighters, fires);
 
     std::vector<std::vector<FighterVertex>> partitions;
 
@@ -60,7 +60,7 @@ std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex
                     subset.push_back(fighters[j]);
                 }
             }
-            if (checker(subset, fires))
+            if (check_feasibility(subset, fires))
             {
                 partitions.push_back(subset);
             }

@@ -109,11 +109,11 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> &fea
     int height = feasibility_map.size();
     int width = feasibility_map[0].size();
 
-    for (int p = 0; p < ray_path.size()-1; p++)
+    for (int p = 0; p < ray_path.size() - 1; p++)
     {
-        if (feasibility_map[ray_path[p].y][ray_path[p].x]==0)
+        if (feasibility_map[ray_path[p].y][ray_path[p].x] == 0)
             continue;
-        
+
         std::vector<pixel> circle_pixels = circle_to_pixels(ray_path[p], action_radius, width, height);
         for (const pixel &pixel : circle_pixels)
         {
@@ -156,7 +156,7 @@ void display_map(std::vector<std::vector<Color>> map)
     }
 }
 
-std::vector<std::vector<Color>> draw_scenario(std::vector<std::vector<Color>> map, std::vector<float> &config)
+std::vector<std::vector<Color>> draw_details(std::vector<std::vector<Color>> map, std::vector<float> &config)
 {
     int nb_rays = (int)config[0];
     // int nb_rays = 25;
@@ -171,7 +171,7 @@ std::vector<std::vector<Color>> draw_scenario(std::vector<std::vector<Color>> ma
     {
         for (size_t x = 0; x < width; x++)
         {
-            if (map[y][x] == RED)                  //
+            if (map[y][x] == RED) //
             {
                 pixel fire;
                 fire.x = x;
@@ -193,7 +193,6 @@ std::vector<std::vector<Color>> draw_scenario(std::vector<std::vector<Color>> ma
                         map[p.y][p.x] = LIME;
                 map[y][x] = GREEN;
             }
-            
         }
     }
 
@@ -232,7 +231,7 @@ std::vector<std::vector<Color>> draw_scenario(std::vector<std::vector<Color>> ma
     return map;
 }
 
-std::vector<std::string> splitString(const std::string &s, const std::string &delim)
+std::vector<std::string> split_string(const std::string &s, const std::string &delim)
 {
     std::vector<std::string> elems;
     size_t last = 0;
@@ -299,7 +298,8 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<floa
         }
     }
 
-    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements" << std::endl;
+    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements\n"
+              << std::endl;
 
     std::vector<std::vector<ray>> fire_rays;
     std::vector<std::vector<std::vector<pixel>>> fire_ray_paths;

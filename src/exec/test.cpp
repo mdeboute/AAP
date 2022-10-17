@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
     const string map_file = data_dir + "/map.ppm";
     const string config_file = data_dir + "/config.txt";
 
-    vector<float> config = parseConfig(config_file);
-    vector<vector<Color>> map = parseMap(map_file);
+    vector<float> config = parse_config(config_file);
+    vector<vector<Color>> map = parse_map(map_file);
 
     cout << "Number of angles: " << config[0] << endl;
     cout << "Furnace radius: " << config[1] << endl;
@@ -35,20 +35,14 @@ int main(int argc, char *argv[])
     vector<FireVertex> fireVertices = graph.getFireVertexTab();
     vector<FighterVertex> fighterVertices = graph.getFigtherVertexTab();
 
-    cout << "Number of fires: " << fireVertices.size() << endl;
-    cout << "Number of  potential fighters: " << fighterVertices.size() << endl;
+    // cout << "Number of fires: " << fireVertices.size() << endl;
+    // cout << "Number of potential fighters: " << fighterVertices.size() << endl;
 
-    vector<vector<FighterVertex>> partitions = findPartitions(fighterVertices, fireVertices);
+    vector<vector<FighterVertex>> partitions = find_partitions(fighterVertices, fireVertices);
 
-    cout << "Number of partitions: " << partitions.size() << endl;
+    // cout << "Number of partitions: " << partitions.size() << endl;
 
     const vector<FighterVertex> bestTeam = solve(partitions, fireVertices);
-
-    for (FighterVertex fighter : bestTeam)
-    {
-        Position pos = fighter.getPos();
-        map[pos.getY()][pos.getX()] = GREEN;
-    }
 
     cout << "Best team: \n"
          << endl;
@@ -57,11 +51,11 @@ int main(int argc, char *argv[])
         cout << fighter << endl;
     }
 
-    vector<string> splittedString = splitString(data_dir, "/");
+    vector<string> splittedString = split_string(data_dir, "/");
     const string result_file = "../solution/result_" + splittedString[1] + ".ppm";
     cout << "Writing result to " << result_file << endl;
 
-    writeMap(result_file, map);
+    write_solution(result_file, map, config, bestTeam);
 
     // display_map(map);
 

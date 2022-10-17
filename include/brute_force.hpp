@@ -5,9 +5,9 @@
 #include "Graph/FighterVertex.hpp"
 #include "Graph/FireVertex.hpp"
 
-std::vector<std::vector<FighterVertex>> findPartitions(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
-bool checker(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
+std::vector<std::vector<FighterVertex>> find_partitions(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
+bool check_feasibility(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
 std::vector<FighterVertex> solve(std::vector<std::vector<FighterVertex>> partitions, std::vector<FireVertex> fireList);
-int computeLowerBound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
+int compute_lower_bound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
 
 #endif
