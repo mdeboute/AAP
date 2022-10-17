@@ -101,22 +101,26 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
     return path;
 }
 
-std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> feasibility_map, std::vector<pixel> ray_path, float action_radius, int ray_index, std::vector<std::vector<std::vector<int>>> &ray_fighting_map)
+std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> &feasibility_map, std::vector<pixel> &ray_path, float action_radius, int ray_index, std::vector<std::vector<std::vector<int>>> &ray_fighting_map)
 {
     // make sure feasibility_map is a copy
     std::vector<pixel> neighborhood;
+    std::vector<std::vector<int>> exploration_map = feasibility_map;
     int height = feasibility_map.size();
     int width = feasibility_map[0].size();
 
-    for (int p = 0; p < ray_path.size(); p++)
+    for (int p = 0; p < ray_path.size()-1; p++)
     {
+        if (feasibility_map[ray_path[p].y][ray_path[p].x]==0)
+            continue;
+        
         std::vector<pixel> circle_pixels = circle_to_pixels(ray_path[p], action_radius, width, height);
         for (const pixel &pixel : circle_pixels)
         {
-            if (feasibility_map[pixel.y][pixel.x] == 1)
+            if (exploration_map[pixel.y][pixel.x] == 1)
             {
                 neighborhood.push_back(pixel);
-                feasibility_map[pixel.y][pixel.x] = 0;
+                exploration_map[pixel.y][pixel.x] = 0;
                 ray_fighting_map[pixel.y][pixel.x].push_back(ray_index);
             }
         }
@@ -150,6 +154,82 @@ void display_map(std::vector<std::vector<Color>> map)
         }
         std::cout << std::endl;
     }
+}
+
+std::vector<std::vector<Color>> draw_scenario(std::vector<std::vector<Color>> map, std::vector<float> &config)
+{
+    int nb_rays = (int)config[0];
+    // int nb_rays = 25;
+    float furnace_radius = config[1];
+    float action_radius = config[2];
+
+    size_t height = map.size();
+    size_t width = map[0].size();
+
+    std::vector<pixel> fire_centers;
+    for (size_t y = 0; y < height; y++)
+    {
+        for (size_t x = 0; x < width; x++)
+        {
+            if (map[y][x] == RED)                  //
+            {
+                pixel fire;
+                fire.x = x;
+                fire.y = y;
+                fire_centers.push_back(fire);
+                std::vector<pixel> furnace = circle_to_pixels(fire, furnace_radius, width, height);
+                for (auto &&pixel : furnace)
+                    if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
+                        map[pixel.y][pixel.x] = MAGENTA;
+            }
+            if (map[y][x] == GREEN)
+            {
+                pixel firefighter;
+                firefighter.x = x;
+                firefighter.y = y;
+                std::vector<pixel> action_area = circle_to_pixels(firefighter, action_radius, width, height);
+                for (auto &&p : action_area)
+                    if (map[p.y][p.x] == YELLOW || map[p.y][p.x] == ORANGE)
+                        map[p.y][p.x] = LIME;
+                map[y][x] = GREEN;
+            }
+            
+        }
+    }
+
+    size_t nb_fires = fire_centers.size();
+
+    for (size_t f = 0; f < nb_fires; f++)
+    {
+        for (size_t r = 0; r < nb_rays; r++)
+        {
+            float degrees = r * 360.0 / nb_rays;
+            float x_r = fire_centers[f].x + 0.5 + furnace_radius * cos(degrees * (M_PI / 180.0));
+            float y_r = fire_centers[f].y + 0.5 + furnace_radius * sin(degrees * (M_PI / 180.0));
+            ray ray;
+            ray.slope = (y_r - (fire_centers[f].y + 0.5)) / (x_r - (fire_centers[f].x + 0.5));
+            ray.intercept = y_r - ray.slope * x_r;
+            ray.source = fire_centers[f]; // possible copy of data. Can be improved later
+            if (degrees > 90 && degrees <= 270)
+                ray.dir = LEFT;
+            else
+                ray.dir = RIGHT;
+
+            std::vector<pixel> ray_path = calculate_ray_path(map, ray);
+
+            ray.target = ray_path[ray_path.size() - 1];
+
+            for (size_t i = 1; i < ray_path.size(); i++)
+            {
+                pixel p = ray_path[i];
+                if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
+                    break;
+                if (map[p.y][p.x] == YELLOW)
+                    map[p.y][p.x] = ORANGE;
+            }
+        }
+    }
+    return map;
 }
 
 std::vector<std::string> splitString(const std::string &s, const std::string &delim)

@@ -31,7 +31,8 @@ int main(int argc, char *argv[])
 
     Graph graph = calculate_graph_data(map, config);
 
-    map = solve(map, config);
+    map = solve_using_graph(map, config);
+    map = draw_scenario(map, config);
 
     vector<string> splittedString = splitString(data_dir, "/");
     const string result_file = "../solution/result_" + splittedString[1] + ".ppm";
