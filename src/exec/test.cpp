@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
 
     // cout << "Number of partitions: " << partitions.size() << endl;
 
-    // const vector<FighterVertex> bestTeam = bruteforce_solve(graph);
-    const vector<FighterVertex> bestTeam = greedy_solve(graph);
+    const vector<FighterVertex> bestTeam = bruteforce_solve(graph);
+    // const vector<FighterVertex> bestTeam = greedy_solve(graph);
 
     cout << "Best team: \n"
          << endl;

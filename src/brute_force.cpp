@@ -5,7 +5,7 @@
 #include <chrono>
 #include <cmath>
 
-int compute_lower_bound(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList)
+int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
 {
     int max = 0;
     for (FighterVertex fighter : fighterList)
@@ -19,7 +19,7 @@ int compute_lower_bound(const std::vector<FighterVertex>& fighterList, const std
     return ceil((double)fireList.size() / max);
 }
 
-bool check_feasibility(const std::vector<FighterVertex>& fighters, const std::vector<FireVertex>& fires)
+bool check_feasibility(const std::vector<FighterVertex> &fighters, const std::vector<FireVertex> &fires)
 {
     for (FireVertex fire : fires)
     {
@@ -40,54 +40,35 @@ bool check_feasibility(const std::vector<FighterVertex>& fighters, const std::ve
     return true;
 }
 
-std::vector<std::vector<FighterVertex>> find_partitions(const std::vector<FighterVertex>& fighters, const std::vector<FireVertex>& fires)
+std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
 {
+    std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();
+    std::vector<FireVertex> fires = graph.getFireVertexTab();
+
     int n = fighters.size();
     int upperBound = fires.size();
     int lowerBound = compute_lower_bound(fighters, fires);
 
-    std::vector<std::vector<FighterVertex>> partitions;
-
     for (int i = 0; i < std::pow(2, n); i++)
     {
-        std::vector<FighterVertex> subset;
+        std::vector<FighterVertex> team;
 
-        // we want the subset of size at most upperBound and at least lowerBound that are feasible (using the checker)
+        // we want the team of size at most upperBound and at least lowerBound that are feasible (using the checker)
         if (std::bitset<32>(i).count() <= upperBound && std::bitset<32>(i).count() >= lowerBound)
         {
             for (int j = 0; j < n; j++)
             {
                 if (i & (1 << j))
                 {
-                    subset.push_back(fighters[j]);
+                    team.push_back(fighters[j]);
                 }
             }
-            if (check_feasibility(subset, fires))
+            if (check_feasibility(team, fires))
             {
-                partitions.push_back(subset);
+                return team;
             }
         }
     }
-    return partitions;
-}
-
-std::vector<FighterVertex> bruteforce_solve(const Graph& graph)
-{
-    auto startingTime = std::chrono::steady_clock::now();
-    std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();
-    std::vector<FireVertex> fires = graph.getFireVertexTab();
-    std::vector<std::vector<FighterVertex>> partitions = find_partitions(fighters, fires);
-    std::vector<FighterVertex> bestTeam;
-    int bestSize = fires.size();
-    for (std::vector<FighterVertex> team : partitions)
-    {
-        if (team.size() <= bestSize)
-        {
-            bestTeam = team;
-            bestSize = team.size();
-        }
-    }
-    std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-    std::cout << "Solved with BF in " << tt.count() << "sec" << std::endl;
-    return bestTeam;
+    std::cout << "No solution found" << std::endl;
+    return std::vector<FighterVertex>();
 }

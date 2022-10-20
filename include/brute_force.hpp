@@ -4,10 +4,8 @@
 #include <vector>
 #include "Graph/Graph.hpp"
 
-std::vector<std::vector<FighterVertex>> find_partitions(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList);
-bool check_feasibility(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList);
-int compute_lower_bound(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList);
-
-std::vector<FighterVertex> bruteforce_solve(const Graph& graph);
+bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
+int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
+std::vector<FighterVertex> bruteforce_solve(const Graph &graph);
 
 #endif
