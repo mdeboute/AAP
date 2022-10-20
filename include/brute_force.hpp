@@ -8,6 +8,6 @@ std::vector<std::vector<FighterVertex>> find_partitions(const std::vector<Fighte
 bool check_feasibility(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList);
 int compute_lower_bound(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList);
 
-std::vector<FighterVertex> BFsolve(const Graph& graph);
+std::vector<FighterVertex> bruteforce_solve(const Graph& graph);
 
 #endif

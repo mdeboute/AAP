@@ -366,7 +366,7 @@ const std::vector<std::vector<Color>>& solve_using_graph(
             for (size_t i = 0; i < nb_firefighters; ++i)
             {
                 FighterVertex fighter = fighterVertexTab[i];
-                for (FireVertex coveredRay : fighter.getFireLines())
+                for (FireVertex coveredRay : fighter.getFireCovered())
                 {
                     if (fireRay.getID() == coveredRay.getID())
                     {

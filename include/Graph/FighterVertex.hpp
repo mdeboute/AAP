@@ -7,7 +7,7 @@
 class FighterVertex : public Vertex
 {
 private:
-    std::vector<FireVertex> fireLines; // maybe to refactor because it's not a line
+    std::vector<FireVertex> fire_covered;
     bool parssingDone = false;
 
 public:
@@ -23,12 +23,12 @@ public:
     int getFireCapacity() const;
     int getNbFireCovered() const;
 
-    const std::vector<FireVertex>& getFireLines() const;
+    const std::vector<FireVertex>& getFireCovered() const;
 };
 
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)
 {
-    os << "Vertex of id : " << v.getID() << " at position : " << v.getPos() << " with " << v.getFireLines().size() << " fire lines";
+    os << "Vertex of id : " << v.getID() << " at position : " << v.getPos() << " with " << v.getFireCovered().size() << " fire lines";
     return os;
 }
 

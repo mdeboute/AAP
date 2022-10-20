@@ -1,8 +1,8 @@
-#ifndef GREEDY
-#define GREEDY
+#ifndef GREEDY_HPP
+#define GREEDY_HPP
 
 #include "Graph/Graph.hpp"
 
-std::vector<FighterVertex> greedySolve(const Graph& graph);
+std::vector<FighterVertex> greedy_solve(const Graph& graph);
 
 #endif
