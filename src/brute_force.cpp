@@ -2,6 +2,7 @@
 #include <vector>
 #include <bitset>
 #include "Graph/FighterVertex.hpp"
+#include <chrono>
 #include <cmath>
 
 int compute_lower_bound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList)
@@ -70,8 +71,12 @@ std::vector<std::vector<FighterVertex>> find_partitions(std::vector<FighterVerte
     return partitions;
 }
 
-std::vector<FighterVertex> solve(std::vector<std::vector<FighterVertex>> partitions, std::vector<FireVertex> fires)
+std::vector<FighterVertex> BFsolve(Graph& graph)
 {
+    auto startingTime = std::chrono::steady_clock::now();
+    std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();
+    std::vector<FireVertex> fires = graph.getFireVertexTab();
+    std::vector<std::vector<FighterVertex>> partitions = find_partitions(fighters, fires);
     std::vector<FighterVertex> bestTeam;
     int bestSize = fires.size();
     for (std::vector<FighterVertex> team : partitions)
@@ -82,5 +87,7 @@ std::vector<FighterVertex> solve(std::vector<std::vector<FighterVertex>> partiti
             bestSize = team.size();
         }
     }
+    std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
+    std::cout << "solved with BF in " << tt.count() << "sec" << std::endl;
     return bestTeam;
 }

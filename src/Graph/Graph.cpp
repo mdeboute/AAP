@@ -20,6 +20,7 @@ Graph::Graph(std::vector<FireVertex> fireTab,
     this->fighterTab = fighterTab;
     cutUselessFighters();
     generateAdjacency();
+    std::cout << "after cut, only " << fighterTab.size() << "pos of fighters left" << std::endl;
 }
 
 void Graph::cutUselessFighters()
