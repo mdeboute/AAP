@@ -1,4 +1,4 @@
-25              # nombre d'angles
+800             # nombre d'angles
 4.5             # rayon de fournaise
 1.6             # rayon d'action d'un pompier
 0 255  0   0    # rouge: Feu
