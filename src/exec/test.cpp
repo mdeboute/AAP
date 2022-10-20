@@ -2,6 +2,7 @@
 #include "Graph/FireVertex.hpp"
 #include "utils.hpp"
 #include "brute_force.hpp"
+#include "greedy.hpp"
 
 #include <vector>
 
@@ -38,11 +39,10 @@ int main(int argc, char *argv[])
     // cout << "Number of fires: " << fireVertices.size() << endl;
     // cout << "Number of potential fighters: " << fighterVertices.size() << endl;
 
-    vector<vector<FighterVertex>> partitions = find_partitions(fighterVertices, fireVertices);
-
     // cout << "Number of partitions: " << partitions.size() << endl;
 
-    const vector<FighterVertex> bestTeam = solve(partitions, fireVertices);
+    // const vector<FighterVertex> bestTeam = bruteforce_solve(graph);
+    const vector<FighterVertex> bestTeam = greedy_solve(graph);
 
     cout << "Best team: \n"
          << endl;

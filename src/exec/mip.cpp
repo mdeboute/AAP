@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
     cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
 
     // display_map(map);
+    // map = draw_details(map, config);
 
-    Graph graph = calculate_graph_data(map, config);
+    // Graph graph = calculate_graph_data(map, config);
 
     map = solve_using_graph(map, config);
     map = draw_details(map, config);

@@ -20,6 +20,7 @@ Graph::Graph(std::vector<FireVertex> fireTab,
     this->fighterTab = fighterTab;
     cutUselessFighters();
     generateAdjacency();
+    // std::cout << "After cut, only " << fighterTab.size() << "pos of fighters left" << std::endl;
 }
 
 void Graph::cutUselessFighters()
@@ -28,7 +29,7 @@ void Graph::cutUselessFighters()
 
     for (FighterVertex f : this->fighterTab)
     {
-        int fUsefullness = (f.getFireLines().size() != 0);
+        int fUsefullness = (f.getFireCovered().size() != 0);
 
         if (fUsefullness)
         {
@@ -141,7 +142,7 @@ void Graph::generateAdjacency()
 
     for (FighterVertex figther : fighterTab)
     {
-        std::vector<FireVertex> fires = figther.getFireLines();
+        std::vector<FireVertex> fires = figther.getFireCovered();
         int figtherID = figther.getID();
         for (FireVertex fire : fires)
         {
