@@ -6,12 +6,16 @@ Vertex::Vertex(Position p, int id)
     this->id = id;
 }
 
-Position Vertex::getPos()
+Position Vertex::getPos() const
 {
     return p;
 }
 
-int Vertex::getID()
+int Vertex::getID() const
 {
     return this->id;
+}
+
+void Vertex::setID(int id){
+    this->id = id;
 }

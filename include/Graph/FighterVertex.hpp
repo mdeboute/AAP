@@ -13,13 +13,17 @@ private:
 public:
     FighterVertex();
     FighterVertex(Position p, int id);
+
     void doneParsing();
     void addFire(FireVertex f);
-    FireVertex getFireAt(int index);
-    std::vector<FireVertex> getFireLines();
-    bool containsFighter(FighterVertex f);
-    bool stopFire(FireVertex f);
-    int getFireCapacity();
+
+    FireVertex getFireAt(int index) const;
+    bool containsFighter(FighterVertex f) const;
+    bool stopFire(FireVertex f) const;
+    int getFireCapacity() const;
+    int getNbFireCovered() const;
+
+    const std::vector<FireVertex>& getFireLines() const;
 };
 
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)

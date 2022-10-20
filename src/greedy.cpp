@@ -1,7 +1,7 @@
 #include "greedy.hpp"
 #include <chrono>
 
-std::vector<FighterVertex> greedySolve(Graph& graph){
+std::vector<FighterVertex> greedySolve(const Graph& graph){
     auto startingTime = std::chrono::steady_clock::now();
     std::vector<FighterVertex> Sol;
     std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();

@@ -29,22 +29,25 @@ public:
           std::vector<FighterVertex> fighterTab,
           std::vector<std::vector<FireVertex>> fighterAdjacencyList,
           std::vector<std::vector<FighterVertex>> fireAdjacencyList);
-
     Graph(std::vector<FireVertex> fireTab,
           std::vector<FighterVertex> fighterTab);
 
-    const std::vector<FighterVertex> getFireNeightborhood(int ID);
-    const std::vector<FireVertex> getFighterNeightborhood(int ID);
-    const int isAdjacent(int fighterID, int fireID);
-    const std::vector<FireVertex> &getFireVertexTab();
-    const FireVertex &getFireVertex(int id);
-    const std::vector<FighterVertex> &getFigtherVertexTab();
-    const FighterVertex &getFigtherVertex(int id);
-    const std::vector<std::vector<FireVertex>> &getFighterAdjacencyList();
-    const std::vector<FireVertex> &getFighterAdjacencyList(int id);
-    const std::vector<std::vector<FighterVertex>> &getFireAdjacencyList();
-    const std::vector<FighterVertex> &getFireAdjacencyList(int id);
-    const int getNbFires(){return fireTab.size();}
+    int isAdjacent(int fighterID, int fireID) const;
+    int getNbFires() const;
+
+    FireVertex getFireVertex(int id) const;
+    const FighterVertex &getFigtherVertex(int id) const;
+
+    const std::vector<FireVertex> &getFireVertexTab() const;
+    const std::vector<FighterVertex> &getFigtherVertexTab() const;
+
+    const std::vector<std::vector<FireVertex>> &getFighterAdjacencyList() const;
+    const std::vector<FireVertex> &getFighterAdjacencyList(int id) const;
+    const std::vector<std::vector<FighterVertex>> &getFireAdjacencyList() const;
+    const std::vector<FighterVertex> &getFireAdjacencyList(int id) const;
+
+    const std::vector<FighterVertex>& getFireNeightborhood(int FireID) const;
+    const std::vector<FireVertex>& getFighterNeightborhood(int FighterID) const;
 };
 
 #endif

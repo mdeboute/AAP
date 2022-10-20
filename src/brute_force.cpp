@@ -5,7 +5,7 @@
 #include <chrono>
 #include <cmath>
 
-int compute_lower_bound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList)
+int compute_lower_bound(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList)
 {
     int max = 0;
     for (FighterVertex fighter : fighterList)
@@ -19,7 +19,7 @@ int compute_lower_bound(std::vector<FighterVertex> fighterList, std::vector<Fire
     return ceil((double)fireList.size() / max);
 }
 
-bool check_feasibility(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
+bool check_feasibility(const std::vector<FighterVertex>& fighters, const std::vector<FireVertex>& fires)
 {
     for (FireVertex fire : fires)
     {
@@ -40,7 +40,7 @@ bool check_feasibility(std::vector<FighterVertex> fighters, std::vector<FireVert
     return true;
 }
 
-std::vector<std::vector<FighterVertex>> find_partitions(std::vector<FighterVertex> fighters, std::vector<FireVertex> fires)
+std::vector<std::vector<FighterVertex>> find_partitions(const std::vector<FighterVertex>& fighters, const std::vector<FireVertex>& fires)
 {
     int n = fighters.size();
     int upperBound = fires.size();
@@ -71,7 +71,7 @@ std::vector<std::vector<FighterVertex>> find_partitions(std::vector<FighterVerte
     return partitions;
 }
 
-std::vector<FighterVertex> BFsolve(Graph& graph)
+std::vector<FighterVertex> BFsolve(const Graph& graph)
 {
     auto startingTime = std::chrono::steady_clock::now();
     std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();

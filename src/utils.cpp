@@ -38,7 +38,7 @@ std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int h
     return pixels;
 }
 
-std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray ray)
+std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>>& map, ray ray)
 {
     // std::cout << "Ray(" << ray.source.x << "," << ray.source.y << ")" << ray.dir << ": y = " << ray.slope << "*x + " << ray.intercept << " in path vector" << std::endl;  //display current ray degrees
 
@@ -101,7 +101,11 @@ std::vector<pixel> calculate_ray_path(std::vector<std::vector<Color>> map, ray r
     return path;
 }
 
-std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> &feasibility_map, std::vector<pixel> &ray_path, float action_radius, int ray_index, std::vector<std::vector<std::vector<int>>> &ray_fighting_map)
+std::vector<pixel> calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibility_map, 
+                                                     const std::vector<pixel> &ray_path, 
+                                                     float action_radius, 
+                                                     int ray_index, 
+                                                     std::vector<std::vector<std::vector<int>>> &ray_fighting_map)
 {
     // make sure feasibility_map is a copy
     std::vector<pixel> neighborhood;
@@ -129,7 +133,7 @@ std::vector<pixel> calculate_ray_neighborhood(std::vector<std::vector<int>> &fea
     return neighborhood;
 }
 
-void display_map(std::vector<std::vector<Color>> map)
+void display_map(const std::vector<std::vector<Color>>& map)
 {
     for (int y = 0; y < map.size(); y++)
     {
@@ -156,7 +160,7 @@ void display_map(std::vector<std::vector<Color>> map)
     }
 }
 
-std::vector<std::vector<Color>> draw_details(std::vector<std::vector<Color>> map, std::vector<float> &config)
+const std::vector<std::vector<Color>>& draw_details(std::vector<std::vector<Color>>& map, const std::vector<float> &config)
 {
     int nb_rays = (int)config[0];
     // int nb_rays = 25;
@@ -245,7 +249,7 @@ std::vector<std::string> split_string(const std::string &s, const std::string &d
     return elems;
 }
 
-Graph calculate_graph_data(std::vector<std::vector<Color>> map, std::vector<float> config)
+Graph calculate_graph_data(std::vector<std::vector<Color>>& map, const std::vector<float>& config)
 {
     int nb_rays = (int)config[0];
     float furnace_radius = config[1];

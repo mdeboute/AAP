@@ -7,7 +7,7 @@ FireVertex::FireVertex(Position fireCenter, Position collide, int id) : Vertex(c
     this->fireCenter = fireCenter;
 }
 
-Position FireVertex::getFireCenter()
+Position FireVertex::getFireCenter() const
 {
     return fireCenter;
 }

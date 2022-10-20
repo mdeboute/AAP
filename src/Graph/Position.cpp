@@ -7,18 +7,18 @@ Position::Position(double x, double y)
     this->y = y;
 }
 
-double Position::getX()
+double Position::getX() const
 {
     return this->x;
 }
 
-double Position::getY()
+double Position::getY() const
 {
     return this->y;
 }
 
 // euclidian distance
-double Position::dist(Position p)
+double Position::dist(Position p) const
 {
     int xDelta = this->x - p.getX();
     int yDelta = this->y - p.getY();

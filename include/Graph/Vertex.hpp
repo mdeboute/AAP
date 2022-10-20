@@ -15,9 +15,10 @@ protected:
     Vertex(Position p, int id);
 
 public:
-    Position getPos();
-    int getID();
-    void setID(int id){this->id = id;}
+    Position getPos() const;
+    int getID() const;
+    
+    void setID(int id);
 };
 
 #endif
