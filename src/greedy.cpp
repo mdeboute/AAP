@@ -33,7 +33,7 @@ std::vector<FighterVertex> greedy_solve(const Graph& graph){
                 std::vector<FireVertex> fighterFires = fighters[i].getFireCovered();
                 for (int j = 0; j < fighterFires.size(); ++j)
                 {
-                    if (isFireCovered[fighterFires[j].getID()] == 0)
+                    if (isFireCovered[fighterFires[j].getIndex()] == 0)
                     {
                         fightersValue[i]++;
                     }
@@ -59,7 +59,7 @@ std::vector<FighterVertex> greedy_solve(const Graph& graph){
         std::vector<FireVertex> fighterFires = fighters[bestFighter].getFireCovered();
         for (int j = 0; j < fighterFires.size(); ++j)
         {
-            isFireCovered[fighterFires[j].getID()] = 1;
+            isFireCovered[fighterFires[j].getIndex()] = 1;
         }
 
         for (int i = 0; i < fires.size(); ++i)

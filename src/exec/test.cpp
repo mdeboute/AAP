@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
          << endl;
     for (FighterVertex fighter : bestTeam)
     {
-        cout << fighter << endl;
+        fighter.print();
     }
 
     vector<string> splittedString = split_string(data_dir, "/");

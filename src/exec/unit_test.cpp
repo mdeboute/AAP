@@ -9,11 +9,11 @@ Graph genVal1()
     std::vector<FighterVertex> fighters;
     for (int i = 0; i < 4; ++i)
     {
-        fires.push_back(FireVertex(Position(), Position(), i));
+        fires.push_back(FireVertex(Position(), Position(), i, i));
     }
     for (int i = 0; i < 6; ++i)
     {
-        fighters.push_back(FighterVertex(Position(), i));
+        fighters.push_back(FighterVertex(Position(), i, i));
     }
 
     // a
@@ -67,8 +67,8 @@ bool generateAdjacencyTest(Graph g)
     for (FighterVertex f : figthers)
     {
         fires = f.getFireCovered();
-        int id = f.getID();
-        std::vector<FireVertex> cutFires = g.getFighterAdjacencyList(id);
+        int Index = f.getIndex();
+        std::vector<FireVertex> cutFires = g.getFighterAdjacencyList(Index);
         if (cutFires.size() != 2)
         {
             const std::string msg = "[FAIL] generateAdjacency : fire couth = " + std::to_string(cutFires.size());
@@ -77,7 +77,7 @@ bool generateAdjacencyTest(Graph g)
         }
         if (f.getFireCovered() != cutFires)
         {
-            const std::string msg = "[FAIL] generateAdjacency : wrong adjacent fire ligne for figther : " + std::to_string(id);
+            const std::string msg = "[FAIL] generateAdjacency : wrong adjacent fire ligne for figther : " + std::to_string(f.getID());
             std::perror(msg.c_str());
             return false;
         }
@@ -89,14 +89,24 @@ bool generateAdjacencyTest(Graph g)
 int main()
 {
     Graph g = genVal1();
+    printf("----- Graph : fires -----\n");
+    std::vector<FireVertex> fires = g.getFireVertexTab();
+    for (FireVertex f : fires){
+        std::cout << f << std::endl;
+    }
+    printf("----- Graph : fighters -----\n");
+    std::vector<FighterVertex> fighters = g.getFigtherVertexTab();
+    for (FighterVertex f : fighters){
+        std::cout << f << std::endl;
+    }
     printf("----- [TEST] Graph -----\n");
     bool cut = cutUselessFightersTest(g);
     bool gen = generateAdjacencyTest(g);
     if (cut && gen){
-        printf("-- [SUCESS] Graph");
-        return 0;
+        printf("-- [SUCESS] Graph\n");
+        return 1;
     }
-    std::perror("-- [FAIL] Graph");
+    std::perror("-- [FAIL] Graph \n");
         return 0;   
     
     

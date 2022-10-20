@@ -12,7 +12,7 @@ private:
 
 public:
     FighterVertex();
-    FighterVertex(Position p, int id);
+    FighterVertex(Position p, int id, int index);
 
     void doneParsing();
     void addFire(FireVertex f);
@@ -22,13 +22,17 @@ public:
     bool stopFire(FireVertex f) const;
     int getFireCapacity() const;
     int getNbFireCovered() const;
+    void print(int verbose = 0);
 
     const std::vector<FireVertex>& getFireCovered() const;
 };
 
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)
 {
-    os << "Vertex of id : " << v.getID() << " at position : " << v.getPos() << " with " << v.getFireCovered().size() << " fire lines";
+    os << "Fighter of id : " << v.getID() << " at position : " << v.getPos() << " with " << v.getFireCovered().size() << " fire lines : " << std::endl;
+    for(FireVertex f : v.getFireCovered()){
+        os << " - " << f << std::endl;
+    }
     return os;
 }
 

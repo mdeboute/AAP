@@ -2,7 +2,7 @@
 
 FireVertex::FireVertex() {}
 
-FireVertex::FireVertex(Position fireCenter, Position collide, int id) : Vertex(collide, id)
+FireVertex::FireVertex(Position fireCenter, Position collide, int id, int index) : Vertex(collide, id, index)
 {
     this->fireCenter = fireCenter;
 }

@@ -1,9 +1,10 @@
 #include "Graph/Vertex.hpp"
 
-Vertex::Vertex(Position p, int id)
+Vertex::Vertex(Position p, int id, int index)
 {
     this->p = p;
     this->id = id;
+    this->index = index;
 }
 
 Position Vertex::getPos() const
@@ -18,4 +19,13 @@ int Vertex::getID() const
 
 void Vertex::setID(int id){
     this->id = id;
+}
+
+int Vertex::getIndex() const
+{
+    return this->index;
+}
+
+void Vertex::setIndex(int index){
+    this->index = index;
 }

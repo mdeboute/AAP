@@ -363,7 +363,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>>& map, const std::vect
         ray ray = fatal_rays[r];
         Position fireCenter(ray.source.x, ray.source.y);
         Position collide(ray.target.x, ray.target.y);
-        fireTab.push_back(FireVertex(fireCenter, collide, r));
+        fireTab.push_back(FireVertex(fireCenter, collide, r, r));
     }
     int fighterID = 0;
     for (int y = 0; y < height; y++)
@@ -373,7 +373,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>>& map, const std::vect
             if (ray_fighting_map[y][x].size() > 0)
             {
                 Position p(x, y);
-                FighterVertex fighter(p, fighterID);
+                FighterVertex fighter(p, fighterID, fighterID);
                 for (int r : ray_fighting_map[y][x])
                 {
                     fighter.addFire(fireTab[r]);

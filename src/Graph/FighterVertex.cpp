@@ -2,7 +2,7 @@
 
 FighterVertex::FighterVertex() {}
 
-FighterVertex::FighterVertex(Position p, int id) : Vertex(p, id) {}
+FighterVertex::FighterVertex(Position p, int id, int index) : Vertex(p, id, index) {}
 
 void FighterVertex::doneParsing()
 {
@@ -66,4 +66,12 @@ bool FighterVertex::stopFire(FireVertex f) const
 int FighterVertex::getFireCapacity() const
 {
     return fire_covered.size();
+}
+
+void FighterVertex::print(int verbose){
+    if (verbose==1){
+        std::cout << *this << std::endl;
+    }else{
+        std::cout << "Vertex of id : " << this->getID() << " at position : " << this->getPos() << std::endl;
+    }
 }
