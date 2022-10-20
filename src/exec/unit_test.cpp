@@ -1,4 +1,4 @@
-#include "Test/graphTest.hpp"
+#include "unit_test.hpp"
 #include "Graph/Graph.hpp"
 
 #include <vector>
@@ -41,15 +41,16 @@ void cutUselessFightersTest(Graph g)
     std::vector<FireVertex> fires;
     for (FighterVertex f : figthers)
     {
-        fires = f.getFireLignes();
+        fires = f.getFireCovered();
         int id = f.getID();
         if (id == 1 || id == 3 || id == 4)
         {
-            perror("[FAIL] cutUselessFighters : Unexpected figther in the graph, id : " + id);
+            const std::string msg = "[FAIL] cutUselessFighters : unexpected figther in the graph, id : " + std::to_string(id);
+            std::perror(msg.c_str());
             return;
         }
     }
-    printf("[SUCESS] cutUselessFighters");
+    printf("[SUCESS] cutUselessFighters\n");
     return;
 }
 void generateAdjacencyTest(Graph g)
@@ -58,29 +59,32 @@ void generateAdjacencyTest(Graph g)
     std::vector<FireVertex> fires;
     for (FighterVertex f : figthers)
     {
-        fires = f.getFireLignes();
+        fires = f.getFireCovered();
         int id = f.getID();
         std::vector<FireVertex> cutFires = g.getFighterAdjacencyList(id);
         if (cutFires.size() != 2)
         {
-            perror("[FAIL] generateAdjacency : fire couth = " + cutFires.size());
+            const std::string msg = "[FAIL] generateAdjacency : fire couth = " + std::to_string(cutFires.size());
+            std::perror(msg.c_str());
             return;
         }
-        if (f.getFireLignes() != cutFires)
+        if (f.getFireCovered() != cutFires)
         {
-            perror("[FAIL] generateAdjacency : wrong adjacent fire ligne for figther : " + id);
+            const std::string msg = "[FAIL] generateAdjacency : wrong adjacent fire ligne for figther : " + std::to_string(id);
+            std::perror(msg.c_str());
             return;
         }
     }
-    printf("[SUCESS] generateAdjacency");
+    printf("[SUCESS] generateAdjacency\n");
     return;
 }
 
-void mainGraphTest()
+int main()
 {
     Graph g = genVal1();
-    printf("----- [TEST] Graph -----");
+    printf("----- [TEST] Graph -----\n");
     cutUselessFightersTest(g);
     generateAdjacencyTest(g);
     printf("[SUCESS] Graph");
+    return 0;
 }

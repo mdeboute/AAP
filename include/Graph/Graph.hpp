@@ -44,7 +44,7 @@ public:
     const std::vector<FireVertex> &getFighterAdjacencyList(int id);
     const std::vector<std::vector<FighterVertex>> &getFireAdjacencyList();
     const std::vector<FighterVertex> &getFireAdjacencyList(int id);
-    const int getNbFires(){return fireTab.size();}
+    const int getNbFires() { return fireTab.size(); }
 };
 
 #endif

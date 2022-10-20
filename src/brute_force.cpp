@@ -71,7 +71,7 @@ std::vector<std::vector<FighterVertex>> find_partitions(std::vector<FighterVerte
     return partitions;
 }
 
-std::vector<FighterVertex> BFsolve(Graph& graph)
+std::vector<FighterVertex> bruteforce_solve(Graph &graph)
 {
     auto startingTime = std::chrono::steady_clock::now();
     std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();
@@ -88,6 +88,6 @@ std::vector<FighterVertex> BFsolve(Graph& graph)
         }
     }
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-    std::cout << "solved with BF in " << tt.count() << "sec" << std::endl;
+    std::cout << "Solved with BF in " << tt.count() << "sec" << std::endl;
     return bestTeam;
 }
