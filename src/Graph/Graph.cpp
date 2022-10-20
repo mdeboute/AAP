@@ -36,20 +36,17 @@ void Graph::cutUselessFighters()
             for (int i = 0; i < usefullFighters.size(); i++)
             {
                 FighterVertex f2 = usefullFighters[i];
-                if (fUsefullness)
+                if (f2.containsFighter(f))
                 {
-                    if (f2.containsFighter(f))
+                    fUsefullness = 0;
+                    break;
+                }
+                else
+                {
+                    if (f.containsFighter(f2))
                     {
-                        fUsefullness = 0;
-                    }
-                    else
-                    {
-                        if (f.containsFighter(f2))
-                        {
-                            usefullFighters.erase(usefullFighters.begin() + i);
-                            usefullFighters.push_back(f);
-                            fUsefullness = 0;
-                        }
+                        usefullFighters.erase(usefullFighters.begin() + i);
+                        break;
                     }
                 }
             }
