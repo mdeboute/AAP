@@ -9,28 +9,32 @@ endif()
 
 include_directories(include)
 
-find_library(GUROBI_LIBRARY_CPLUS libgurobi_c++.a OR gurobi_c++mdd2019.lib PATHS /opt/local/stow/gurobi910/linux64/lib/ /Library/gurobi903/mac64/lib/ C:/gurobi951/win64/lib/)
-find_library(GUROBI_LIBRARY libgurobi91.so OR libgurobi90.dylib OR gurobi95.lib PATHS /opt/local/stow/gurobi910/linux64/lib/ /Library/gurobi903/mac64/lib/ C:/gurobi951/win64/lib/)
+find_library(GUROBI_LIBRARY_CPLUS libgurobi_c++.a OR gurobi_c++mdd2019.lib PATHS /opt/local/stow/gurobi910/linux64/lib/ /Library/gurobi903/mac64/lib/ C:/gurobi951/win64/lib/ /opt/gurobi951/linux64/lib/)
+find_library(GUROBI_LIBRARY libgurobi91.so OR libgurobi95.so OR libgurobi90.dylib OR gurobi95.lib PATHS /opt/local/stow/gurobi910/linux64/lib/ /Library/gurobi903/mac64/lib/ C:/gurobi951/win64/lib/ /opt/gurobi951/linux64/lib/)
 
 # if we find the library, we can use it
 if(GUROBI_LIBRARY_CPLUS AND GUROBI_LIBRARY)
     set(GUROBI_LIBRARIES ${GUROBI_LIBRARY_CPLUS} ${GUROBI_LIBRARY})
     message(STATUS "GUROBI_LIBRARIES : ${GUROBI_LIBRARIES}")
-    set(GUROBI_INCLUDE_DIR /opt/local/stow/gurobi910/linux64/include/ /Library/gurobi903/mac64/include/ C:/gurobi951/win64/include/)
+    set(GUROBI_INCLUDE_DIR /opt/local/stow/gurobi910/linux64/include/ /Library/gurobi903/mac64/include/ C:/gurobi951/win64/include/ /opt/gurobi951/linux64/include/)
     include_directories(include + ${GUROBI_INCLUDE_DIR})
 
-    # mip executable
-    file(GLOB SRC src/*.cpp src/Graph/*.cpp)
-    file(GLOB SRC_MIP   src/mip_formulation.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
+    # executable mip
+    file(GLOB SRC_MIP src/mip_formulation.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
     file(GLOB MIP src/exec/mip.cpp)
     add_executable(mip.out ${SRC_MIP} ${MIP})
     target_link_libraries(mip.out ${GUROBI_LIBRARIES})
 endif()
 
-# test executable
-file(GLOB SRC_TEST src/brute_force.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
+# executable test
+file(GLOB SRC_TEST src/brute_force.cpp src/greedy.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
 file(GLOB TEST src/exec/test.cpp)
 add_executable(test.out ${SRC_TEST} ${TEST})
+
+# executable unit_test
+file(GLOB SRC_UNIT_TEST src/Graph/*.cpp)
+file(GLOB UNIT_TEST src/exec/unit_test.cpp)
+add_executable(unit_test.out ${SRC_UNIT_TEST} ${UNIT_TEST})
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR}/data)
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/solution/ ${CMAKE_CURRENT_BINARY_DIR}/solution)

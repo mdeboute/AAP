@@ -2,7 +2,7 @@
 #include "mip_formulation.hpp"
 using namespace std;
 
-std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::vector<float> config)
+const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &map, const std::vector<float> &config)
 {
     int nb_rays = (int)config[0];
     // int nb_rays = 25;
@@ -296,7 +296,9 @@ std::vector<std::vector<Color>> solve(std::vector<std::vector<Color>> map, std::
     return map;
 }
 
-std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>> map, std::vector<float> config)
+const std::vector<std::vector<Color>> &solve_using_graph(
+    std::vector<std::vector<Color>> &map,
+    const std::vector<float> &config)
 {
     size_t height = map.size();
     size_t width = map[0].size();
@@ -364,7 +366,7 @@ std::vector<std::vector<Color>> solve_using_graph(std::vector<std::vector<Color>
             for (size_t i = 0; i < nb_firefighters; ++i)
             {
                 FighterVertex fighter = fighterVertexTab[i];
-                for (FireVertex coveredRay : fighter.getFireLines())
+                for (FireVertex coveredRay : fighter.getFireCovered())
                 {
                     if (fireRay.getID() == coveredRay.getID())
                     {

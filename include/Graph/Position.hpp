@@ -10,11 +10,13 @@ private:
     double y = -42;
 
 public:
-    double getX();
-    double getY();
     Position() {}
     Position(double x, double y);
-    double dist(Position p);
+
+    double getX() const;
+    double getY() const;
+
+    double dist(Position p) const;
 };
 
 inline std::ostream &operator<<(std::ostream &os, Position p)

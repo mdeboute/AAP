@@ -9,17 +9,17 @@ Edge::Edge(FighterVertex fighter, FireVertex fire, int id)
     this->id = id;
 }
 
-FireVertex Edge::getFireVertex()
+FireVertex Edge::getFireVertex() const
 {
     return fire;
 }
 
-FighterVertex Edge::getFighterVertex()
+FighterVertex Edge::getFighterVertex() const
 {
     return fighter;
 }
 
-int Edge::getID()
+int Edge::getID() const
 {
     return id;
 }

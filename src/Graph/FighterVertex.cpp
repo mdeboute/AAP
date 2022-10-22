@@ -2,7 +2,7 @@
 
 FighterVertex::FighterVertex() {}
 
-FighterVertex::FighterVertex(Position p, int id) : Vertex(p, id) {}
+FighterVertex::FighterVertex(Position p, int id, int index) : Vertex(p, id, index) {}
 
 void FighterVertex::doneParsing()
 {
@@ -13,29 +13,29 @@ void FighterVertex::addFire(FireVertex f)
 {
     if (parssingDone)
         return;
-    fireLines.push_back(f);
+    fire_covered.push_back(f);
 }
 
-FireVertex FighterVertex::getFireAt(int index)
+FireVertex FighterVertex::getFireAt(int index) const
 {
-    return fireLines[index];
+    return fire_covered[index];
 }
 
-std::vector<FireVertex> FighterVertex::getFireLines()
+const std::vector<FireVertex>& FighterVertex::getFireCovered() const
 {
-    return fireLines;
+    return fire_covered;
 }
 /*
 true : tous les feu de f sont contenus dans la liste
 false : un des feux de f n'est pas dans la liste
 */
-bool FighterVertex::containsFighter(FighterVertex f)
+bool FighterVertex::containsFighter(FighterVertex f) const
 {
-    std::vector<FireVertex> fLignes = f.getFireLines();
+    std::vector<FireVertex> fLignes = f.getFireCovered();
     for (FireVertex fire : fLignes)
     {
         bool find = false;
-        for (FireVertex myFire : fireLines)
+        for (FireVertex myFire : fire_covered)
         {
             if (fire == myFire)
             {
@@ -51,9 +51,9 @@ bool FighterVertex::containsFighter(FighterVertex f)
     return true;
 }
 
-bool FighterVertex::stopFire(FireVertex f)
+bool FighterVertex::stopFire(FireVertex f) const
 {
-    for (FireVertex fire : fireLines)
+    for (FireVertex fire : fire_covered)
     {
         if (fire == f)
         {
@@ -63,7 +63,15 @@ bool FighterVertex::stopFire(FireVertex f)
     return false;
 }
 
-int FighterVertex::getFireCapacity()
+int FighterVertex::getFireCapacity() const
 {
-    return fireLines.size();
+    return fire_covered.size();
+}
+
+void FighterVertex::print(int verbose){
+    if (verbose==1){
+        std::cout << *this << std::endl;
+    }else{
+        std::cout << "Vertex of id : " << this->getID() << " at position : " << this->getPos() << std::endl;
+    }
 }

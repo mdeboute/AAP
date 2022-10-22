@@ -6,16 +6,19 @@
 class FireVertex : public Vertex
 {
 private:
+    
     Position fireCenter;
 
 public:
     FireVertex();
-    FireVertex(Position fireCenter, Position collide, int id);
-    Position getFireCenter();
+    FireVertex(Position fireCenter, Position collide, int id, int index);
+    
+    Position getFireCenter() const;
 };
+
 inline std::ostream &operator<<(std::ostream &os, FireVertex v)
 {
-    os << "fire of id : " << v.getID() << " from " << v.getFireCenter() << " to " << v.getPos();
+    os << "Fire of id : " << v.getID() << " from " << v.getFireCenter() << " to " << v.getPos();
     return os;
 }
 

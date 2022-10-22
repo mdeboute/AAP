@@ -2,6 +2,7 @@
 #include "Graph/FireVertex.hpp"
 #include "utils.hpp"
 #include "brute_force.hpp"
+#include "greedy.hpp"
 
 #include <vector>
 
@@ -9,9 +10,10 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc != 3)
     {
-        cout << "Usage: ./test.out <input_dir>" << endl;
+        cout << "Usage: ./test.out <instance_dir> <algo>" << endl;
+        cout << "Algo: -b for brute force, -g for greedy" << endl;
         return 1;
     }
 
@@ -25,39 +27,38 @@ int main(int argc, char *argv[])
     cout << "Number of angles: " << config[0] << endl;
     cout << "Furnace radius: " << config[1] << endl;
     cout << "Radius of action of a firefighter: " << config[2] << endl;
-    cout << endl;
     cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
-
-    // display_map(map);
+    cout << endl;
 
     Graph graph = calculate_graph_data(map, config);
 
-    vector<FireVertex> fireVertices = graph.getFireVertexTab();
-    vector<FighterVertex> fighterVertices = graph.getFigtherVertexTab();
-
-    // cout << "Number of fires: " << fireVertices.size() << endl;
-    // cout << "Number of potential fighters: " << fighterVertices.size() << endl;
-
-    vector<vector<FighterVertex>> partitions = find_partitions(fighterVertices, fireVertices);
-
-    // cout << "Number of partitions: " << partitions.size() << endl;
-
-    const vector<FighterVertex> bestTeam = solve(partitions, fireVertices);
-
-    cout << "Best team: \n"
-         << endl;
-    for (FighterVertex fighter : bestTeam)
-    {
-        cout << fighter << endl;
-    }
-
     vector<string> splittedString = split_string(data_dir, "/");
     const string result_file = "../solution/result_" + splittedString[1] + ".ppm";
-    cout << "Writing result to " << result_file << endl;
 
-    write_solution(result_file, map, config, bestTeam);
-
-    // display_map(map);
-
+    if (strcmp(argv[2], "-b") == 0)
+    {
+        vector<FighterVertex> bestTeam = bruteforce_solve(graph);
+        for (FighterVertex fighter : bestTeam)
+        {
+            cout << "We place a fighter at position (" << fighter.getPos().getX() << ", " << fighter.getPos().getY() << ")" << endl;
+        }
+        cout << "\nWriting result to " << result_file << endl;
+        write_solution(result_file, map, config, bestTeam);
+    }
+    else if (strcmp(argv[2], "-g") == 0)
+    {
+        vector<FighterVertex> bestTeam = greedy_solve(graph);
+        for (FighterVertex fighter : bestTeam)
+        {
+            cout << "We place a fighter at position (" << fighter.getPos().getX() << ", " << fighter.getPos().getY() << ")" << endl;
+        }
+        cout << "\nWriting result to " << result_file << endl;
+        write_solution(result_file, map, config, bestTeam);
+    }
+    else
+    {
+        cout << "Unknown algorithm!" << endl;
+        return 1;
+    }
     return 0;
 }

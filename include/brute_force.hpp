@@ -2,12 +2,10 @@
 #define BRUTE_FORCE_HPP
 
 #include <vector>
-#include "Graph/FighterVertex.hpp"
-#include "Graph/FireVertex.hpp"
+#include "Graph/Graph.hpp"
 
-std::vector<std::vector<FighterVertex>> find_partitions(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
-bool check_feasibility(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
-std::vector<FighterVertex> solve(std::vector<std::vector<FighterVertex>> partitions, std::vector<FireVertex> fireList);
-int compute_lower_bound(std::vector<FighterVertex> fighterList, std::vector<FireVertex> fireList);
+bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
+int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
+std::vector<FighterVertex> bruteforce_solve(const Graph &graph);
 
 #endif

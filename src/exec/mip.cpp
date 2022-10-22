@@ -24,12 +24,8 @@ int main(int argc, char *argv[])
     cout << "Number of angles: " << config[0] << endl;
     cout << "Furnace radius: " << config[1] << endl;
     cout << "Radius of action of a firefighter: " << config[2] << endl;
-    cout << endl;
     cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
-
-    // display_map(map);
-
-    Graph graph = calculate_graph_data(map, config);
+    cout << endl;
 
     map = solve_using_graph(map, config);
     map = draw_details(map, config);
@@ -38,8 +34,6 @@ int main(int argc, char *argv[])
     const string result_file = "../solution/result_" + splittedString[1] + ".ppm";
     cout << "Writing result to " << result_file << endl;
     write_map(result_file, map);
-
-    // display_map(map);
 
     return 0;
 }
