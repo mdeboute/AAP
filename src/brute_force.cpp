@@ -45,6 +45,8 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
     std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();
     std::vector<FireVertex> fires = graph.getFireVertexTab();
 
+    auto startingTime = std::chrono::steady_clock::now();
+
     int n = fighters.size();
     int upperBound = fires.size();
     int lowerBound = compute_lower_bound(fighters, fires);
@@ -65,10 +67,13 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
             }
             if (check_feasibility(team, fires))
             {
+                std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
+                std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << team.size() << std::endl;
                 return team;
             }
         }
     }
-    std::cout << "No solution found" << std::endl;
+    std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
+    std::cout << "Result: runtime = " << tt.count() << " sec; No feasible solution found!" << std::endl;
     return std::vector<FighterVertex>();
 }

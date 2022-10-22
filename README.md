@@ -18,11 +18,11 @@ make <target>
 In the build directory:
 
 ```shell
-./a.out <dir>
+./exec.out
 ```
 
 ### Second report, **deadline: Friday, October 28th**
 
 Write a small report (PDF file) explaining:
 
-BrutForce + Greedy algorithms.
+~Bruteforce~ + ~Greedy algorithms~.

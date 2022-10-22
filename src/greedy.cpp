@@ -1,13 +1,17 @@
 #include "greedy.hpp"
 #include <chrono>
 
-std::vector<FighterVertex> greedy_solve(const Graph& graph){
-    auto startingTime = std::chrono::steady_clock::now();
-    std::vector<FighterVertex> Sol;
+std::vector<FighterVertex> greedy_solve(const Graph &graph)
+{
     std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();
     if (fighters.size() == 0)
-        std::cout << "invalid input in greedy !!!" << std::endl;
+        std::cout << "Invalid input in greedy!" << std::endl;
     std::vector<FireVertex> fires = graph.getFireVertexTab();
+
+    auto startingTime = std::chrono::steady_clock::now();
+
+    std::vector<FighterVertex> sol;
+
     std::vector<int> isFireCovered;
     std::vector<int> fightersValue;
     for (int i = 0; i < fires.size(); ++i)
@@ -52,10 +56,8 @@ std::vector<FighterVertex> greedy_solve(const Graph& graph){
             }
         }
 
-        std::cout << "took fighter " << bestFighter << std::endl;
-
         fightersValue[bestFighter] = -1;
-        Sol.push_back(fighters[bestFighter]);
+        sol.push_back(fighters[bestFighter]);
         std::vector<FireVertex> fighterFires = fighters[bestFighter].getFireCovered();
         for (int j = 0; j < fighterFires.size(); ++j)
         {
@@ -74,7 +76,6 @@ std::vector<FighterVertex> greedy_solve(const Graph& graph){
         }
     }
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-    std::cout << "Solved with greedy in " << tt.count() << "sec" << std::endl;
-
-    return Sol;
+    std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << sol.size() << std::endl;
+    return sol;
 }

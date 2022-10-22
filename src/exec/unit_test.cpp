@@ -48,16 +48,18 @@ bool cutUselessFightersTest(Graph g)
         {
             const std::string msg = "[FAIL] cutUselessFighters : unexpected figther in the graph, id : " + std::to_string(id);
             std::perror(msg.c_str());
-            //return false;
+            // return false;
         }
-        if (id == 0 || id == 2 || id == 5){
-            cpt ++;
+        if (id == 0 || id == 2 || id == 5)
+        {
+            cpt++;
         }
     }
-    if(cpt != 3){
+    if (cpt != 3)
+    {
         printf("[FAIL] cutUselessFighters : Not enough figther in the graph, find %d insted of 3", cpt);
     }
-    printf("[SUCESS] cutUselessFighters\n");
+    printf("[SUCCESS] cutUselessFighters\n");
     return true;
 }
 bool generateAdjacencyTest(Graph g)
@@ -82,7 +84,7 @@ bool generateAdjacencyTest(Graph g)
             return false;
         }
     }
-    printf("[SUCESS] generateAdjacency\n");
+    printf("[SUCCESS] generateAdjacency\n");
     return true;
 }
 
@@ -91,23 +93,24 @@ int main()
     Graph g = genVal1();
     printf("----- Graph : fires -----\n");
     std::vector<FireVertex> fires = g.getFireVertexTab();
-    for (FireVertex f : fires){
+    for (FireVertex f : fires)
+    {
         std::cout << f << std::endl;
     }
     printf("----- Graph : fighters -----\n");
     std::vector<FighterVertex> fighters = g.getFigtherVertexTab();
-    for (FighterVertex f : fighters){
+    for (FighterVertex f : fighters)
+    {
         std::cout << f << std::endl;
     }
     printf("----- [TEST] Graph -----\n");
     bool cut = cutUselessFightersTest(g);
     bool gen = generateAdjacencyTest(g);
-    if (cut && gen){
-        printf("-- [SUCESS] Graph\n");
+    if (cut && gen)
+    {
+        printf("----- [SUCCESS] Graph -----\n");
         return 1;
     }
-    std::perror("-- [FAIL] Graph \n");
-        return 0;   
-    
-    
+    std::perror("----- [FAIL] Graph -----\n");
+    return 0;
 }
