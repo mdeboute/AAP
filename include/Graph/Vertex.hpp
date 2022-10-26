@@ -8,7 +8,7 @@ class Vertex
 {
 private:
     Position p;
-    int index = -1; 
+    int index = -1;
     int id = -42;
 
 protected:
@@ -19,7 +19,7 @@ public:
     Position getPos() const;
     int getID() const;
     int getIndex() const;
-    
+
     void setID(int id);
     void setIndex(int index);
 };

@@ -14,7 +14,7 @@ private:
 public:
     Edge();
     Edge(FighterVertex fighter, FireVertex fire, int id);
-    
+
     FireVertex getFireVertex() const;
     FighterVertex getFighterVertex() const;
     int getID() const;

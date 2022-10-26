@@ -1,139 +1,119 @@
 #define _USE_MATH_DEFINES
 #include "mip_formulation.hpp"
-using namespace std;
 
 const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &map, const std::vector<float> &config)
 {
-    int nb_rays = (int)config[0];
-    // int nb_rays = 25;
-    float furnace_radius = config[1];
-    float action_radius = config[2];
+    int nbRays = (int)config[0];
+    float furnaceRadius = config[1];
+    float actionRadius = config[2];
 
     size_t height = map.size();
     size_t width = map[0].size();
 
-    // map[35][25] = RED;
+    std::vector<pixel> fireCenters;
+    std::vector<std::vector<int>> feasibilityMap;
+    std::vector<std::vector<std::vector<int>>> rayFightingMap;
+    std::cout << "Start gathering data..." << std::endl;
 
-    std::vector<pixel> fire_centers;
-    std::vector<std::vector<int>> feasibility_map;
-    std::vector<std::vector<std::vector<int>>> ray_fighting_map;
-    std::cout << "Start gathering data" << std::endl;
     // We get the fire centers and a map overlay of places we can't put firefighters
     for (size_t y = 0; y < height; y++)
     {
-        std::vector<int> feasibility_map_line;
-        std::vector<std::vector<int>> ray_fighting_map_line;
+        std::vector<int> feasibilityMapLine;
+        std::vector<std::vector<int>> rayFightingMapLine;
         for (size_t x = 0; x < width; x++)
         {
             if (map[y][x] == YELLOW)
-                feasibility_map_line.push_back(1);
+                feasibilityMapLine.push_back(1);
             else
-                feasibility_map_line.push_back(0); // to changer if firefighters can be in cities
-            if (map[y][x] == RED)                  //
+                feasibilityMapLine.push_back(0);
+            if (map[y][x] == RED)
             {
                 pixel fire;
                 fire.x = x;
                 fire.y = y;
-                fire_centers.push_back(fire);
+                fireCenters.push_back(fire);
             }
-            std::vector<int> ray_fighting_pos;
-            ray_fighting_map_line.push_back(ray_fighting_pos);
+            std::vector<int> rayFightingPos;
+            rayFightingMapLine.push_back(rayFightingPos);
         }
-        feasibility_map.push_back(feasibility_map_line);
-        ray_fighting_map.push_back(ray_fighting_map_line);
+        feasibilityMap.push_back(feasibilityMapLine);
+        rayFightingMap.push_back(rayFightingMapLine);
     }
 
-    size_t nb_fires = fire_centers.size();
+    size_t nbFires = fireCenters.size();
 
-    std::cout << "Finished gathering firecenters and partial feasible placement data" << std::endl;
+    std::cout << "Finished gathering firecenters and partial feasible placement data!" << std::endl;
 
-    for (size_t f = 0; f < nb_fires; f++)
+    for (size_t f = 0; f < nbFires; f++)
     {
-        std::vector<pixel> furnace = circle_to_pixels(fire_centers[f], furnace_radius, width, height);
+        std::vector<pixel> furnace = circle_to_pixels(fireCenters[f], furnaceRadius, width, height);
         for (auto &&pixel : furnace)
         {
-            feasibility_map[pixel.y][pixel.x] = 0;
+            feasibilityMap[pixel.y][pixel.x] = 0;
             if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
                 map[pixel.y][pixel.x] = MAGENTA;
         }
     }
 
-    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements" << std::endl;
+    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!" << std::endl;
 
-    std::vector<std::vector<ray>> fire_rays;
-    std::vector<std::vector<std::vector<pixel>>> fire_ray_paths;
-    std::vector<std::vector<pixel>> fatal_ray_neighborhoods;
-    std::vector<ray> fatal_rays;
+    std::vector<std::vector<ray>> fireRays;
+    std::vector<std::vector<std::vector<pixel>>> fireRayPaths;
+    std::vector<std::vector<pixel>> fatalRayNeighborhoods;
+    std::vector<ray> fatalRays;
 
-    for (size_t f = 0; f < nb_fires; f++)
+    for (size_t f = 0; f < nbFires; f++)
     {
         std::vector<ray> rays;
-        std::vector<std::vector<pixel>> ray_paths;
-        for (size_t r = 0; r < nb_rays; r++)
+        std::vector<std::vector<pixel>> rayPaths;
+        for (size_t r = 0; r < nbRays; r++)
         {
-            float degrees = r * 360.0 / nb_rays;
-            // std::cout << degrees;  //display current ray degrees
-            float x_r = fire_centers[f].x + 0.5 + furnace_radius * cos(degrees * (M_PI / 180.0));
-            float y_r = fire_centers[f].y + 0.5 + furnace_radius * sin(degrees * (M_PI / 180.0));
-            // std::cout << " 2(" << x_r << ", " << y_r << ")" << std::endl;
+            float degrees = r * 360.0 / nbRays;
+            float x_r = fireCenters[f].x + 0.5 + furnaceRadius * cos(degrees * (M_PI / 180.0));
+            float y_r = fireCenters[f].y + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             ray ray;
-            ray.slope = (y_r - (fire_centers[f].y + 0.5)) / (x_r - (fire_centers[f].x + 0.5));
+            ray.slope = (y_r - (fireCenters[f].y + 0.5)) / (x_r - (fireCenters[f].x + 0.5));
             ray.intercept = y_r - ray.slope * x_r;
-            ray.source = fire_centers[f]; // possible copy of data. Can be improved later
+            ray.source = fireCenters[f]; // possible copy of data. Can be improved later
             if (degrees > 90 && degrees <= 270)
                 ray.dir = LEFT;
             else
                 ray.dir = RIGHT;
 
-            // std::cout << "Ray " << r << ": y = " << ray.slope << " * x + " << ray.intercept << " from(" << ray.source.x << ", " << ray.source.y << ")";
+            std::vector<pixel> rayPath = calculate_ray_path(map, ray);
 
-            std::vector<pixel> ray_path = calculate_ray_path(map, ray);
-
-            // for (size_t i = 1; i < ray_path.size()-1; i++)
-            //     if(map[ray_path[i].y][ray_path[i].x] == YELLOW)
-            //         map[ray_path[i].y][ray_path[i].x] = ORANGE;
-
-            ray.target = ray_path[ray_path.size() - 1];
-
-            // std::cout << " to(" << ray.target.x << ", " << ray.target.y << ") in direction " << ray.dir << std::endl;  //display current ray
+            ray.target = rayPath[rayPath.size() - 1];
 
             if (map[ray.target.y][ray.target.x] == BLACK) // ray is directed to a city
             {
-                std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius, (int)fatal_ray_neighborhoods.size(), ray_fighting_map);
-                fatal_ray_neighborhoods.push_back(ray_neighborhood);
-                fatal_rays.push_back(ray);
+                std::vector<pixel> rayNeighborhood = calculate_ray_neighborhood(feasibilityMap, rayPath, actionRadius, (int)fatalRayNeighborhoods.size(), rayFightingMap);
+                fatalRayNeighborhoods.push_back(rayNeighborhood);
+                fatalRays.push_back(ray);
             }
             rays.push_back(ray);
-            ray_paths.push_back(ray_path);
+            rayPaths.push_back(rayPath);
         }
-        fire_rays.push_back(rays);
-        fire_ray_paths.push_back(ray_paths);
+        fireRays.push_back(rays);
+        fireRayPaths.push_back(rayPaths);
     }
 
-    std::cout << "Finished calculating ray paths and neighborhoods" << std::endl;
-
-    /** TODO:
-     * Check why rays going upwards seem thinner for some reason
-     * Update feasibility map to limit it to positions that cover rays
-     * Further improve feasibility map to reduce symetries (multiple positions that stop the same group of rays)
-     **/
+    std::cout << "Finished calculating ray paths and neighborhoods!" << std::endl;
 
     bool verbose = true;
-    int nb_fatal_rays = fatal_ray_neighborhoods.size();
+    int nbFatalRays = fatalRayNeighborhoods.size();
 
     GRBVar **x = nullptr;
     try
     {
         // --- Creation of the Gurobi environment ---
         if (verbose)
-            cout << "--> Creating the Gurobi environment" << endl;
+            std::cout << "--> Creating the Gurobi environment" << std::endl;
         GRBEnv env = GRBEnv(true);
-        // env.set("LogFile", "mip1.log"); ///< prints the log in a file
         env.start();
 
         // --- Creation of the Gurobi model ---
         if (verbose)
-            cout << "--> Creating the Gurobi model" << endl;
+            std::cout << "--> Creating the Gurobi model" << std::endl;
         GRBModel model = GRBModel(env);
 
         if (!verbose)
@@ -143,7 +123,7 @@ const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &ma
 
         // --- Creation of the variables ---
         if (verbose)
-            cout << "--> Creating the variables" << endl;
+            std::cout << "--> Creating the variables" << std::endl;
 
         x = new GRBVar *[height];
 
@@ -152,10 +132,10 @@ const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &ma
             x[j] = new GRBVar[width];
             for (size_t i = 0; i < width; ++i)
             {
-                if (feasibility_map[j][i] == 1)
+                if (feasibilityMap[j][i] == 1)
                 {
-                    stringstream ss;
-                    ss << "Pixel(" << i << ", " << j << ")";
+                    std::stringstream ss;
+                    ss << "pixel(" << i << ", " << j << ")";
                     x[j][i] = model.addVar(0.0, 1.0, 0.0, GRB_BINARY, ss.str());
                 }
             }
@@ -163,13 +143,13 @@ const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &ma
 
         // --- Creation of the objective function ---
         if (verbose)
-            cout << "--> Creating the objective function" << endl;
+            std::cout << "--> Creating the objective function" << std::endl;
         GRBLinExpr obj = 0;
         for (size_t j = 0; j < height; ++j)
         {
             for (size_t i = 0; i < width; ++i)
             {
-                if (feasibility_map[j][i] == 1)
+                if (feasibilityMap[j][i] == 1)
                 {
                     obj += x[j][i];
                 }
@@ -179,39 +159,38 @@ const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &ma
 
         // --- Creation of the constraints ---
         if (verbose)
-            cout << "--> Creating the constraints" << endl;
+            std::cout << "--> Creating the constraints" << std::endl;
 
         // Each ray must be in the action range of a firefigher
-        for (size_t r = 0; r < nb_fatal_rays; ++r)
+        for (size_t r = 0; r < nbFatalRays; ++r)
         {
-            GRBLinExpr ray_cover = 0;
+            GRBLinExpr rayCover = 0;
 
-            for (pixel pixel : fatal_ray_neighborhoods[r])
+            for (pixel pixel : fatalRayNeighborhoods[r])
             {
-                ray_cover += x[pixel.y][pixel.x];
+                rayCover += x[pixel.y][pixel.x];
             }
 
-            stringstream ss;
-            ss << "Ray_cover(" << r << ")";
-            model.addConstr(ray_cover >= 1, ss.str());
+            std::stringstream ss;
+            ss << "ray_cover(" << r << ")";
+            model.addConstr(rayCover >= 1, ss.str());
         }
 
         // Optimize model
         // --- Solver configuration ---
         if (verbose)
-            cout << "--> Configuring the solver" << endl;
+            std::cout << "--> Configuring the solver" << std::endl;
         model.set(GRB_DoubleParam_TimeLimit, 600.0); //< sets the time limit (in seconds)
         model.set(GRB_IntParam_Threads, 3);          //< limits the solver to single thread usage
 
         // --- Solver launch ---
         if (verbose)
-            cout << "--> Running the solver" << endl;
+            std::cout << "--> Running the solver" << std::endl;
         model.optimize();
-        // model.write("model.lp"); //< Writes the model in a file
 
         // --- Solver results retrieval ---
         if (verbose)
-            cout << "--> Retrieving solver results " << endl;
+            std::cout << "--> Retrieving solver results " << std::endl;
 
         int status = model.get(GRB_IntAttr_Status);
         if (status == GRB_OPTIMAL || (status == GRB_TIME_LIMIT && model.get(GRB_IntAttr_SolCount) > 0))
@@ -219,13 +198,13 @@ const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &ma
             // the solver has computed the optimal solution or a feasible solution (when the time limit is reached before proving optimality)
             if (verbose)
             {
-                cout << "Success! (Status: " << status << ")" << endl; //< prints the solver status (see the gurobi documentation)
-                cout << "--> Printing results " << endl;
+                std::cout << "Success! (Status: " << status << ")" << std::endl; //< prints the solver status (see the gurobi documentation)
+                std::cout << "--> Printing results " << std::endl;
             }
 
-            cout << "Result: ";
-            cout << "runtime = " << model.get(GRB_DoubleAttr_Runtime) << " sec; ";
-            cout << "objective value = " << model.get(GRB_DoubleAttr_ObjVal) << endl; //< gets the value of the objective function for the best computed solution (optimal if no time limit)
+            std::cout << "Result: ";
+            std::cout << "runtime = " << model.get(GRB_DoubleAttr_Runtime) << " sec; ";
+            std::cout << "objective value = " << model.get(GRB_DoubleAttr_ObjVal) << std::endl; //< gets the value of the objective function for the best computed solution (optimal if no time limit)
 
             if (verbose)
             {
@@ -233,34 +212,28 @@ const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &ma
                 {
                     for (size_t i = 0; i < width; ++i)
                     {
-                        /*if (ray_fighting_map[j][i].size() > 0)
-                            cout << "Rays ";
-                        for (size_t k = 0; k < ray_fighting_map[j][i].size(); k++)
-                            cout << ray_fighting_map[j][i][k] << ", ";
-                        if (ray_fighting_map[j][i].size() > 0)
-                            cout << " can be stopped in position (" << i << ", " << j << ")" << endl;
-                        */
-                        if (feasibility_map[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
+
+                        if (feasibilityMap[j][i] == 1 && x[j][i].get(GRB_DoubleAttr_X) >= 0.5)
                         {
                             pixel firefighter;
                             firefighter.x = i;
                             firefighter.y = j;
-                            vector<pixel> action_area = circle_to_pixels(firefighter, action_radius, width, height);
+                            std::vector<pixel> action_area = circle_to_pixels(firefighter, actionRadius, width, height);
                             for (pixel p : action_area)
                                 if (map[p.y][p.x] == YELLOW || map[p.y][p.x] == ORANGE)
                                     map[p.y][p.x] = LIME;
-                            cout << "We place a firefigher at position (" << i << ", " << j << ")" << endl;
+                            std::cout << "We place a firefigher at position (" << i << ", " << j << ")" << std::endl;
                             map[j][i] = GREEN;
                         }
                     }
                 }
-                for (vector<vector<pixel>> ray_paths : fire_ray_paths)
+                for (std::vector<std::vector<pixel>> rayPaths : fireRayPaths)
                 {
-                    for (vector<pixel> ray_path : ray_paths)
+                    for (std::vector<pixel> rays : rayPaths)
                     {
-                        for (size_t i = 1; i < ray_path.size(); i++)
+                        for (size_t i = 1; i < rays.size(); i++)
                         {
-                            pixel p = ray_path[i];
+                            pixel p = rays[i];
                             if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
                                 break;
                             if (map[p.y][p.x] == YELLOW)
@@ -269,22 +242,21 @@ const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &ma
                     }
                 }
             }
-            // model.write("solution.sol"); //< Writes the solution in a file
         }
         else
         {
             // the model is infeasible (maybe wrong) or the solver has reached the time limit without finding a feasible solution
-            cerr << "Fail! (Status: " << status << ")" << endl; //< see status page in the Gurobi documentation
+            std::cerr << "Fail! (Status: " << status << ")" << std::endl; //< see status page in the Gurobi documentation
         }
     }
     catch (GRBException e)
     {
-        cout << "Error code = " << e.getErrorCode() << endl;
-        cout << e.getMessage() << endl;
+        std::cout << "Error code = " << e.getErrorCode() << std::endl;
+        std::cout << e.getMessage() << std::endl;
     }
     catch (...)
     {
-        cout << "Exception during optimization" << endl;
+        std::cout << "Exception during optimization" << std::endl;
     }
 
     for (size_t j = 0; j < height; ++j)
@@ -304,11 +276,10 @@ const std::vector<std::vector<Color>> &solve_using_graph(
     size_t width = map[0].size();
 
     Graph graph = calculate_graph_data(map, config);
-    std::vector<FireVertex> fireVertexTab = graph.getFireVertexTab();
-    std::vector<FighterVertex> fighterVertexTab = graph.getFigtherVertexTab();
-    size_t nb_fatal_rays = fireVertexTab.size();
-    size_t nb_firefighters = fighterVertexTab.size();
-    // cout << graph.getFireVertex(0) << " " << nb_firefighters << endl;
+    std::vector<FireVertex> fireVertexList = graph.getFireVertexList();
+    std::vector<FighterVertex> fighterVertexList = graph.getFigtherVertexList();
+    size_t nbFatalRays = fireVertexList.size();
+    size_t nbFirefighters = fighterVertexList.size();
 
     bool verbose = true;
 
@@ -317,14 +288,13 @@ const std::vector<std::vector<Color>> &solve_using_graph(
     {
         // --- Creation of the Gurobi environment ---
         if (verbose)
-            cout << "--> Creating the Gurobi environment" << endl;
+            std::cout << "--> Creating the Gurobi environment" << std::endl;
         GRBEnv env = GRBEnv(true);
-        // env.set("LogFile", "mip1.log"); ///< prints the log in a file
         env.start();
 
         // --- Creation of the Gurobi model ---
         if (verbose)
-            cout << "--> Creating the Gurobi model" << endl;
+            std::cout << "--> Creating the Gurobi model" << std::endl;
         GRBModel model = GRBModel(env);
 
         if (!verbose)
@@ -334,68 +304,67 @@ const std::vector<std::vector<Color>> &solve_using_graph(
 
         // --- Creation of the variables ---
         if (verbose)
-            cout << "--> Creating the variables" << endl;
+            std::cout << "--> Creating the variables" << std::endl;
 
-        x = new GRBVar[nb_firefighters];
+        x = new GRBVar[nbFirefighters];
 
-        for (size_t i = 0; i < nb_firefighters; ++i)
+        for (size_t i = 0; i < nbFirefighters; ++i)
         {
-            Position p = fighterVertexTab[i].getPos();
-            stringstream ss;
+            Position p = fighterVertexList[i].getPos();
+            std::stringstream ss;
             ss << "Fighter(" << p.getX() << ", " << p.getY() << ")";
             x[i] = model.addVar(0.0, 1.0, 0.0, GRB_BINARY, ss.str());
         }
 
         // --- Creation of the objective function ---
         if (verbose)
-            cout << "--> Creating the objective function" << endl;
+            std::cout << "--> Creating the objective function" << std::endl;
         GRBLinExpr obj = 0;
-        for (size_t i = 0; i < nb_firefighters; ++i)
+        for (size_t i = 0; i < nbFirefighters; ++i)
             obj += x[i];
 
         model.setObjective(obj, GRB_MINIMIZE);
 
         // --- Creation of the constraints ---
         if (verbose)
-            cout << "--> Creating the constraints" << endl;
+            std::cout << "--> Creating the constraints" << std::endl;
 
         // Each ray must be in the action range of a firefigher
-        for (FireVertex fireRay : fireVertexTab)
+        for (FireVertex fireRay : fireVertexList)
         {
-            GRBLinExpr ray_cover = 0;
-            for (size_t i = 0; i < nb_firefighters; ++i)
+            GRBLinExpr rayCover = 0;
+            for (size_t i = 0; i < nbFirefighters; ++i)
             {
-                FighterVertex fighter = fighterVertexTab[i];
+                FighterVertex fighter = fighterVertexList[i];
                 for (FireVertex coveredRay : fighter.getFireCovered())
                 {
                     if (fireRay.getID() == coveredRay.getID())
                     {
-                        ray_cover += x[i];
+                        rayCover += x[i];
                         break;
                     }
                 }
             }
-            stringstream ss;
-            ss << "Ray_cover(" << fireRay.getID() << ")";
-            model.addConstr(ray_cover >= 1, ss.str());
+            std::stringstream ss;
+            ss << "ray_cover(" << fireRay.getID() << ")";
+            model.addConstr(rayCover >= 1, ss.str());
         }
 
         // Optimize model
         // --- Solver configuration ---
         if (verbose)
-            cout << "--> Configuring the solver" << endl;
+            std::cout << "--> Configuring the solver" << std::endl;
         model.set(GRB_DoubleParam_TimeLimit, 600.0); //< sets the time limit (in seconds)
         model.set(GRB_IntParam_Threads, 3);          //< limits the solver to single thread usage
 
         // --- Solver launch ---
         if (verbose)
-            cout << "--> Running the solver" << endl;
+            std::cout << "--> Running the solver" << std::endl;
         model.optimize();
-        // model.write("model.lp"); //< Writes the model in a file
 
         // --- Solver results retrieval ---
         if (verbose)
-            cout << "--> Retrieving solver results " << endl;
+            std::cout << "--> Retrieving solver results " << std::endl;
 
         int status = model.get(GRB_IntAttr_Status);
         if (status == GRB_OPTIMAL || (status == GRB_TIME_LIMIT && model.get(GRB_IntAttr_SolCount) > 0))
@@ -403,48 +372,52 @@ const std::vector<std::vector<Color>> &solve_using_graph(
             // the solver has computed the optimal solution or a feasible solution (when the time limit is reached before proving optimality)
             if (verbose)
             {
-                cout << "Success! (Status: " << status << ")" << endl; //< prints the solver status (see the gurobi documentation)
-                cout << "--> Printing results " << endl;
+                std::cout << "Success! (Status: " << status << ")" << std::endl; //< prints the solver status (see the gurobi documentation)
+                std::cout << "--> Printing results\n"
+                          << std::endl;
             }
 
-            cout << "Result: ";
-            cout << "runtime = " << model.get(GRB_DoubleAttr_Runtime) << " sec; ";
-            cout << "objective value = " << model.get(GRB_DoubleAttr_ObjVal) << endl; //< gets the value of the objective function for the best computed solution (optimal if no time limit)
+            std::cout << "Result: ";
+            std::cout << "runtime = " << model.get(GRB_DoubleAttr_Runtime) << " sec; ";
+            std::cout << "objective value = " << model.get(GRB_DoubleAttr_ObjVal) << std::endl; //< gets the value of the objective function for the best computed solution (optimal if no time limit)
 
             if (verbose)
             {
-                for (size_t i = 0; i < nb_firefighters; ++i)
+                std::cout << std::endl;
+                for (size_t i = 0; i < nbFirefighters; ++i)
                 {
                     if (x[i].get(GRB_DoubleAttr_X) >= 0.5)
                     {
-                        Position pos = fighterVertexTab[i].getPos();
+                        Position pos = fighterVertexList[i].getPos();
                         pixel firefighter;
                         firefighter.x = pos.getX();
                         firefighter.y = pos.getY();
-                        cout << "We place a firefigher at position (" << firefighter.x << ", " << firefighter.y << ")" << endl;
+                        std::cout << "We place a firefigher at position (" << firefighter.x << ", " << firefighter.y << ")" << std::endl;
                         map[firefighter.y][firefighter.x] = GREEN;
                     }
                 }
             }
-            // model.write("solution.sol"); //< Writes the solution in a file
+            std::cout << std::endl;
         }
         else
         {
             // the model is infeasible (maybe wrong) or the solver has reached the time limit without finding a feasible solution
-            cerr << "Fail! (Status: " << status << ")" << endl; //< see status page in the Gurobi documentation
+            std::cerr << "Fail! (Status: " << status << ")" << std::endl; //< see status page in the Gurobi documentation
         }
     }
     catch (GRBException e)
     {
-        cout << "Error code = " << e.getErrorCode() << endl;
-        cout << e.getMessage() << endl;
+        std::cout << "Error code = " << e.getErrorCode() << std::endl;
+        std::cout << e.getMessage() << std::endl;
     }
     catch (...)
     {
-        cout << "Exception during optimization" << endl;
+        std::cout << "Exception during optimization" << std::endl;
     }
 
     delete[] x;
 
     return map;
 }
+
+// TODO: create more functions to clean up the code lmao

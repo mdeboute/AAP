@@ -13,29 +13,26 @@ void FighterVertex::addFire(FireVertex f)
 {
     if (parssingDone)
         return;
-    fire_covered.push_back(f);
+    fireCovered.push_back(f);
 }
 
 FireVertex FighterVertex::getFireAt(int index) const
 {
-    return fire_covered[index];
+    return fireCovered[index];
 }
 
-const std::vector<FireVertex>& FighterVertex::getFireCovered() const
+const std::vector<FireVertex> &FighterVertex::getFireCovered() const
 {
-    return fire_covered;
+    return fireCovered;
 }
-/*
-true : tous les feu de f sont contenus dans la liste
-false : un des feux de f n'est pas dans la liste
-*/
-bool FighterVertex::containsFighter(FighterVertex f) const
+
+bool FighterVertex::betterThan(FighterVertex f) const
 {
-    std::vector<FireVertex> fLignes = f.getFireCovered();
-    for (FireVertex fire : fLignes)
+    std::vector<FireVertex> fireLines = f.getFireCovered();
+    for (FireVertex fire : fireLines)
     {
         bool find = false;
-        for (FireVertex myFire : fire_covered)
+        for (FireVertex myFire : fireCovered)
         {
             if (fire == myFire)
             {
@@ -53,7 +50,7 @@ bool FighterVertex::containsFighter(FighterVertex f) const
 
 bool FighterVertex::stopFire(FireVertex f) const
 {
-    for (FireVertex fire : fire_covered)
+    for (FireVertex fire : fireCovered)
     {
         if (fire == f)
         {
@@ -65,13 +62,17 @@ bool FighterVertex::stopFire(FireVertex f) const
 
 int FighterVertex::getFireCapacity() const
 {
-    return fire_covered.size();
+    return fireCovered.size();
 }
 
-void FighterVertex::print(int verbose){
-    if (verbose==1){
+void FighterVertex::print(int verbose)
+{
+    if (verbose == 1)
+    {
         std::cout << *this << std::endl;
-    }else{
-        std::cout << "Vertex of id : " << this->getID() << " at position : " << this->getPos() << std::endl;
+    }
+    else
+    {
+        std::cout << "Vertex of id: " << this->getID() << " at position: " << this->getPos() << std::endl;
     }
 }

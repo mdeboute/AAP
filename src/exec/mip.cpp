@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
     map = solve_using_graph(map, config);
     map = draw_details(map, config);
 
-    vector<string> splittedString = split_string(data_dir, "/");
-    const string result_file = "../solution/result_" + splittedString[1] + ".ppm";
+    vector<string> splitted_string = split_string(data_dir, "/");
+    const string result_file = "../solution/result_" + splitted_string[1] + ".ppm";
     cout << "Writing result to " << result_file << endl;
     write_map(result_file, map);
 

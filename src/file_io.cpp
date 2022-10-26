@@ -75,7 +75,7 @@ void open_file(std::ifstream &file, std::string filePath)
     file.open(filePath);
     if (!file.is_open())
     {
-        std::cerr << "File open failed\n"
+        std::cerr << "File open failed!\n"
                   << std::endl;
         exit(-1);
     }
