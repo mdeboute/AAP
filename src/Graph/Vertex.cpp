@@ -17,7 +17,8 @@ int Vertex::getID() const
     return this->id;
 }
 
-void Vertex::setID(int id){
+void Vertex::setID(int id)
+{
     this->id = id;
 }
 
@@ -26,6 +27,7 @@ int Vertex::getIndex() const
     return this->index;
 }
 
-void Vertex::setIndex(int index){
+void Vertex::setIndex(int index)
+{
     this->index = index;
 }

@@ -3,6 +3,6 @@
 
 #include "Graph/Graph.hpp"
 
-std::vector<FighterVertex> greedy_solve(const Graph& graph);
+std::vector<FighterVertex> greedy_solve(const Graph &graph);
 
 #endif

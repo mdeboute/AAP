@@ -19,12 +19,12 @@ int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std
     return ceil((double)fireList.size() / max);
 }
 
-bool check_feasibility(const std::vector<FighterVertex> &fighters, const std::vector<FireVertex> &fires)
+bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
 {
-    for (FireVertex fire : fires)
+    for (FireVertex fire : fireList)
     {
         bool find = false;
-        for (FighterVertex fighter : fighters)
+        for (FighterVertex fighter : fighterList)
         {
             if (fighter.stopFire(fire))
             {
@@ -42,14 +42,21 @@ bool check_feasibility(const std::vector<FighterVertex> &fighters, const std::ve
 
 std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
 {
-    std::vector<FighterVertex> fighters = graph.getFigtherVertexTab();
-    std::vector<FireVertex> fires = graph.getFireVertexTab();
+    std::vector<FighterVertex> fighters = graph.getFigtherVertexList();
+    std::vector<FireVertex> fires = graph.getFireVertexList();
 
     auto startingTime = std::chrono::steady_clock::now();
 
     int n = fighters.size();
     int upperBound = fires.size();
     int lowerBound = compute_lower_bound(fighters, fires);
+
+    std::cout << "Number of potential fighters: " << n << std::endl;
+    std::cout << std::endl;
+
+    // sort the fighters list by the number of fires they can stop
+    std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
+              { return a.getFireCapacity() > b.getFireCapacity(); });
 
     for (int i = 0; i < std::pow(2, n); i++)
     {
@@ -69,11 +76,13 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
             {
                 std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
                 std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << team.size() << std::endl;
+                std ::cout << std::endl;
                 return team;
             }
         }
     }
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
     std::cout << "Result: runtime = " << tt.count() << " sec; No feasible solution found!" << std::endl;
+    std ::cout << std::endl;
     return std::vector<FighterVertex>();
 }

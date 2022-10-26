@@ -37,7 +37,7 @@ Graph genVal1()
 
 bool cutUselessFightersTest(Graph g)
 {
-    std::vector<FighterVertex> figthers = g.getFigtherVertexTab();
+    std::vector<FighterVertex> figthers = g.getFigtherVertexList();
     std::vector<FireVertex> fires;
     int cpt = 0;
     for (FighterVertex f : figthers)
@@ -46,9 +46,8 @@ bool cutUselessFightersTest(Graph g)
         int id = f.getID();
         if (id == 1 || id == 3 || id == 4)
         {
-            const std::string msg = "[FAIL] cutUselessFighters : unexpected figther in the graph, id : " + std::to_string(id);
+            const std::string msg = "[FAIL] cutUselessFighters: unexpected figther in the graph, id : " + std::to_string(id);
             std::perror(msg.c_str());
-            // return false;
         }
         if (id == 0 || id == 2 || id == 5)
         {
@@ -57,14 +56,15 @@ bool cutUselessFightersTest(Graph g)
     }
     if (cpt != 3)
     {
-        printf("[FAIL] cutUselessFighters : Not enough figther in the graph, find %d insted of 3", cpt);
+        printf("[FAIL] cutUselessFighters: Not enough figther in the graph, find %d insted of 3", cpt);
+        return false;
     }
     printf("[SUCCESS] cutUselessFighters\n");
     return true;
 }
 bool generateAdjacencyTest(Graph g)
 {
-    std::vector<FighterVertex> figthers = g.getFigtherVertexTab();
+    std::vector<FighterVertex> figthers = g.getFigtherVertexList();
     std::vector<FireVertex> fires;
     for (FighterVertex f : figthers)
     {
@@ -73,13 +73,13 @@ bool generateAdjacencyTest(Graph g)
         std::vector<FireVertex> cutFires = g.getFighterAdjacencyList(Index);
         if (cutFires.size() != 2)
         {
-            const std::string msg = "[FAIL] generateAdjacency : fire couth = " + std::to_string(cutFires.size());
+            const std::string msg = "[FAIL] generateAdjacency: fire couth = " + std::to_string(cutFires.size());
             std::perror(msg.c_str());
             return false;
         }
         if (f.getFireCovered() != cutFires)
         {
-            const std::string msg = "[FAIL] generateAdjacency : wrong adjacent fire ligne for figther : " + std::to_string(f.getID());
+            const std::string msg = "[FAIL] generateAdjacency: wrong adjacent fire ligne for figther: " + std::to_string(f.getID());
             std::perror(msg.c_str());
             return false;
         }
@@ -91,14 +91,14 @@ bool generateAdjacencyTest(Graph g)
 int main()
 {
     Graph g = genVal1();
-    printf("----- Graph : fires -----\n");
-    std::vector<FireVertex> fires = g.getFireVertexTab();
+    printf("----- Graph: fires -----\n");
+    std::vector<FireVertex> fires = g.getFireVertexList();
     for (FireVertex f : fires)
     {
         std::cout << f << std::endl;
     }
-    printf("----- Graph : fighters -----\n");
-    std::vector<FighterVertex> fighters = g.getFigtherVertexTab();
+    printf("----- Graph: fighters -----\n");
+    std::vector<FighterVertex> fighters = g.getFigtherVertexList();
     for (FighterVertex f : fighters)
     {
         std::cout << f << std::endl;

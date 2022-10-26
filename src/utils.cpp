@@ -38,16 +38,14 @@ std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int h
     return pixels;
 }
 
-std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>>& map, ray ray)
+std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>> &map, ray ray)
 {
-    // std::cout << "Ray(" << ray.source.x << "," << ray.source.y << ")" << ray.dir << ": y = " << ray.slope << "*x + " << ray.intercept << " in path vector" << std::endl;  //display current ray degrees
-
     std::vector<pixel> path;
-    bool obstacle_reached = false;
+    bool obstacleReached = false;
     int x = ray.source.x;
     int curr_y = ray.source.y;
-    // Check these to make sure all values are accounted for
-    while (!obstacle_reached)
+
+    while (!obstacleReached)
     {
         int next_x = x + ray.dir;
         int next_y;
@@ -72,16 +70,14 @@ std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>>& map
 
         for (int y = curr_y; y != next_y; y += step)
         {
-            // std::cout << " y is " << y << " next y is " << y + step << " >/< " << next_y << std::endl;
             pixel pixel;
             pixel.x = x;
             pixel.y = y;
-            // std::cout << "Trying to put pixel " << x << "," << y << " in path vector : ";
             path.push_back(pixel);
-            // std::cout << "Success!" << std::endl;
+
             if (map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size())
             {
-                obstacle_reached = true;
+                obstacleReached = true;
                 break;
             }
         }
@@ -101,31 +97,31 @@ std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>>& map
     return path;
 }
 
-std::vector<pixel> calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibility_map, 
-                                                     const std::vector<pixel> &ray_path, 
-                                                     float action_radius, 
-                                                     int ray_index, 
-                                                     std::vector<std::vector<std::vector<int>>> &ray_fighting_map)
+std::vector<pixel> calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibilityMap,
+                                              const std::vector<pixel> &rayPath,
+                                              float actionRadius,
+                                              int rayIndex,
+                                              std::vector<std::vector<std::vector<int>>> &rayFightingMap)
 {
     // make sure feasibility_map is a copy
     std::vector<pixel> neighborhood;
-    std::vector<std::vector<int>> exploration_map = feasibility_map;
-    int height = feasibility_map.size();
-    int width = feasibility_map[0].size();
+    std::vector<std::vector<int>> explorationMap = feasibilityMap;
+    int height = feasibilityMap.size();
+    int width = feasibilityMap[0].size();
 
-    for (int p = 0; p < ray_path.size() - 1; p++)
+    for (int p = 0; p < rayPath.size() - 1; p++)
     {
-        if (feasibility_map[ray_path[p].y][ray_path[p].x] == 0)
+        if (feasibilityMap[rayPath[p].y][rayPath[p].x] == 0)
             continue;
 
-        std::vector<pixel> circle_pixels = circle_to_pixels(ray_path[p], action_radius, width, height);
+        std::vector<pixel> circle_pixels = circle_to_pixels(rayPath[p], actionRadius, width, height);
         for (const pixel &pixel : circle_pixels)
         {
-            if (exploration_map[pixel.y][pixel.x] == 1)
+            if (explorationMap[pixel.y][pixel.x] == 1)
             {
                 neighborhood.push_back(pixel);
-                exploration_map[pixel.y][pixel.x] = 0;
-                ray_fighting_map[pixel.y][pixel.x].push_back(ray_index);
+                explorationMap[pixel.y][pixel.x] = 0;
+                rayFightingMap[pixel.y][pixel.x].push_back(rayIndex);
             }
         }
     }
@@ -133,7 +129,7 @@ std::vector<pixel> calculate_ray_neighborhood(const std::vector<std::vector<int>
     return neighborhood;
 }
 
-void display_map(const std::vector<std::vector<Color>>& map)
+void display_map(const std::vector<std::vector<Color>> &map)
 {
     for (int y = 0; y < map.size(); y++)
     {
@@ -160,17 +156,16 @@ void display_map(const std::vector<std::vector<Color>>& map)
     }
 }
 
-const std::vector<std::vector<Color>>& draw_details(std::vector<std::vector<Color>>& map, const std::vector<float> &config)
+const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Color>> &map, const std::vector<float> &config)
 {
-    int nb_rays = (int)config[0];
-    // int nb_rays = 25;
-    float furnace_radius = config[1];
-    float action_radius = config[2];
+    int nbRays = (int)config[0];
+    float furnaceRadius = config[1];
+    float actionRadius = config[2];
 
     size_t height = map.size();
     size_t width = map[0].size();
 
-    std::vector<pixel> fire_centers;
+    std::vector<pixel> fireCenters;
     for (size_t y = 0; y < height; y++)
     {
         for (size_t x = 0; x < width; x++)
@@ -180,8 +175,8 @@ const std::vector<std::vector<Color>>& draw_details(std::vector<std::vector<Colo
                 pixel fire;
                 fire.x = x;
                 fire.y = y;
-                fire_centers.push_back(fire);
-                std::vector<pixel> furnace = circle_to_pixels(fire, furnace_radius, width, height);
+                fireCenters.push_back(fire);
+                std::vector<pixel> furnace = circle_to_pixels(fire, furnaceRadius, width, height);
                 for (auto &&pixel : furnace)
                     if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
                         map[pixel.y][pixel.x] = MAGENTA;
@@ -191,7 +186,7 @@ const std::vector<std::vector<Color>>& draw_details(std::vector<std::vector<Colo
                 pixel firefighter;
                 firefighter.x = x;
                 firefighter.y = y;
-                std::vector<pixel> action_area = circle_to_pixels(firefighter, action_radius, width, height);
+                std::vector<pixel> action_area = circle_to_pixels(firefighter, actionRadius, width, height);
                 for (auto &&p : action_area)
                     if (map[p.y][p.x] == YELLOW || map[p.y][p.x] == ORANGE)
                         map[p.y][p.x] = LIME;
@@ -200,31 +195,31 @@ const std::vector<std::vector<Color>>& draw_details(std::vector<std::vector<Colo
         }
     }
 
-    size_t nb_fires = fire_centers.size();
+    size_t nbFires = fireCenters.size();
 
-    for (size_t f = 0; f < nb_fires; f++)
+    for (size_t f = 0; f < nbFires; f++)
     {
-        for (size_t r = 0; r < nb_rays; r++)
+        for (size_t r = 0; r < nbRays; r++)
         {
-            float degrees = r * 360.0 / nb_rays;
-            float x_r = fire_centers[f].x + 0.5 + furnace_radius * cos(degrees * (M_PI / 180.0));
-            float y_r = fire_centers[f].y + 0.5 + furnace_radius * sin(degrees * (M_PI / 180.0));
+            float degrees = r * 360.0 / nbRays;
+            float x_r = fireCenters[f].x + 0.5 + furnaceRadius * cos(degrees * (M_PI / 180.0));
+            float y_r = fireCenters[f].y + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             ray ray;
-            ray.slope = (y_r - (fire_centers[f].y + 0.5)) / (x_r - (fire_centers[f].x + 0.5));
+            ray.slope = (y_r - (fireCenters[f].y + 0.5)) / (x_r - (fireCenters[f].x + 0.5));
             ray.intercept = y_r - ray.slope * x_r;
-            ray.source = fire_centers[f]; // possible copy of data. Can be improved later
+            ray.source = fireCenters[f]; // possible copy of data. Can be improved later
             if (degrees > 90 && degrees <= 270)
                 ray.dir = LEFT;
             else
                 ray.dir = RIGHT;
 
-            std::vector<pixel> ray_path = calculate_ray_path(map, ray);
+            std::vector<pixel> rayPath = calculate_ray_path(map, ray);
 
-            ray.target = ray_path[ray_path.size() - 1];
+            ray.target = rayPath[rayPath.size() - 1];
 
-            for (size_t i = 1; i < ray_path.size(); i++)
+            for (size_t i = 1; i < rayPath.size(); i++)
             {
-                pixel p = ray_path[i];
+                pixel p = rayPath[i];
                 if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
                     break;
                 if (map[p.y][p.x] == YELLOW)
@@ -249,140 +244,130 @@ std::vector<std::string> split_string(const std::string &s, const std::string &d
     return elems;
 }
 
-Graph calculate_graph_data(std::vector<std::vector<Color>>& map, const std::vector<float>& config)
+Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vector<float> &config)
 {
-    int nb_rays = (int)config[0];
-    float furnace_radius = config[1];
-    float action_radius = config[2];
+    int nbRays = (int)config[0];
+    float furnaceRadius = config[1];
+    float actionRadius = config[2];
 
     size_t height = map.size();
     size_t width = map[0].size();
 
-    std::vector<pixel> fire_centers;
-    std::vector<std::vector<int>> feasibility_map;
-    std::vector<std::vector<std::vector<int>>> ray_fighting_map;
-    std::cout << "Start gathering data" << std::endl;
+    std::vector<pixel> fireCenters;
+    std::vector<std::vector<int>> feasibilityMap;
+    std::vector<std::vector<std::vector<int>>> rayFightingMap;
+    std::cout << "Start gathering data..." << std::endl;
+
     // We get the fire centers and a map overlay of places we can't put firefighters
     for (size_t y = 0; y < height; y++)
     {
-        std::vector<int> feasibility_map_line;
-        std::vector<std::vector<int>> ray_fighting_map_line;
+        std::vector<int> feasibilityMapLine;
+        std::vector<std::vector<int>> rayFightingMapLine;
         for (size_t x = 0; x < width; x++)
         {
             if (map[y][x] == YELLOW)
-                feasibility_map_line.push_back(1);
+                feasibilityMapLine.push_back(1);
             else
-                feasibility_map_line.push_back(0); // to change if firefighters can be in cities
+                feasibilityMapLine.push_back(0); // to change if firefighters can be in cities
             if (map[y][x] == RED)
             {
                 pixel fire;
                 fire.x = x;
                 fire.y = y;
-                fire_centers.push_back(fire);
+                fireCenters.push_back(fire);
             }
             std::vector<int> ray_fighting_pos;
-            ray_fighting_map_line.push_back(ray_fighting_pos);
+            rayFightingMapLine.push_back(ray_fighting_pos);
         }
-        feasibility_map.push_back(feasibility_map_line);
-        ray_fighting_map.push_back(ray_fighting_map_line);
+        feasibilityMap.push_back(feasibilityMapLine);
+        rayFightingMap.push_back(rayFightingMapLine);
     }
 
-    size_t nb_fires = fire_centers.size();
+    size_t nbFires = fireCenters.size();
 
-    std::cout << "Finished gathering firecenters and partial feasible placement data" << std::endl;
+    std::cout << "Finished gathering firecenters and partial feasible placement data!" << std::endl;
 
-    for (size_t f = 0; f < nb_fires; f++)
+    for (size_t f = 0; f < nbFires; f++)
     {
-        std::vector<pixel> furnace = circle_to_pixels(fire_centers[f], furnace_radius, width, height);
+        std::vector<pixel> furnace = circle_to_pixels(fireCenters[f], furnaceRadius, width, height);
         for (auto &&pixel : furnace)
         {
-            feasibility_map[pixel.y][pixel.x] = 0;
+            feasibilityMap[pixel.y][pixel.x] = 0;
             if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
                 map[pixel.y][pixel.x] = MAGENTA;
         }
     }
 
-    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements\n"
+    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!\n"
               << std::endl;
 
-    std::vector<std::vector<ray>> fire_rays;
-    std::vector<std::vector<std::vector<pixel>>> fire_ray_paths;
-    std::vector<std::vector<pixel>> fatal_ray_neighborhoods;
-    std::vector<ray> fatal_rays;
+    std::vector<std::vector<ray>> fireRays;
+    std::vector<std::vector<std::vector<pixel>>> fireRayPaths;
+    std::vector<std::vector<pixel>> fatalRayNeighborhoods;
+    std::vector<ray> fatalRays;
 
-    for (size_t f = 0; f < nb_fires; f++)
+    for (size_t f = 0; f < nbFires; f++)
     {
         std::vector<ray> rays;
-        std::vector<std::vector<pixel>> ray_paths;
-        for (size_t r = 0; r < nb_rays; r++)
+        std::vector<std::vector<pixel>> rayPaths;
+        for (size_t r = 0; r < nbRays; r++)
         {
-            float degrees = r * 360.0 / nb_rays;
-            // std::cout << degrees;  //display current ray degrees
-            float x_r = fire_centers[f].x + 0.5 + furnace_radius * cos(degrees * (M_PI / 180.0));
-            float y_r = fire_centers[f].y + 0.5 + furnace_radius * sin(degrees * (M_PI / 180.0));
-            // std::cout << " 2(" << x_r << ", " << y_r << ")" << std::endl;
+            float degrees = r * 360.0 / nbRays;
+            float x_r = fireCenters[f].x + 0.5 + furnaceRadius * cos(degrees * (M_PI / 180.0));
+            float y_r = fireCenters[f].y + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             ray ray;
-            ray.slope = (y_r - (fire_centers[f].y + 0.5)) / (x_r - (fire_centers[f].x + 0.5));
+            ray.slope = (y_r - (fireCenters[f].y + 0.5)) / (x_r - (fireCenters[f].x + 0.5));
             ray.intercept = y_r - ray.slope * x_r;
-            ray.source = fire_centers[f]; // possible copy of data. Can be improved later
+            ray.source = fireCenters[f]; // possible copy of data. Can be improved later
             if (degrees > 90 && degrees <= 270)
                 ray.dir = LEFT;
             else
                 ray.dir = RIGHT;
 
-            // std::cout << "Ray " << r << ": y = " << ray.slope << " * x + " << ray.intercept << " from(" << ray.source.x << ", " << ray.source.y << ")";
+            std::vector<pixel> rayPath = calculate_ray_path(map, ray);
 
-            std::vector<pixel> ray_path = calculate_ray_path(map, ray);
-
-            // for (size_t i = 1; i < ray_path.size()-1; i++)
-            //     if(map[ray_path[i].y][ray_path[i].x] == YELLOW)
-            //         map[ray_path[i].y][ray_path[i].x] = ORANGE;
-
-            ray.target = ray_path[ray_path.size() - 1];
-
-            // std::cout << " to(" << ray.target.x << ", " << ray.target.y << ") in direction " << ray.dir << std::endl;  //display current ray
+            ray.target = rayPath[rayPath.size() - 1];
 
             if (map[ray.target.y][ray.target.x] == BLACK) // ray is directed to a city
             {
-                std::vector<pixel> ray_neighborhood = calculate_ray_neighborhood(feasibility_map, ray_path, action_radius, (int)fatal_ray_neighborhoods.size(), ray_fighting_map);
-                fatal_ray_neighborhoods.push_back(ray_neighborhood);
-                fatal_rays.push_back(ray);
+                std::vector<pixel> rayNeighborhood = calculate_ray_neighborhood(feasibilityMap, rayPath, actionRadius, (int)fatalRayNeighborhoods.size(), rayFightingMap);
+                fatalRayNeighborhoods.push_back(rayNeighborhood);
+                fatalRays.push_back(ray);
             }
             rays.push_back(ray);
-            ray_paths.push_back(ray_path);
+            rayPaths.push_back(rayPath);
         }
-        fire_rays.push_back(rays);
-        fire_ray_paths.push_back(ray_paths);
+        fireRays.push_back(rays);
+        fireRayPaths.push_back(rayPaths);
     }
 
-    std::vector<FireVertex> fireTab;
-    std::vector<FighterVertex> fighterTab;
+    std::vector<FireVertex> fireList;
+    std::vector<FighterVertex> fighterList;
 
-    for (int r = 0; r < fatal_rays.size(); r++)
+    for (int r = 0; r < fatalRays.size(); r++)
     {
-        ray ray = fatal_rays[r];
+        ray ray = fatalRays[r];
         Position fireCenter(ray.source.x, ray.source.y);
         Position collide(ray.target.x, ray.target.y);
-        fireTab.push_back(FireVertex(fireCenter, collide, r, r));
+        fireList.push_back(FireVertex(fireCenter, collide, r, r));
     }
     int fighterID = 0;
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            if (ray_fighting_map[y][x].size() > 0)
+            if (rayFightingMap[y][x].size() > 0)
             {
                 Position p(x, y);
                 FighterVertex fighter(p, fighterID, fighterID);
-                for (int r : ray_fighting_map[y][x])
+                for (int r : rayFightingMap[y][x])
                 {
-                    fighter.addFire(fireTab[r]);
+                    fighter.addFire(fireList[r]);
                 }
-                fighterTab.push_back(fighter);
+                fighterList.push_back(fighter);
                 fighterID++;
             }
         }
     }
-    // std::cout << fireTab.size() << " " << fighterTab.size() << std::endl;
-    return Graph(fireTab, fighterTab);
+    return Graph(fireList, fighterList);
 }
