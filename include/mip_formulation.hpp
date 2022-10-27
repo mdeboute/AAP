@@ -8,9 +8,7 @@
 #include <vector>
 #include "utils.hpp"
 
-const std::vector<std::vector<Color>> &solve(std::vector<std::vector<Color>> &map, const std::vector<float> &config);
-
-const std::vector<std::vector<Color>> &solve_using_graph(
+const std::vector<std::vector<Color>> &solve(
     std::vector<std::vector<Color>> &map,
     const std::vector<float> &config);
 

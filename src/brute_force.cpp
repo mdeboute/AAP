@@ -1,4 +1,5 @@
 #include "brute_force.hpp"
+#include <algorithm>
 #include <vector>
 #include <bitset>
 #include "Graph/FighterVertex.hpp"

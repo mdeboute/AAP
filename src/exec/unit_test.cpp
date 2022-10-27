@@ -2,6 +2,7 @@
 #include "Graph/Graph.hpp"
 
 #include <vector>
+#include <string>
 
 Graph genVal1()
 {

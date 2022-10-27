@@ -32,8 +32,10 @@ int main(int argc, char *argv[])
 
     Graph graph = calculate_graph_data(map, config);
 
-    vector<string> splitted_string = split_string(data_dir, "/");
-    const string result_file = "../solution/result_" + splitted_string[1] + ".ppm";
+    vector<string> splitString = split_string(data_dir, "/");
+    if (splitString[splitString.size() - 1].empty())
+        splitString.erase(splitString.end()-1);
+    const string result_file = "../solution/result_" + splitString[splitString.size() - 1] + ".ppm";
 
     if (strcmp(argv[2], "-b") == 0)
     {

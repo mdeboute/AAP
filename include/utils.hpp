@@ -1,6 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
 #include "file_io.hpp"

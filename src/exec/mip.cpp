@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
         cout << "Usage: ./mip.out <input_dir>" << endl;
         return 1;
     }
-
     const string data_dir = argv[1];
     const string map_file = data_dir + "/map.ppm";
     const string config_file = data_dir + "/config.txt";
@@ -26,12 +25,13 @@ int main(int argc, char *argv[])
     cout << "Radius of action of a firefighter: " << config[2] << endl;
     cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
     cout << endl;
-
-    map = solve_using_graph(map, config);
+    map = solve(map, config);
     map = draw_details(map, config);
 
-    vector<string> splitted_string = split_string(data_dir, "/");
-    const string result_file = "../solution/result_" + splitted_string[1] + ".ppm";
+    vector<string> splitString = split_string(data_dir, "/");
+    if (splitString[splitString.size() - 1].empty())
+        splitString.erase(splitString.end()-1);
+    const string result_file = "../solution/result_" + splitString[splitString.size() -1] + ".ppm";
     cout << "Writing result to " << result_file << endl;
     write_map(result_file, map);
 

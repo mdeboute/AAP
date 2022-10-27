@@ -33,13 +33,13 @@ void Graph::cutUselessFighters()
         {
             for (int i = 0; i < usefullFighters.size(); i++)
             {
-                FighterVertex otherFighter = usefullFighters[i];
-                if (fighter.betterThan(otherFighter))
+                FighterVertex usefulFighter = usefullFighters[i];
+                if (fighter.betterThan(usefulFighter))
                 {
                     usefullFighters.erase(usefullFighters.begin() + i);
                     i--;
                 }
-                else if (otherFighter.betterThan(fighter))
+                else if (usefulFighter.betterThan(fighter))
                 {
                     usefullness = false;
                     break;
