@@ -54,9 +54,12 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
     std::cout << "Number of potential fighters: " << n << std::endl;
     std::cout << std::endl;
 
-    // sort the fighters list by the number of fires they can stop
+    // sort the fighters list by the number of fires they can stop (we earn ~10% of the time)
     std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
               { return a.getFireCapacity() > b.getFireCapacity(); });
+
+    std::vector<FighterVertex> bestSolution;
+    int bestSize = upperBound;
 
     for (int i = 0; i < std::pow(2, n); i++)
     {
@@ -72,17 +75,16 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
                     team.push_back(fighters[j]);
                 }
             }
-            if (check_feasibility(team, fires))
+            if (check_feasibility(team, fires) && team.size() < bestSize)
             {
-                std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-                std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << team.size() << std::endl;
-                std ::cout << std::endl;
-                return team;
+                bestSolution = team;
+                bestSize = team.size();
             }
         }
     }
+
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-    std::cout << "Result: runtime = " << tt.count() << " sec; No feasible solution found!" << std::endl;
+    std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << bestSize << std::endl;
     std ::cout << std::endl;
-    return std::vector<FighterVertex>();
+    return bestSolution;
 }
