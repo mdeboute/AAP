@@ -30,7 +30,7 @@ public:
           std::vector<std::vector<FireVertex>> fighterAdjacencyList,
           std::vector<std::vector<FighterVertex>> fireAdjacencyList);
     Graph(std::vector<FireVertex> fireList,
-          std::vector<FighterVertex> fighterList);
+          std::vector<FighterVertex> fighterList, bool isReduced, bool addAdjacency);
 
     int isAdjacent(int fighterIndex, int fireIndex) const;
     int getNbFires() const;

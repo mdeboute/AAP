@@ -1,4 +1,5 @@
 #include "brute_force.hpp"
+#include <algorithm>
 #include <vector>
 #include <bitset>
 #include "Graph/FighterVertex.hpp"
@@ -50,9 +51,6 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
     int n = fighters.size();
     int upperBound = fires.size();
     int lowerBound = compute_lower_bound(fighters, fires);
-
-    std::cout << "Number of potential fighters: " << n << std::endl;
-    std::cout << std::endl;
 
     // sort the fighters list by the number of fires they can stop (we earn ~10% of the time)
     std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
