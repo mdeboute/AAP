@@ -33,7 +33,7 @@ Graph genVal1()
     fighters[5].addFire(fires[0]);
     fighters[5].addFire(fires[3]);
 
-    return Graph(fires, fighters);
+    return Graph(fires, fighters, true, true);
 }
 
 bool cutUselessFightersTest(Graph g)

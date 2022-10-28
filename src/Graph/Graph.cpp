@@ -14,18 +14,21 @@ Graph::Graph(std::vector<FireVertex> fireList,
 }
 
 Graph::Graph(std::vector<FireVertex> fireTab,
-             std::vector<FighterVertex> fighterTab)
+             std::vector<FighterVertex> fighterTab, bool isReduced, bool addAdjacency)
 {
     this->fireList = fireTab;
     this->fighterList = fighterTab;
-    cutUselessFighters();
-    generateAdjacency();
+    if (isReduced)
+        cutUselessFighters();
+    if (addAdjacency)
+        generateAdjacency();
     // std::cout << "After cut, only " << fighterTab.size() << "pos of fighters left" << std::endl;
 }
 
 void Graph::cutUselessFighters()
 {
     std::vector<FighterVertex> usefullFighters;
+    std::cout << "Old Nb Fighters: " << fighterList.size() << std::endl;
     for (FighterVertex fighter : fighterList)
     {
         bool usefullness = (fighter.getFireCovered().size() != 0);
@@ -52,9 +55,11 @@ void Graph::cutUselessFighters()
         }
     }
     this->fighterList = usefullFighters;
+    std::cout << "New Nb Fighters: " << fighterList.size() << std::endl << std::endl;
     for (int i = 0; i < fighterList.size(); ++i)
     {
         fighterList[i].setIndex(i);
+        //fighterList[i].print(1);
     }
     for (int i = 0; i < fireList.size(); ++i)
     {

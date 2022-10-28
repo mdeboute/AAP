@@ -5,6 +5,7 @@
 #include "greedy.hpp"
 
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
@@ -30,7 +31,7 @@ int main(int argc, char *argv[])
     cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
     cout << endl;
 
-    Graph graph = calculate_graph_data(map, config);
+    Graph graph = calculate_graph_data(map, config, true, true);
 
     vector<string> splitString = split_string(data_dir, "/");
     if (splitString[splitString.size() - 1].empty())

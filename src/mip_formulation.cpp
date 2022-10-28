@@ -8,7 +8,7 @@ const std::vector<std::vector<Color>> &solve(
     size_t height = map.size();
     size_t width = map[0].size();
 
-    Graph graph = calculate_graph_data(map, config);
+    Graph graph = calculate_graph_data(map, config, false, false);
     std::vector<FireVertex> fireVertexList = graph.getFireVertexList();
     std::vector<FighterVertex> fighterVertexList = graph.getFigtherVertexList();
     size_t nbFatalRays = fireVertexList.size();

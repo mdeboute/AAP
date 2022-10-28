@@ -244,7 +244,7 @@ std::vector<std::string> split_string(const std::string &s, const std::string &d
     return elems;
 }
 
-Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vector<float> &config)
+Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vector<float> &config, bool isReduced, bool addAdjacency)
 {
     int nbRays = (int)config[0];
     float furnaceRadius = config[1];
@@ -369,5 +369,5 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
             }
         }
     }
-    return Graph(fireList, fighterList);
+    return Graph(fireList, fighterList, isReduced, addAdjacency);
 }
