@@ -2,7 +2,6 @@
 #define MIP_FORMULATION_HPP
 
 #include "gurobi_c++.h"
-#include "file_io.hpp"
 #include <cstring>
 #include <cmath>
 #include <vector>

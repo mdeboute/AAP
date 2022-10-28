@@ -1,6 +1,7 @@
 #include "Graph/FighterVertex.hpp"
 #include "Graph/FireVertex.hpp"
 #include "utils.hpp"
+#include "file_io.hpp"
 #include "brute_force.hpp"
 #include "greedy.hpp"
 
@@ -9,13 +10,15 @@
 
 using namespace std;
 
+const string MAP_FILE = "/map.ppm";
+const string CONFIG_FILE = "/config.txt";
+
 void display_usage()
 {
     cout << "Usage: ./test <instance_directory> <algorithm>" << endl;
     cout << "Where <algorithm> is one of:" << endl;
     cout << "-b or --bruteforce" << endl;
     cout << "-g or --greedy" << endl;
-    cout << "-m or --mip" << endl;
 }
 
 void display_solution(const vector<FighterVertex> solution)
@@ -35,6 +38,16 @@ void display_data(vector<float> config, vector<vector<Color>> map)
     cout << endl;
 }
 
+const string get_result_file(const string data_dir)
+{
+    vector<string> splitString = split_string(data_dir, "/");
+    if (splitString[splitString.size() - 1].empty())
+        splitString.erase(splitString.end() - 1);
+    const string result_file = "../solution/result_" + splitString[splitString.size() - 1] + ".ppm";
+    cout << "\nWriting result to " << result_file << endl;
+    return result_file;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 3)
@@ -44,8 +57,8 @@ int main(int argc, char *argv[])
     }
 
     const string data_dir = argv[1];
-    const string map_file = data_dir + "/map.ppm";
-    const string config_file = data_dir + "/config.txt";
+    const string map_file = data_dir + MAP_FILE;
+    const string config_file = data_dir + CONFIG_FILE;
 
     vector<float> config = parse_config(config_file);
     vector<vector<Color>> map = parse_map(map_file);
@@ -54,27 +67,23 @@ int main(int argc, char *argv[])
 
     Graph graph = calculate_graph_data(map, config, true, true);
 
-    vector<string> splitString = split_string(data_dir, "/");
-    if (splitString[splitString.size() - 1].empty())
-        splitString.erase(splitString.end() - 1);
-    const string result_file = "../solution/result_" + splitString[splitString.size() - 1] + ".ppm";
-
-    if (strcmp(argv[2], "-b") == 0)
+    if (strcmp(argv[2], "-b") == 0 || strcmp(argv[2], "--bruteforce") == 0)
     {
         vector<FighterVertex> bestTeam = bruteforce_solve(graph);
         display_solution(bestTeam);
+        const string result_file = get_result_file(data_dir);
         write_solution(result_file, map, config, bestTeam);
     }
-    else if (strcmp(argv[2], "-g") == 0)
+    else if (strcmp(argv[2], "-g") == 0 || strcmp(argv[2], "--greedy") == 0)
     {
         vector<FighterVertex> bestTeam = greedy_solve(graph);
         display_solution(bestTeam);
-        cout << "\nWriting result to " << result_file << endl;
+        const string result_file = get_result_file(data_dir);
         write_solution(result_file, map, config, bestTeam);
     }
     else
     {
-        cout << "Unknown algorithm!" << endl;
+        display_usage();
         return 1;
     }
     return 0;

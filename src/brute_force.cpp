@@ -52,9 +52,6 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
     int upperBound = fires.size();
     int lowerBound = compute_lower_bound(fighters, fires);
 
-    std::cout << "Number of potential fighters: " << n << std::endl;
-    std::cout << std::endl;
-
     // sort the fighters list by the number of fires they can stop (we earn ~10% of the time)
     std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
               { return a.getFireCapacity() > b.getFireCapacity(); });

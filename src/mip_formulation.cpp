@@ -104,15 +104,12 @@ const std::vector<FighterVertex> mip_solve(
             std::cout << "runtime = " << model.get(GRB_DoubleAttr_Runtime) << " sec; ";
             std::cout << "objective value = " << model.get(GRB_DoubleAttr_ObjVal) << std::endl; //< gets the value of the objective function for the best computed solution (optimal if no time limit)
 
-            std::cout << std::endl;
             for (size_t i = 0; i < nbFirefighters; ++i)
             {
                 if (x[i].get(GRB_DoubleAttr_X) >= 0.5)
                 {
                     solution.push_back(fighterVertexList[i]);
                     Position pos = fighterVertexList[i].getPos();
-                    if (verbose)
-                        std::cout << "We place a firefigher at position (" << pos.getX() << ", " << pos.getY() << ")" << std::endl;
                 }
             }
             std::cout << std::endl;
@@ -137,5 +134,3 @@ const std::vector<FighterVertex> mip_solve(
 
     return solution;
 }
-
-// TODO: create more functions to clean up the code lmao
