@@ -9,6 +9,10 @@ const std::vector<FighterVertex> mip_solve(
     size_t nbFatalRays = fireVertexList.size();
     size_t nbFirefighters = fighterVertexList.size();
 
+    std::cout << "Solving using MIP Formulation" << std::endl;
+    std::cout << "Nb Fighters: " << nbFirefighters << std::endl;
+    std::cout << "Nb Rays: " << nbFatalRays << std::endl << std::endl;
+
     bool verbose = true;
     std::vector<FighterVertex> solution;
 
