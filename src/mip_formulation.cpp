@@ -1,20 +1,16 @@
 #define _USE_MATH_DEFINES
 #include "mip_formulation.hpp"
 
-const std::vector<std::vector<Color>> &solve(
-    std::vector<std::vector<Color>> &map,
-    const std::vector<float> &config)
+const std::vector<FighterVertex> mip_solve(
+    Graph &graph)
 {
-    size_t height = map.size();
-    size_t width = map[0].size();
-
-    Graph graph = calculate_graph_data(map, config, false, false);
     std::vector<FireVertex> fireVertexList = graph.getFireVertexList();
     std::vector<FighterVertex> fighterVertexList = graph.getFigtherVertexList();
     size_t nbFatalRays = fireVertexList.size();
     size_t nbFirefighters = fighterVertexList.size();
 
     bool verbose = true;
+    std::vector<FighterVertex> solution;
 
     GRBVar *x = nullptr;
     try
@@ -113,13 +109,10 @@ const std::vector<std::vector<Color>> &solve(
             {
                 if (x[i].get(GRB_DoubleAttr_X) >= 0.5)
                 {
+                    solution.push_back(fighterVertexList[i]);
                     Position pos = fighterVertexList[i].getPos();
-                    pixel firefighter;
-                    firefighter.x = pos.getX();
-                    firefighter.y = pos.getY();
                     if (verbose)
-                        std::cout << "We place a firefigher at position (" << firefighter.x << ", " << firefighter.y << ")" << std::endl;
-                    map[firefighter.y][firefighter.x] = GREEN;
+                        std::cout << "We place a firefigher at position (" << pos.getX() << ", " << pos.getY() << ")" << std::endl;
                 }
             }
             std::cout << std::endl;
@@ -142,7 +135,7 @@ const std::vector<std::vector<Color>> &solve(
 
     delete[] x;
 
-    return map;
+    return solution;
 }
 
 // TODO: create more functions to clean up the code lmao
