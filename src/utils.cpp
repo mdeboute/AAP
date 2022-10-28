@@ -298,7 +298,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         }
     }
 
-    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!\n"
+    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!"
               << std::endl;
 
     std::vector<std::vector<ray>> fireRays;
@@ -341,6 +341,9 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         fireRayPaths.push_back(rayPaths);
     }
 
+    std::cout << "Finished gathering ray paths and feasible fighter placements!"
+              << std::endl;
+
     std::vector<FireVertex> fireList;
     std::vector<FighterVertex> fighterList;
 
@@ -369,5 +372,9 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
             }
         }
     }
+
+    std::cout << "Finished gathering data!\n"
+              << std::endl;
+
     return Graph(fireList, fighterList, isReduced, addAdjacency);
 }

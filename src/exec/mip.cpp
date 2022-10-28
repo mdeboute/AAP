@@ -25,15 +25,17 @@ int main(int argc, char *argv[])
     cout << "Radius of action of a firefighter: " << config[2] << endl;
     cout << "Map size: " << map.size() << "x" << map[0].size() << endl;
     cout << endl;
-    map = solve(map, config);
-    map = draw_details(map, config);
+
+    Graph graph = calculate_graph_data(map, config, false, false);
+
+    vector<FighterVertex> solution = mip_solve(graph);
 
     vector<string> splitString = split_string(data_dir, "/");
     if (splitString[splitString.size() - 1].empty())
         splitString.erase(splitString.end()-1);
     const string result_file = "../solution/result_" + splitString[splitString.size() -1] + ".ppm";
     cout << "Writing result to " << result_file << endl;
-    write_map(result_file, map);
+    write_solution(result_file, map, config, solution);
 
     return 0;
 }

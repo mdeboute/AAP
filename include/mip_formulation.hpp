@@ -8,8 +8,7 @@
 #include <vector>
 #include "utils.hpp"
 
-const std::vector<std::vector<Color>> &solve(
-    std::vector<std::vector<Color>> &map,
-    const std::vector<float> &config);
+const std::vector<FighterVertex> mip_solve(
+    Graph &graph);
 
 #endif
