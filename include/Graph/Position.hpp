@@ -6,15 +6,15 @@
 class Position
 {
 private:
-    double x = -42;
-    double y = -42;
+    int x = -42;
+    int y = -42;
 
 public:
     Position() {}
-    Position(double x, double y);
+    Position(int x, int y);
 
-    double getX() const;
-    double getY() const;
+    int getX() const;
+    int getY() const;
 
     double dist(Position p) const;
 };

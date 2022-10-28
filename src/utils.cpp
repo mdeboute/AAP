@@ -1,34 +1,32 @@
 #include "utils.hpp"
 
-std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height)
+std::vector<Position> circle_to_positions(Position center, float radius, int width, int height)
 {
     // possibly switch to float center coordinates and cast (int) to get pixels
-    int x_bound_a = (int)floor(center.x + 0.5 - radius);
-    int x_bound_b = (int)ceil(center.x + 0.5 + radius);
-    int y_bound_a = (int)floor(center.y + 0.5 - radius);
-    int y_bound_b = (int)ceil(center.y + 0.5 + radius);
+    int x_bound_a = (int)floor(center.getX() + 0.5 - radius);
+    int x_bound_b = (int)ceil(center.getX() + 0.5 + radius);
+    int y_bound_a = (int)floor(center.getY() + 0.5 - radius);
+    int y_bound_b = (int)ceil(center.getY() + 0.5 + radius);
 
-    std::vector<pixel> pixels;
+    std::vector<Position> pixels;
 
     for (int y = y_bound_a; y < y_bound_b; y++)
     {
         for (int x = x_bound_a; x < x_bound_b; x++)
         {
-            if (x == center.x || y == center.y ||
-                (x < center.x && y > center.y && // North-West
-                 pow(x + 1 - (center.x + 0.5), 2) + pow(y - (center.y + 0.5), 2) <= pow(radius, 2)) ||
-                (x < center.x && y < center.y && // South-West
-                 pow(x + 1 - (center.x + 0.5), 2) + pow(y + 1 - (center.y + 0.5), 2) <= pow(radius, 2)) ||
-                (x > center.x && y < center.y && // South-East
-                 pow(x - (center.x + 0.5), 2) + pow(y + 1 - (center.y + 0.5), 2) <= pow(radius, 2)) ||
-                (x > center.x && y > center.y && // North-East
-                 pow(x - (center.x + 0.5), 2) + pow(y - (center.y + 0.5), 2) <= pow(radius, 2)))
+            if (x == center.getX() || y == center.getY() ||
+                (x < center.getX() && y > center.getY() && // North-West
+                 pow(x + 1 - (center.getX() + 0.5), 2) + pow(y - (center.getY() + 0.5), 2) <= pow(radius, 2)) ||
+                (x < center.getX() && y < center.getY() && // South-West
+                 pow(x + 1 - (center.getX() + 0.5), 2) + pow(y + 1 - (center.getY() + 0.5), 2) <= pow(radius, 2)) ||
+                (x > center.getX() && y < center.getY() && // South-East
+                 pow(x - (center.getX() + 0.5), 2) + pow(y + 1 - (center.getY() + 0.5), 2) <= pow(radius, 2)) ||
+                (x > center.getX() && y > center.getY() && // North-East
+                 pow(x - (center.getX() + 0.5), 2) + pow(y - (center.getY() + 0.5), 2) <= pow(radius, 2)))
             {
                 if (x >= 0 && x < width && y >= 0 && y < height)
                 {
-                    pixel pixel;
-                    pixel.x = x;
-                    pixel.y = y;
+                    Position pixel(x,y);
                     pixels.push_back(pixel);
                 }
             }
@@ -38,41 +36,39 @@ std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int h
     return pixels;
 }
 
-std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>> &map, ray ray)
+std::vector<Position> calculate_ray_path(const std::vector<std::vector<Color>> &map, Position source, float slope, float intercept, direction dir)
 {
-    std::vector<pixel> path;
+    std::vector<Position> path;
     bool obstacleReached = false;
-    int x = ray.source.x;
-    int curr_y = ray.source.y;
+    int x = source.getX();
+    int curr_y = source.getY();
 
     while (!obstacleReached)
     {
-        int next_x = x + ray.dir;
+        int next_x = x + dir;
         int next_y;
         float exact_next_y;
 
-        if (ray.slope == INFINITY)
+        if (slope == INFINITY)
             exact_next_y = map.size();
-        else if (ray.slope == -INFINITY)
+        else if (slope == -INFINITY)
             exact_next_y = 0;
         else
-            exact_next_y = ray.slope * next_x + ray.intercept;
+            exact_next_y = slope * next_x + intercept;
 
-        if ((ray.slope >= 0 && ray.dir == RIGHT) || (ray.slope < 0 && ray.dir == LEFT))
+        if ((slope >= 0 && dir == RIGHT) || (slope < 0 && dir == LEFT))
             next_y = (int)ceil(exact_next_y);
         else
             next_y = (int)floor(exact_next_y);
 
         if (next_y == curr_y)
-            next_y = curr_y + ray.dir;
+            next_y = curr_y + dir;
 
         int step = (int)(next_y - curr_y) / abs(next_y - curr_y); // +1 or -1 depending on the direction of the ray
 
         for (int y = curr_y; y != next_y; y += step)
         {
-            pixel pixel;
-            pixel.x = x;
-            pixel.y = y;
+            Position pixel(x,y);
             path.push_back(pixel);
 
             if (map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size())
@@ -86,7 +82,7 @@ std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>> &map
         if (x < 0 || x >= map[0].size())
             break;
 
-        if ((ray.slope >= 0 && ray.dir == RIGHT) || (ray.slope < 0 && ray.dir == LEFT))
+        if ((slope >= 0 && dir == RIGHT) || (slope < 0 && dir == LEFT))
             curr_y = (int)floor(exact_next_y);
         else
             curr_y = (int)ceil(exact_next_y);
@@ -97,36 +93,32 @@ std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>> &map
     return path;
 }
 
-std::vector<pixel> calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibilityMap,
-                                              const std::vector<pixel> &rayPath,
+void calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibilityMap,
+                                              const std::vector<Position> &rayPath,
                                               float actionRadius,
                                               int rayIndex,
                                               std::vector<std::vector<std::vector<int>>> &rayFightingMap)
 {
     // make sure feasibility_map is a copy
-    std::vector<pixel> neighborhood;
     std::vector<std::vector<int>> explorationMap = feasibilityMap;
     int height = feasibilityMap.size();
     int width = feasibilityMap[0].size();
 
     for (int p = 0; p < rayPath.size() - 1; p++)
     {
-        if (feasibilityMap[rayPath[p].y][rayPath[p].x] == 0)
+        if (feasibilityMap[rayPath[p].getY()][rayPath[p].getX()] == 0)
             continue;
 
-        std::vector<pixel> circle_pixels = circle_to_pixels(rayPath[p], actionRadius, width, height);
-        for (const pixel &pixel : circle_pixels)
+        std::vector<Position> circle_positions = circle_to_positions(rayPath[p], actionRadius, width, height);
+        for (const Position &pixel : circle_positions)
         {
-            if (explorationMap[pixel.y][pixel.x] == 1)
+            if (explorationMap[pixel.getY()][pixel.getX()] == 1)
             {
-                neighborhood.push_back(pixel);
-                explorationMap[pixel.y][pixel.x] = 0;
-                rayFightingMap[pixel.y][pixel.x].push_back(rayIndex);
+                explorationMap[pixel.getY()][pixel.getX()] = 0;
+                rayFightingMap[pixel.getY()][pixel.getX()].push_back(rayIndex);
             }
         }
     }
-
-    return neighborhood;
 }
 
 void display_map(const std::vector<std::vector<Color>> &map)
@@ -165,31 +157,27 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
     size_t height = map.size();
     size_t width = map[0].size();
 
-    std::vector<pixel> fireCenters;
+    std::vector<Position> fireCenters;
     for (size_t y = 0; y < height; y++)
     {
         for (size_t x = 0; x < width; x++)
         {
             if (map[y][x] == RED) //
             {
-                pixel fire;
-                fire.x = x;
-                fire.y = y;
+                Position fire(x,y);
                 fireCenters.push_back(fire);
-                std::vector<pixel> furnace = circle_to_pixels(fire, furnaceRadius, width, height);
+                std::vector<Position> furnace = circle_to_positions(fire, furnaceRadius, width, height);
                 for (auto &&pixel : furnace)
-                    if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
-                        map[pixel.y][pixel.x] = MAGENTA;
+                    if (map[pixel.getY()][pixel.getX()] != BLUE && map[pixel.getY()][pixel.getX()] != RED)
+                        map[pixel.getY()][pixel.getX()] = MAGENTA;
             }
             if (map[y][x] == GREEN)
             {
-                pixel firefighter;
-                firefighter.x = x;
-                firefighter.y = y;
-                std::vector<pixel> action_area = circle_to_pixels(firefighter, actionRadius, width, height);
+                Position firefighter(x,y);
+                std::vector<Position> action_area = circle_to_positions(firefighter, actionRadius, width, height);
                 for (auto &&p : action_area)
-                    if (map[p.y][p.x] == YELLOW || map[p.y][p.x] == ORANGE)
-                        map[p.y][p.x] = LIME;
+                    if (map[p.getY()][p.getX()] == YELLOW || map[p.getY()][p.getX()] == ORANGE)
+                        map[p.getY()][p.getX()] = LIME;
                 map[y][x] = GREEN;
             }
         }
@@ -202,28 +190,28 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
         for (size_t r = 0; r < nbRays; r++)
         {
             float degrees = r * 360.0 / nbRays;
-            float x_r = fireCenters[f].x + 0.5 + furnaceRadius * cos(degrees * (M_PI / 180.0));
-            float y_r = fireCenters[f].y + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
-            ray ray;
-            ray.slope = (y_r - (fireCenters[f].y + 0.5)) / (x_r - (fireCenters[f].x + 0.5));
-            ray.intercept = y_r - ray.slope * x_r;
-            ray.source = fireCenters[f]; // possible copy of data. Can be improved later
+            float x_r = fireCenters[f].getX() + 0.5 + furnaceRadius * cos(degrees * (M_PI / 180.0));
+            float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
+            float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
+            float intercept = y_r - slope * x_r;
+            Position source = fireCenters[f]; // possible copy of data. Can be improved later
+            direction dir;
             if (degrees > 90 && degrees <= 270)
-                ray.dir = LEFT;
+                dir = LEFT;
             else
-                ray.dir = RIGHT;
+                dir = RIGHT;
 
-            std::vector<pixel> rayPath = calculate_ray_path(map, ray);
+            std::vector<Position> rayPath = calculate_ray_path(map, source, slope, intercept, dir);
 
-            ray.target = rayPath[rayPath.size() - 1];
+            Position target = rayPath[rayPath.size() - 1];
 
             for (size_t i = 1; i < rayPath.size(); i++)
             {
-                pixel p = rayPath[i];
-                if (map[p.y][p.x] == LIME || map[p.y][p.x] == GREEN || map[p.y][p.x] == BLACK)
+                Position p = rayPath[i];
+                if (map[p.getY()][p.getX()] == LIME || map[p.getY()][p.getX()] == GREEN || map[p.getY()][p.getX()] == BLACK)
                     break;
-                if (map[p.y][p.x] == YELLOW)
-                    map[p.y][p.x] = ORANGE;
+                if (map[p.getY()][p.getX()] == YELLOW)
+                    map[p.getY()][p.getX()] = ORANGE;
             }
         }
     }
@@ -253,7 +241,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
     size_t height = map.size();
     size_t width = map[0].size();
 
-    std::vector<pixel> fireCenters;
+    std::vector<Position> fireCenters;
     std::vector<std::vector<int>> feasibilityMap;
     std::vector<std::vector<std::vector<int>>> rayFightingMap;
     std::cout << "Start gathering data..." << std::endl;
@@ -271,9 +259,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
                 feasibilityMapLine.push_back(0); // to change if firefighters can be in cities
             if (map[y][x] == RED)
             {
-                pixel fire;
-                fire.x = x;
-                fire.y = y;
+                Position fire(x,y);
                 fireCenters.push_back(fire);
             }
             std::vector<int> ray_fighting_pos;
@@ -289,71 +275,50 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
 
     for (size_t f = 0; f < nbFires; f++)
     {
-        std::vector<pixel> furnace = circle_to_pixels(fireCenters[f], furnaceRadius, width, height);
+        std::vector<Position> furnace = circle_to_positions(fireCenters[f], furnaceRadius, width, height);
         for (auto &&pixel : furnace)
         {
-            feasibilityMap[pixel.y][pixel.x] = 0;
-            if (map[pixel.y][pixel.x] != BLUE && map[pixel.y][pixel.x] != RED)
-                map[pixel.y][pixel.x] = MAGENTA;
+            feasibilityMap[pixel.getY()][pixel.getX()] = 0;
         }
     }
 
     std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!"
               << std::endl;
 
-    std::vector<std::vector<ray>> fireRays;
-    std::vector<std::vector<std::vector<pixel>>> fireRayPaths;
-    std::vector<std::vector<pixel>> fatalRayNeighborhoods;
-    std::vector<ray> fatalRays;
+    std::vector<FireVertex> fireList;
 
     for (size_t f = 0; f < nbFires; f++)
     {
-        std::vector<ray> rays;
-        std::vector<std::vector<pixel>> rayPaths;
         for (size_t r = 0; r < nbRays; r++)
         {
             float degrees = r * 360.0 / nbRays;
-            float x_r = fireCenters[f].x + 0.5 + furnaceRadius * cos(degrees * (M_PI / 180.0));
-            float y_r = fireCenters[f].y + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
-            ray ray;
-            ray.slope = (y_r - (fireCenters[f].y + 0.5)) / (x_r - (fireCenters[f].x + 0.5));
-            ray.intercept = y_r - ray.slope * x_r;
-            ray.source = fireCenters[f]; // possible copy of data. Can be improved later
+            float x_r = fireCenters[f].getX() + 0.5 + furnaceRadius * cos(degrees * (M_PI / 180.0));
+            float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
+            float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
+            float intercept = y_r - slope * x_r;
+            Position source = fireCenters[f]; // possible copy of data. Can be improved later
+            direction dir;
             if (degrees > 90 && degrees <= 270)
-                ray.dir = LEFT;
+                dir = LEFT;
             else
-                ray.dir = RIGHT;
+                dir = RIGHT;
 
-            std::vector<pixel> rayPath = calculate_ray_path(map, ray);
+            std::vector<Position> rayPath = calculate_ray_path(map, source, slope, intercept, dir);
 
-            ray.target = rayPath[rayPath.size() - 1];
+            Position target = rayPath[rayPath.size() - 1];
 
-            if (map[ray.target.y][ray.target.x] == BLACK) // ray is directed to a city
+            if (map[target.getY()][target.getX()] == BLACK) // ray is directed to a city
             {
-                std::vector<pixel> rayNeighborhood = calculate_ray_neighborhood(feasibilityMap, rayPath, actionRadius, (int)fatalRayNeighborhoods.size(), rayFightingMap);
-                fatalRayNeighborhoods.push_back(rayNeighborhood);
-                fatalRays.push_back(ray);
+                calculate_ray_neighborhood(feasibilityMap, rayPath, actionRadius, (int)fireList.size(), rayFightingMap);
+                fireList.push_back(FireVertex(source, target, fireList.size(), fireList.size()));
             }
-            rays.push_back(ray);
-            rayPaths.push_back(rayPath);
         }
-        fireRays.push_back(rays);
-        fireRayPaths.push_back(rayPaths);
     }
 
     std::cout << "Finished gathering ray paths and feasible fighter placements!"
               << std::endl;
 
-    std::vector<FireVertex> fireList;
     std::vector<FighterVertex> fighterList;
-
-    for (int r = 0; r < fatalRays.size(); r++)
-    {
-        ray ray = fatalRays[r];
-        Position fireCenter(ray.source.x, ray.source.y);
-        Position collide(ray.target.x, ray.target.y);
-        fireList.push_back(FireVertex(fireCenter, collide, r, r));
-    }
     int fighterID = 0;
     for (int y = 0; y < height; y++)
     {
@@ -364,9 +329,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
                 Position p(x, y);
                 FighterVertex fighter(p, fighterID, fighterID);
                 for (int r : rayFightingMap[y][x])
-                {
                     fighter.addFire(fireList[r]);
-                }
                 fighterList.push_back(fighter);
                 fighterID++;
             }
