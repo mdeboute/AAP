@@ -49,6 +49,9 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
     auto startingTime = std::chrono::steady_clock::now();
 
     int n = fighters.size();
+
+    std::cout << "Number of potential fighters: " << n << std::endl;
+
     int upperBound = fires.size();
     int lowerBound = compute_lower_bound(fighters, fires);
 
