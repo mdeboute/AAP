@@ -16,27 +16,12 @@ enum direction
     RIGHT = 1,
 };
 
-struct pixel
-{
-    int x;
-    int y;
-};
+std::vector<Position> circle_to_positions(Position center, float radius, int width, int height);
+std::vector<Position> calculate_ray_path(const std::vector<std::vector<Color>> &map, Position source, float slope, float intercept, direction dir);
 
-struct ray
-{
-    pixel source;
-    float slope;
-    float intercept;
-    direction dir;
-    pixel target;
-};
-
-std::vector<pixel> circle_to_pixels(pixel center, float radius, int width, int height);
-std::vector<pixel> calculate_ray_path(const std::vector<std::vector<Color>> &map, ray ray);
-
-std::vector<pixel> calculate_ray_neighborhood(
+void calculate_ray_neighborhood(
     const std::vector<std::vector<int>> &feasibilityMap,
-    const std::vector<pixel> &rayPath,
+    const std::vector<Position> &rayPath,
     float actionRadius,
     int rayIndex,
     std::vector<std::vector<std::vector<int>>> &rayFightingMap);
