@@ -26,7 +26,7 @@ std::vector<Position> circle_to_positions(Position center, float radius, int wid
             {
                 if (x >= 0 && x < width && y >= 0 && y < height)
                 {
-                    Position pixel(x,y);
+                    Position pixel(x, y);
                     pixels.push_back(pixel);
                 }
             }
@@ -68,7 +68,7 @@ std::vector<Position> calculate_ray_path(const std::vector<std::vector<Color>> &
 
         for (int y = curr_y; y != next_y; y += step)
         {
-            Position pixel(x,y);
+            Position pixel(x, y);
             path.push_back(pixel);
 
             if (map[y][x] == BLUE || map[y][x] == BLACK || y + step < 0 || y + step >= map.size())
@@ -94,10 +94,10 @@ std::vector<Position> calculate_ray_path(const std::vector<std::vector<Color>> &
 }
 
 void calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibilityMap,
-                                              const std::vector<Position> &rayPath,
-                                              float actionRadius,
-                                              int rayIndex,
-                                              std::vector<std::vector<std::vector<int>>> &rayFightingMap)
+                                const std::vector<Position> &rayPath,
+                                float actionRadius,
+                                int rayIndex,
+                                std::vector<std::vector<std::vector<int>>> &rayFightingMap)
 {
     // make sure feasibility_map is a copy
     std::vector<std::vector<int>> explorationMap = feasibilityMap;
@@ -164,7 +164,7 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
         {
             if (map[y][x] == RED) //
             {
-                Position fire(x,y);
+                Position fire(x, y);
                 fireCenters.push_back(fire);
                 std::vector<Position> furnace = circle_to_positions(fire, furnaceRadius, width, height);
                 for (auto &&pixel : furnace)
@@ -173,7 +173,7 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
             }
             if (map[y][x] == GREEN)
             {
-                Position firefighter(x,y);
+                Position firefighter(x, y);
                 std::vector<Position> action_area = circle_to_positions(firefighter, actionRadius, width, height);
                 for (auto &&p : action_area)
                     if (map[p.getY()][p.getX()] == YELLOW || map[p.getY()][p.getX()] == ORANGE)
@@ -247,11 +247,11 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
     std::cout << "Start gathering data..." << std::endl;
 
     // We get the fire centers and a map overlay of places we can't put firefighters
-    for (size_t y = 0; y < height; y++)
+    for (int y = 0; y < height; y++)
     {
         std::vector<int> feasibilityMapLine;
         std::vector<std::vector<int>> rayFightingMapLine;
-        for (size_t x = 0; x < width; x++)
+        for (int x = 0; x < width; x++)
         {
             if (map[y][x] == YELLOW)
                 feasibilityMapLine.push_back(1);
@@ -259,7 +259,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
                 feasibilityMapLine.push_back(0); // to change if firefighters can be in cities
             if (map[y][x] == RED)
             {
-                Position fire(x,y);
+                Position fire(x, y);
                 fireCenters.push_back(fire);
             }
             std::vector<int> ray_fighting_pos;
@@ -296,7 +296,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
             float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
             float intercept = y_r - slope * x_r;
-            Position source = fireCenters[f]; // possible copy of data. Can be improved later
+            Position source = fireCenters[f]; // Possible copy of data. Can be improved later.
             direction dir;
             if (degrees > 90 && degrees <= 270)
                 dir = LEFT;

@@ -16,7 +16,6 @@ enum direction
     RIGHT = 1,
 };
 
-
 std::vector<Position> circle_to_positions(Position center, float radius, int width, int height);
 std::vector<Position> calculate_ray_path(const std::vector<std::vector<Color>> &map, Position source, float slope, float intercept, direction dir);
 
