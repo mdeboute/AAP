@@ -74,6 +74,13 @@ int main(int argc, char *argv[])
         const string result_file = get_result_file(data_dir);
         write_solution(result_file, map, config, bestTeam);
     }
+    else if (strcmp(argv[2], "-bc") == 0)
+    {
+        vector<FighterVertex> bestTeam = bruteforce_solve_concon(graph);
+        display_solution(bestTeam);
+        const string result_file = get_result_file(data_dir);
+        write_solution(result_file, map, config, bestTeam);
+    }
     else if (strcmp(argv[2], "-g") == 0 || strcmp(argv[2], "--greedy") == 0)
     {
         vector<FighterVertex> bestTeam = greedy_solve(graph);
