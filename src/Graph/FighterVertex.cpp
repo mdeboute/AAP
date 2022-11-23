@@ -1,4 +1,5 @@
 #include "Graph/FighterVertex.hpp"
+#include "utils.hpp"
 
 FighterVertex::FighterVertex() {}
 
@@ -26,10 +27,32 @@ const std::vector<FireVertex> &FighterVertex::getFireCovered() const
     return fireCovered;
 }
 
+int FighterVertex::compareFighters(FighterVertex f) const
+{
+    int bestFighter = -1;
+    std::vector<int> fireIDs;
+    int m = f.getFireCovered().size();
+
+    for (size_t i = 0; i < m; i++)
+        fireIDs.push_back(f.getFireCovered()[i].getID());
+
+    int nbCommonFiresCovered = 0;
+    for (const FireVertex& fire : fireCovered)
+        if (fire.getID() >= fireIDs[0] && fire.getID() <= fireIDs[m - 1] && dichotomic_search(fireIDs, 0, m, fire.getID()) == -1)
+            nbCommonFiresCovered++;
+
+    if (nbCommonFiresCovered == m)
+        bestFighter = getID();
+    else if (nbCommonFiresCovered == fireCovered.size())
+        bestFighter = f.getID();
+
+    return bestFighter;
+}
+
 bool FighterVertex::betterThan(FighterVertex f) const
 {
     std::vector<FireVertex> fireLines = f.getFireCovered();
-    for (FireVertex fire : fireLines)
+    for (const FireVertex& fire : fireLines)
     {
         bool find = false;
         for (FireVertex myFire : fireCovered)
@@ -50,7 +73,7 @@ bool FighterVertex::betterThan(FighterVertex f) const
 
 bool FighterVertex::stopFire(FireVertex f) const
 {
-    for (FireVertex fire : fireCovered)
+    for (const FireVertex& fire : fireCovered)
     {
         if (fire == f)
         {
@@ -61,6 +84,11 @@ bool FighterVertex::stopFire(FireVertex f) const
 }
 
 int FighterVertex::getFireCapacity() const
+{
+    return fireCovered.size();
+}
+
+int FighterVertex::getNbFireCovered() const
 {
     return fireCovered.size();
 }
