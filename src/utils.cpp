@@ -341,3 +341,39 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
 
     return Graph(fireList, fighterList, isReduced, addAdjacency);
 }
+
+int dichotomic_search(const std::vector<int> &list, int start, int end, int val)
+{
+    if (end - start <= 0)
+        return 0;
+    int middle = (int)((end + start) / 2);
+    if (list[middle] == val)
+        return -1;
+    if (list[middle] < val)
+        return dichotomic_search(list, middle + 1, end, val);
+    return dichotomic_search(list, start, middle, val);
+}
+
+bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList)
+{
+    int pos = dichotomic_search(fireIdList, 0, fireIdList.size(), fire.getID());
+    if (pos == -1)
+        return false;
+    fireIdList.insert(fireIdList.begin() + pos, fire.getID());
+    return true;
+}
+
+bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
+{
+    std::vector<int> coveredFiresIds;
+    for (FighterVertex fighter : fighterList)
+    {
+        for (const FireVertex &fire : fighter.getFireCovered())
+        {
+            bool success = insert_fireID(fire, coveredFiresIds);
+            if (success && coveredFiresIds.size() == fireList.size())
+                return true;
+        }
+    }
+    return false;
+}

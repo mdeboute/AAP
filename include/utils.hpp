@@ -38,4 +38,8 @@ const std::vector<std::vector<Color>> &draw_details(
     std::vector<std::vector<Color>> &map,
     const std::vector<float> &config);
 
+bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
+int dichotomic_search(const std::vector<int> &list, int start, int end, int val);
+bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList);
+
 #endif

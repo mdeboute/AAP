@@ -16,7 +16,7 @@ void FighterVertex::addFire(FireVertex f)
     fireCovered.push_back(f);
 }
 
-FireVertex FighterVertex::getFireAt(int index) const
+FireVertex FighterVertex::getFireAtIndex(int index) const
 {
     return fireCovered[index];
 }

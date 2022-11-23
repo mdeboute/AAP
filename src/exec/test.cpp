@@ -4,6 +4,7 @@
 #include "file_io.hpp"
 #include "brute_force.hpp"
 #include "greedy.hpp"
+#include "genetic_search.hpp"
 
 #include <vector>
 #include <cstring>
@@ -19,6 +20,7 @@ void display_usage()
     cout << "Where <algorithm> is one of:" << endl;
     cout << "-b or --bruteforce" << endl;
     cout << "-g or --greedy" << endl;
+    cout << "-gs or --genetic_search" << endl;
 }
 
 void display_solution(const vector<FighterVertex> solution)
@@ -77,6 +79,13 @@ int main(int argc, char *argv[])
     else if (strcmp(argv[2], "-g") == 0 || strcmp(argv[2], "--greedy") == 0)
     {
         vector<FighterVertex> bestTeam = greedy_solve(graph);
+        display_solution(bestTeam);
+        const string result_file = get_result_file(data_dir);
+        write_solution(result_file, map, config, bestTeam);
+    }
+    else if (strcmp(argv[2], "-gs") == 0 || strcmp(argv[2], "--genetic_search") == 0)
+    {
+        vector<FighterVertex> bestTeam = genetic_solve(graph, 100, 100, 1 / graph.getFigtherVertexList().size(), 0.9, 3);
         display_solution(bestTeam);
         const string result_file = get_result_file(data_dir);
         write_solution(result_file, map, config, bestTeam);

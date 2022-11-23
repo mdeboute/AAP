@@ -4,7 +4,6 @@
 #include <vector>
 #include "Graph/Graph.hpp"
 
-bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
 int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
 std::vector<FighterVertex> bruteforce_solve(const Graph &graph);
 std::vector<FighterVertex> better_bruteforce_solve(const Graph &graph);
