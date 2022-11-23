@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
     if (strcmp(argv[2], "-b") == 0 || strcmp(argv[2], "--bruteforce") == 0)
     {
-        vector<FighterVertex> bestTeam = bruteforce_solve(graph);
+        vector<FighterVertex> bestTeam = better_bruteforce_solve(graph);
         display_solution(bestTeam);
         const string result_file = get_result_file(data_dir);
         write_solution(result_file, map, config, bestTeam);
