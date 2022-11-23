@@ -20,25 +20,39 @@ int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std
     return ceil((double)fireList.size() / max);
 }
 
-bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
+
+int dichotomic_search(const std::vector<int>& list, int start, int end, int val) {
+    if (end - start <= 0)
+        return 0;
+    int middle = (int)((end + start) / 2);
+    if (list[middle] == val)
+        return -1;
+    if (list[middle] < val)
+        return dichotomic_search(list, middle + 1, end, val);
+    return dichotomic_search(list, start, middle, val);
+}
+
+bool insertID(const FireVertex& fire, std::vector<int>& fireIdList) {
+    int pos = dichotomic_search(fireIdList, 0, fireIdList.size(), fire.getID());
+    if (pos == -1)
+        return false;
+    fireIdList.insert(fireIdList.begin() + pos, fire.getID());
+    return true;
+}
+
+bool check_feasibility(const std::vector<FighterVertex>& fighterList, const std::vector<FireVertex>& fireList)
 {
-    for (FireVertex fire : fireList)
+    std::vector<int> coveredFiresIds;
+    for (FighterVertex fighter : fighterList)
     {
-        bool find = false;
-        for (FighterVertex fighter : fighterList)
+        for (const FireVertex& fire : fighter.getFireCovered())
         {
-            if (fighter.stopFire(fire))
-            {
-                find = true;
-                break;
-            }
-        }
-        if (!find)
-        {
-            return false;
+            bool success = insertID(fire, coveredFiresIds);
+            if (success && coveredFiresIds.size() == fireList.size())
+                return true;
         }
     }
-    return true;
+    return false;
 }
 
 std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
