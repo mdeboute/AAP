@@ -32,7 +32,6 @@ std::vector<Position> circle_to_positions(Position center, float radius, int wid
             }
         }
     }
-
     return pixels;
 }
 
@@ -99,7 +98,6 @@ void calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibility
                                 int rayIndex,
                                 std::vector<std::vector<std::vector<int>>> &rayFightingMap)
 {
-    // make sure feasibility_map is a copy
     std::vector<std::vector<int>> explorationMap = feasibilityMap;
     int height = feasibilityMap.size();
     int width = feasibilityMap[0].size();
