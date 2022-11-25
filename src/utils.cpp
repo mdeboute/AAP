@@ -361,17 +361,38 @@ bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList)
     return true;
 }
 
+// bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
+// {
+//     std::vector<int> coveredFiresIds;
+//     for (FighterVertex fighter : fighterList)
+//     {
+//         for (const FireVertex &fire : fighter.getFireCovered())
+//         {
+//             bool success = insert_fireID(fire, coveredFiresIds);
+//             if (success && coveredFiresIds.size() == fireList.size())
+//                 return true;
+//         }
+//     }
+//     return false;
+// } //TODO: fix this (doesn't work for the general case/genetic algorithm??)
+
 bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
 {
-    std::vector<int> coveredFiresIds;
-    for (FighterVertex fighter : fighterList)
+    for (FireVertex fire : fireList)
     {
-        for (const FireVertex &fire : fighter.getFireCovered())
+        bool find = false;
+        for (FighterVertex fighter : fighterList)
         {
-            bool success = insert_fireID(fire, coveredFiresIds);
-            if (success && coveredFiresIds.size() == fireList.size())
-                return true;
+            if (fighter.stopFire(fire))
+            {
+                find = true;
+                break;
+            }
+        }
+        if (!find)
+        {
+            return false;
         }
     }
-    return false;
+    return true;
 }

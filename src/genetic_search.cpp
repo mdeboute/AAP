@@ -1,22 +1,24 @@
 #include "genetic_search.hpp"
+#include "greedy.hpp"
 #include <numeric>
+#include <chrono>
 
-Guy generate_random_guy(int nbChromosomes)
+Fellow generate_random_fellow(int nbChromosomes)
 {
-    Guy guy;
+    Fellow fellow;
     for (int i = 0; i < nbChromosomes; i++)
     {
-        guy.push_back(rand() % 2);
+        fellow.push_back(rand() % 2);
     }
-    return guy;
+    return fellow;
 }
 
-Solution decode_guy(const Guy &guy, const Data &data)
+Solution decode_fellow(const Fellow &fellow, const Data &data)
 {
     Solution solution;
-    for (int i = 0; i < guy.size(); i++)
+    for (int i = 0; i < fellow.size(); i++)
     {
-        if (guy[i])
+        if (fellow[i] == 1)
         {
             solution.push_back(data.getFigtherVertexList()[i]);
         }
@@ -24,20 +26,39 @@ Solution decode_guy(const Guy &guy, const Data &data)
     return solution;
 }
 
-int fitness(const Guy &guy, const Data &data)
+Fellow decode_solution(const Solution &solution, const Data &data)
 {
-    Solution solution = decode_guy(guy, data);
+    Fellow fellow;
+    for (int i = 0; i < data.getFigtherVertexList().size(); i++)
+    {
+        fellow.push_back(0);
+    }
+    for (int i = 0; i < solution.size(); i++)
+    {
+        for (int j = 0; j < data.getFigtherVertexList().size(); j++)
+        {
+            if (solution[i] == data.getFigtherVertexList()[j])
+            {
+                fellow[j] = 1;
+            }
+        }
+    }
+    return fellow;
+}
+
+int fitness(const Fellow &fellow, const Data &data)
+{
+    Solution solution = decode_fellow(fellow, data);
     if (check_feasibility(solution, data.getFireVertexList()))
     {
-        // sum the elements of the vector guy
-        return std::accumulate(guy.begin(), guy.end(), 0);
+        return solution.size();
     }
     return __INT_MAX__;
 }
 
-Guy selection(const Population &population, std::vector<int> &scores, int k)
+Fellow selection(const Population &population, std::vector<int> &scores, int k)
 {
-    // select a random guy from the population and took his index
+    // select a random fellow from the population and took his index
     int index = rand() % population.size();
     // select a random subset of index of size k from the population
     std::vector<int> subset;
@@ -56,22 +77,22 @@ Guy selection(const Population &population, std::vector<int> &scores, int k)
     return population[index];
 }
 
-void mutate(Guy guy, float mutation_rate)
+void mutate(Fellow fellow, float mutationRate)
 {
-    for (int i = 0; i < guy.size(); i++)
+    for (int i = 0; i < fellow.size(); i++)
     {
-        if (rand() % 100 < mutation_rate * 100)
+        if (rand() % 100 < mutationRate * 100)
         {
-            guy[i] = !guy[i];
+            fellow[i] = !fellow[i];
         }
     }
 }
 
-Population crossover(const Guy &guy1, const Guy &guy2, float crossoverRate)
+Population crossover(const Fellow &guy1, const Fellow &guy2, float crossoverRate)
 {
     Population population;
-    Guy child1 = guy1;
-    Guy child2 = guy2;
+    Fellow child1 = guy1;
+    Fellow child2 = guy2;
     for (int i = 0; i < guy1.size(); i++)
     {
         if (rand() % 100 < crossoverRate * 100)
@@ -87,18 +108,23 @@ Population crossover(const Guy &guy1, const Guy &guy2, float crossoverRate)
 
 Solution genetic_solve(const Data &data, int populationSize, int nbGenerations, float mutationRate, float crossoverRate, int k)
 {
+    // std::vector<FighterVertex> fighters = data.getFigtherVertexList();
+    // int nbChromosomes = fighters.size();
+    auto startingTime = std::chrono::steady_clock::now();
     // generate a random population of size populationSize
+    Fellow gigaChad = decode_solution(greedy_solve(data), data);
     Population population;
     for (int i = 0; i < populationSize; i++)
     {
-        population.push_back(generate_random_guy(data.getFigtherVertexList().size()));
+        mutate(gigaChad, mutationRate);
+        population.push_back(gigaChad);
     }
-    Guy bestGuy;
+    Fellow bestGuy;
     int bestScore = __INT_MAX__;
     // for each generation
     for (int i = 0; i < nbGenerations; i++)
     {
-        // compute the score of each guy in the population
+        // compute the score of each fellow in the population
         std::vector<int> scores;
         for (int j = 0; j < population.size(); j++)
         {
@@ -111,7 +137,6 @@ Solution genetic_solve(const Data &data, int populationSize, int nbGenerations, 
             {
                 bestScore = scores[j];
                 bestGuy = population[j];
-                std::cout << "New best score: " << bestScore << std::endl;
             }
         }
         // select parents
@@ -125,11 +150,11 @@ Solution genetic_solve(const Data &data, int populationSize, int nbGenerations, 
         for (int j = 0; j < populationSize; j += 2)
         {
             // get selected parents in pairs
-            Guy parent1 = parents[j];
-            Guy parent2 = parents[j + 1];
+            Fellow parent1 = parents[j];
+            Fellow parent2 = parents[j + 1];
             // crossover and mutation
             Population childrens = crossover(parent1, parent2, crossoverRate);
-            for (Guy child : childrens)
+            for (Fellow child : childrens)
             {
                 mutate(child, mutationRate);
                 newPopulation.push_back(child);
@@ -137,5 +162,8 @@ Solution genetic_solve(const Data &data, int populationSize, int nbGenerations, 
         }
         population = newPopulation;
     }
-    return decode_guy(bestGuy, data);
+    std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
+    std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << fitness(bestGuy, data) << std::endl;
+    std ::cout << std::endl;
+    return decode_fellow(bestGuy, data);
 }

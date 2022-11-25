@@ -32,7 +32,7 @@ file(GLOB TEST src/exec/test.cpp)
 add_executable(test.out ${SRC_TEST} ${TEST})
 
 # executable unit_test
-file(GLOB SRC_UNIT_TEST src/Graph/*.cpp)
+file(GLOB SRC_UNIT_TEST src/Graph/*.cpp src/utils.cpp)
 file(GLOB UNIT_TEST src/exec/unit_test.cpp)
 add_executable(unit_test.out ${SRC_UNIT_TEST} ${UNIT_TEST})
 

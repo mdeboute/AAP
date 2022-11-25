@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(argv[2], "-gs") == 0 || strcmp(argv[2], "--genetic_search") == 0)
     {
-        vector<FighterVertex> bestTeam = genetic_solve(graph, 100, 100, 1 / graph.getFigtherVertexList().size(), 0.9, 3);
+        vector<FighterVertex> bestTeam = genetic_solve(graph, 100, 50, 0.2, 0.9, 5);
         display_solution(bestTeam);
         const string result_file = get_result_file(data_dir);
         write_solution(result_file, map, config, bestTeam);

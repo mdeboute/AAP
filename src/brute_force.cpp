@@ -149,7 +149,7 @@ std::vector<FighterVertex> better_bruteforce_solve(const Graph &graph)
             if (check_feasibility(potentialSol, fires))
             {
                 std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-                std::cout << "Result: runtime = " << tt.count() << " sec" << std::endl;
+                std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << potentialSol.size() << std::endl;
                 std ::cout << std::endl;
                 return potentialSol;
             }

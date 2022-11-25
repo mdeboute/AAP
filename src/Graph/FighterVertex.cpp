@@ -37,7 +37,7 @@ int FighterVertex::compareFighters(FighterVertex f) const
         fireIDs.push_back(f.getFireCovered()[i].getID());
 
     int nbCommonFiresCovered = 0;
-    for (const FireVertex& fire : fireCovered)
+    for (const FireVertex &fire : fireCovered)
         if (fire.getID() >= fireIDs[0] && fire.getID() <= fireIDs[m - 1] && dichotomic_search(fireIDs, 0, m, fire.getID()) == -1)
             nbCommonFiresCovered++;
 
@@ -52,7 +52,7 @@ int FighterVertex::compareFighters(FighterVertex f) const
 bool FighterVertex::betterThan(FighterVertex f) const
 {
     std::vector<FireVertex> fireLines = f.getFireCovered();
-    for (const FireVertex& fire : fireLines)
+    for (const FireVertex &fire : fireLines)
     {
         bool find = false;
         for (FireVertex myFire : fireCovered)
@@ -73,7 +73,7 @@ bool FighterVertex::betterThan(FighterVertex f) const
 
 bool FighterVertex::stopFire(FireVertex f) const
 {
-    for (const FireVertex& fire : fireCovered)
+    for (const FireVertex &fire : fireCovered)
     {
         if (fire == f)
         {
