@@ -27,7 +27,7 @@ if(GUROBI_LIBRARY_CPLUS AND GUROBI_LIBRARY)
 endif()
 
 # executable test
-file(GLOB SRC_TEST src/genetic_search.cpp src/brute_force.cpp src/greedy.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
+file(GLOB SRC_TEST src/simulated_annealing.cpp src/brute_force.cpp src/greedy.cpp src/file_io.cpp src/utils.cpp src/Graph/*.cpp)
 file(GLOB TEST src/exec/test.cpp)
 add_executable(test.out ${SRC_TEST} ${TEST})
 
