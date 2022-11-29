@@ -79,7 +79,7 @@ Solution random_movement(const Solution &solution)
 Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final_temparature, float cooling_rate)
 {
     auto startingTime = std::chrono::steady_clock::now();
-    Team best_team = greedy_solve(data);
+    Team best_team = greedy_solve(data, false);
     Solution best_sol = decode_team(best_team, data);
     int best_cost = get_cost(best_sol, data);
     int current_temperature = initial_temperature;

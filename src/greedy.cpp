@@ -1,7 +1,7 @@
 #include "greedy.hpp"
 #include <chrono>
 
-std::vector<FighterVertex> greedy_solve(const Graph &graph)
+std::vector<FighterVertex> greedy_solve(const Graph &graph, bool verbose)
 {
     std::vector<FighterVertex> fighters = graph.getFigtherVertexList();
     if (fighters.size() == 0)
@@ -76,7 +76,8 @@ std::vector<FighterVertex> greedy_solve(const Graph &graph)
         }
     }
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-    std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << sol.size() << std::endl;
+    if (verbose)
+        std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << sol.size() << std::endl;
     std::cout << std::endl;
     return sol;
 }
