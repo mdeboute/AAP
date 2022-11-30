@@ -86,9 +86,10 @@ int main(int argc, char *argv[])
     else if (strcmp(argv[2], "-sa") == 0 || strcmp(argv[2], "--simulated_annealing") == 0)
     {
         int nb_iterations = graph.getFigtherVertexList().size() * 10;
-        float initial_temperature = 35;
+        float initial_temperature = get_initial_temperature(graph, 0.8, 100, 1000);
+        cout << "Initial temperature: " << initial_temperature << endl;
         float final_temperature = 0.01;
-        float coolingRate = 0.08;
+        float coolingRate = 0.1;
         vector<FighterVertex> bestTeam = sa_solve(graph, nb_iterations, initial_temperature, final_temperature, coolingRate);
         display_solution(bestTeam);
         const string result_file = get_result_file(data_dir);

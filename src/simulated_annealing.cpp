@@ -43,7 +43,7 @@ int get_cost(const Solution &solution, const Data &data)
     {
         return team.size();
     }
-    return __INT_MAX__;
+    return 10000;
 }
 
 Solution single_swap(const Solution &solution)
@@ -89,7 +89,7 @@ Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final
         Solution current_sol = best_sol;
         while (iter < max_iter)
         {
-            Solution sol = random_movement(current_sol);
+            Solution sol = pick_and_drop(current_sol);
             int cost = get_cost(sol, data);
             int delta = cost - best_cost;
             if ((delta < 0) || (rand() % 1 <= exp(-delta / current_temperature)))
@@ -107,4 +107,26 @@ Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final
     std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << best_team.size() << std::endl;
     std::cout << std::endl;
     return best_team;
+}
+
+int get_initial_temperature(Data &data, float tau, int max_iter, int neighborhood_size)
+{
+    Team team = greedy_solve(data, false);
+    Solution solution = decode_team(team, data);
+    Neighborhood neighborhood;
+    for (int i = 0; i < neighborhood_size; i++)
+    {
+        neighborhood.push_back(pick_and_drop(solution));
+    }
+    std::vector<int> deltas;
+    for (int i = 0; i < neighborhood.size(); i++)
+    {
+        Solution sol_1 = neighborhood[rand() % neighborhood.size()];
+        Solution sol_2 = neighborhood[rand() % neighborhood.size()];
+        int cost_1 = get_cost(sol_1, data);
+        int cost_2 = get_cost(sol_2, data);
+        deltas.push_back(abs(cost_1 - cost_2));
+    }
+    int mean_delta = std::accumulate(deltas.begin(), deltas.end(), 0) / deltas.size();
+    return -mean_delta / log(tau);
 }

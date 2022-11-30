@@ -77,7 +77,9 @@ std::vector<FighterVertex> greedy_solve(const Graph &graph, bool verbose)
     }
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
     if (verbose)
+    {
         std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << sol.size() << std::endl;
-    std::cout << std::endl;
+        std::cout << std::endl;
+    }
     return sol;
 }

@@ -26,6 +26,7 @@ Graph::Graph(std::vector<FireVertex> fireTab,
 
 void Graph::cutUselessFighters()
 {
+    std::cout << "Start cutting useless fighters..." << std::endl;
     std::vector<FighterVertex> usefullFighters;
     for (FighterVertex fighter : fighterList)
     {
@@ -61,6 +62,8 @@ void Graph::cutUselessFighters()
     {
         fireList[i].setIndex(i);
     }
+    std::cout << "Finished cutting useless fighters!\n"
+              << std::endl;
 }
 
 const std::vector<FighterVertex> &Graph::getFireNeightborhood(int index) const
