@@ -74,7 +74,7 @@ if [ $2 == "--mip" ]; then
         #create a variable instance that contains the name of the instance (split by '/')
         instance=${dir##*/}
         echo "Solving $instance"
-        ./mip.out $dir > ../log/$algo_dir/log_$instance.txt
+        ./mip.out $dir $time_limit > ../log/$algo_dir/log_$instance.txt
     done
 else
     make 'test.out'
@@ -83,7 +83,7 @@ else
     for dir in $1/*; do
         instance=${dir##*/}
         echo "Solving $instance"
-        ./test.out $dir $2 > ../log/$algo_dir/log_$instance.txt
+        ./test.out $dir $2 $time_limit > ../log/$algo_dir/log_$instance.txt
     done
 fi
 echo
