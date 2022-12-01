@@ -230,7 +230,7 @@ std::vector<std::string> split_string(const std::string &s, const std::string &d
     return elems;
 }
 
-Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vector<float> &config, bool isReduced, bool addAdjacency)
+Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vector<float> &config, bool isReduced, bool addAdjacency, bool verbose)
 {
     int nbRays = (int)config[0];
     float furnaceRadius = config[1];
@@ -242,7 +242,8 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
     std::vector<Position> fireCenters;
     std::vector<std::vector<int>> feasibilityMap;
     std::vector<std::vector<std::vector<int>>> rayFightingMap;
-    std::cout << "Start gathering data..." << std::endl;
+    if (verbose)
+        std::cout << "Start gathering data..." << std::endl;
 
     // We get the fire centers and a map overlay of places we can't put firefighters
     for (int y = 0; y < height; y++)
@@ -269,7 +270,8 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
 
     size_t nbFires = fireCenters.size();
 
-    std::cout << "Finished gathering firecenters and partial feasible placement data!" << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering firecenters and partial feasible placement data!" << std::endl;
 
     for (size_t f = 0; f < nbFires; f++)
     {
@@ -280,8 +282,9 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         }
     }
 
-    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!"
-              << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!"
+                  << std::endl;
 
     std::vector<FireVertex> fireList;
 
@@ -313,8 +316,9 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         }
     }
 
-    std::cout << "Finished gathering ray paths and feasible fighter placements!"
-              << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering ray paths and feasible fighter placements!"
+                  << std::endl;
 
     std::vector<FighterVertex> fighterList;
     int fighterID = 0;
@@ -334,10 +338,11 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         }
     }
 
-    std::cout << "Finished gathering data!\n"
-              << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering data!\n"
+                  << std::endl;
 
-    return Graph(fireList, fighterList, isReduced, addAdjacency);
+    return Graph(fireList, fighterList, isReduced, addAdjacency, verbose);
 }
 
 int dichotomic_search(const std::vector<int> &list, int start, int end, int val)

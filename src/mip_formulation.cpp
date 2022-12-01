@@ -2,19 +2,21 @@
 #include "mip_formulation.hpp"
 
 const std::vector<FighterVertex> mip_solve(
-    Graph &graph)
+    Graph &graph, bool verbose)
 {
     std::vector<FireVertex> fireVertexList = graph.getFireVertexList();
     std::vector<FighterVertex> fighterVertexList = graph.getFigtherVertexList();
     size_t nbFatalRays = fireVertexList.size();
     size_t nbFirefighters = fighterVertexList.size();
 
-    std::cout << "Solving using MIP Formulation" << std::endl;
-    std::cout << "Number of fighters: " << nbFirefighters << std::endl;
-    std::cout << "Number of rays: " << nbFatalRays << std::endl
-              << std::endl;
+    if (verbose)
+    {
+        std::cout << "Solving using MIP Formulation" << std::endl;
+        std::cout << "Number of fighters: " << nbFirefighters << std::endl;
+        std::cout << "Number of rays: " << nbFatalRays << std::endl
+                  << std::endl;
+    }
 
-    bool verbose = true;
     std::vector<FighterVertex> solution;
 
     GRBVar *x = nullptr;
@@ -132,7 +134,7 @@ const std::vector<FighterVertex> mip_solve(
     }
     catch (...)
     {
-        std::cout << "Exception during optimization" << std::endl;
+        std::cout << "Exception during optimization!" << std::endl;
     }
 
     delete[] x;

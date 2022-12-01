@@ -14,19 +14,20 @@ Graph::Graph(std::vector<FireVertex> fireList,
 }
 
 Graph::Graph(std::vector<FireVertex> fireTab,
-             std::vector<FighterVertex> fighterTab, bool isReduced, bool addAdjacency)
+             std::vector<FighterVertex> fighterTab, bool isReduced, bool addAdjacency, bool verbose)
 {
     this->fireList = fireTab;
     this->fighterList = fighterTab;
     if (isReduced)
-        cutUselessFighters();
+        cutUselessFighters(verbose);
     if (addAdjacency)
         generateAdjacency();
 }
 
-void Graph::cutUselessFighters()
+void Graph::cutUselessFighters(bool verbose)
 {
-    std::cout << "Start cutting useless fighters... starting with " << fighterList.size() << std::endl;
+    if (verbose)
+        std::cout << "Start cutting useless fighters... (starting with " << fighterList.size() << " fighters)" << std::endl;
     std::vector<FighterVertex> usefullFighters;
     for (FighterVertex fighter : fighterList)
     {
@@ -62,8 +63,9 @@ void Graph::cutUselessFighters()
     {
         fireList[i].setIndex(i);
     }
-    std::cout << "Finished cutting useless fighters! (" << fighterList.size() << " remainings)\n"
-              << std::endl;
+    if (verbose)
+        std::cout << "Finished cutting useless fighters! (" << fighterList.size() << " remainings)\n"
+                  << std::endl;
 }
 
 const std::vector<FighterVertex> &Graph::getFireNeightborhood(int index) const

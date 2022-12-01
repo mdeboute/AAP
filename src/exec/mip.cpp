@@ -61,9 +61,9 @@ int main(int argc, char *argv[])
 
     display_data(config, map);
 
-    Graph graph = calculate_graph_data(map, config, false, false);
+    Graph graph = calculate_graph_data(map, config, false, false, false);
 
-    vector<FighterVertex> bestTeam = mip_solve(graph);
+    vector<FighterVertex> bestTeam = mip_solve(graph, true);
     display_solution(bestTeam);
     const string result_file = get_result_file(data_dir);
     write_solution(result_file, map, config, bestTeam);

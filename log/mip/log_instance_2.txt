@@ -1,0 +1,67 @@
+Number of angles: 300
+Furnace radius: 4.5
+Radius of action of a firefighter: 1.6
+Map size: 421x486
+
+Solving using MIP Formulation
+Number of fighters: 36660
+Number of rays: 394
+
+--> Creating the Gurobi environment
+Academic license - for non-commercial use only
+--> Creating the Gurobi model
+--> Creating the variables
+--> Creating the objective function
+--> Creating the constraints
+--> Configuring the solver
+--> Running the solver
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (mac64)
+Optimize a model with 394 rows, 36660 columns and 186220 nonzeros
+Model fingerprint: 0x92831992
+Variable types: 0 continuous, 36660 integer (36660 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+00]
+Found heuristic solution: objective 42.0000000
+Presolve removed 337 rows and 36530 columns
+Presolve time: 0.07s
+Presolved: 57 rows, 130 columns, 1045 nonzeros
+Found heuristic solution: objective 12.0000000
+Variable types: 0 continuous, 130 integer (130 binary)
+
+Root relaxation: cutoff, 10 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0     cutoff    0        12.00000   12.00000  0.00%     -    0s
+
+Explored 0 nodes (10 simplex iterations) in 0.08 seconds
+Thread count was 3 (of 8 available processors)
+
+Solution count 2: 12 42 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.200000000000e+01, best bound 1.200000000000e+01, gap 0.0000%
+--> Retrieving solver results 
+Success! (Status: 2)
+--> Printing results
+
+Result: runtime = 0.0853999 sec; objective value = 12
+
+We place a fighter at position (290, 82)
+We place a fighter at position (278, 83)
+We place a fighter at position (281, 87)
+We place a fighter at position (295, 158)
+We place a fighter at position (361, 205)
+We place a fighter at position (353, 209)
+We place a fighter at position (353, 212)
+We place a fighter at position (355, 216)
+We place a fighter at position (179, 308)
+We place a fighter at position (181, 312)
+We place a fighter at position (171, 316)
+We place a fighter at position (173, 318)
+
+Writing result to ../solution/result_instance_2.ppm

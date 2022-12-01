@@ -32,7 +32,7 @@ std::vector<std::string> split_string(const std::string &s, const std::string &d
 
 Graph calculate_graph_data(
     std::vector<std::vector<Color>> &map,
-    const std::vector<float> &config, bool isReduced, bool addAdjacency);
+    const std::vector<float> &config, bool isReduced, bool addAdjacency, bool verbose);
 
 const std::vector<std::vector<Color>> &draw_details(
     std::vector<std::vector<Color>> &map,

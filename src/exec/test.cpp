@@ -62,15 +62,12 @@ int main(int argc, char *argv[])
     const string map_file = data_dir + MAP_FILE;
     const string config_file = data_dir + CONFIG_FILE;
 
-    vector<float> config = parse_config(config_file);
-    vector<vector<Color>> map = parse_map(map_file);
-
-    display_data(config, map);
-
-    Graph graph = calculate_graph_data(map, config, true, true);
-
     if (strcmp(argv[2], "-b") == 0 || strcmp(argv[2], "--bruteforce") == 0)
     {
+        vector<float> config = parse_config(config_file);
+        vector<vector<Color>> map = parse_map(map_file);
+        display_data(config, map);
+        Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = better_bruteforce_solve(graph);
         display_solution(bestTeam);
         const string result_file = get_result_file(data_dir);
@@ -78,6 +75,10 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(argv[2], "-g") == 0 || strcmp(argv[2], "--greedy") == 0)
     {
+        vector<float> config = parse_config(config_file);
+        vector<vector<Color>> map = parse_map(map_file);
+        display_data(config, map);
+        Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = greedy_solve(graph, true);
         display_solution(bestTeam);
         const string result_file = get_result_file(data_dir);
@@ -85,6 +86,10 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(argv[2], "-sa") == 0 || strcmp(argv[2], "--simulated_annealing") == 0)
     {
+        vector<float> config = parse_config(config_file);
+        vector<vector<Color>> map = parse_map(map_file);
+        display_data(config, map);
+        Graph graph = calculate_graph_data(map, config, true, true, true);
         int nb_iterations = graph.getFigtherVertexList().size() * 10;
         float initial_temperature = get_initial_temperature(graph, 0.8, 100, 1000);
         cout << "Initial temperature: " << initial_temperature << endl;

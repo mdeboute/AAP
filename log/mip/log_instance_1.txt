@@ -1,0 +1,63 @@
+Number of angles: 700
+Furnace radius: 4.5
+Radius of action of a firefighter: 1.6
+Map size: 100x100
+
+Solving using MIP Formulation
+Number of fighters: 2765
+Number of rays: 338
+
+--> Creating the Gurobi environment
+Academic license - for non-commercial use only
+--> Creating the Gurobi model
+--> Creating the variables
+--> Creating the objective function
+--> Creating the constraints
+--> Configuring the solver
+--> Running the solver
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (mac64)
+Optimize a model with 338 rows, 2765 columns and 52126 nonzeros
+Model fingerprint: 0x0ed06709
+Variable types: 0 continuous, 2765 integer (2765 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+00]
+Found heuristic solution: objective 10.0000000
+Presolve removed 188 rows and 2485 columns
+Presolve time: 0.06s
+Presolved: 150 rows, 280 columns, 9798 nonzeros
+Found heuristic solution: objective 7.0000000
+Variable types: 0 continuous, 280 integer (280 binary)
+
+Root relaxation: objective 5.666667e+00, 61 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    5.66667    0    7    7.00000    5.66667  19.0%     -    0s
+H    0     0                       6.0000000    5.66667  5.56%     -    0s
+     0     0    5.66667    0    7    6.00000    5.66667  5.56%     -    0s
+
+Explored 1 nodes (61 simplex iterations) in 0.07 seconds
+Thread count was 3 (of 8 available processors)
+
+Solution count 3: 6 7 10 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+--> Retrieving solver results 
+Success! (Status: 2)
+--> Printing results
+
+Result: runtime = 0.066911 sec; objective value = 6
+
+We place a fighter at position (84, 64)
+We place a fighter at position (73, 65)
+We place a fighter at position (71, 70)
+We place a fighter at position (60, 77)
+We place a fighter at position (57, 81)
+We place a fighter at position (58, 86)
+
+Writing result to ../solution/result_instance_1.ppm

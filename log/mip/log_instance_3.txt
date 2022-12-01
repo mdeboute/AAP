@@ -1,0 +1,62 @@
+Number of angles: 30
+Furnace radius: 4.5
+Radius of action of a firefighter: 1.6
+Map size: 789x1388
+
+Solving using MIP Formulation
+Number of fighters: 63205
+Number of rays: 51
+
+--> Creating the Gurobi environment
+Academic license - for non-commercial use only
+--> Creating the Gurobi model
+--> Creating the variables
+--> Creating the objective function
+--> Creating the constraints
+--> Configuring the solver
+--> Running the solver
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (mac64)
+Optimize a model with 51 rows, 63205 columns and 65271 nonzeros
+Model fingerprint: 0x6e1c98c0
+Variable types: 0 continuous, 63205 integer (63205 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+00]
+Found heuristic solution: objective 25.0000000
+Presolve removed 51 rows and 63205 columns
+Presolve time: 0.04s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.05 seconds
+Thread count was 1 (of 8 available processors)
+
+Solution count 2: 16 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.600000000000e+01, best bound 1.600000000000e+01, gap 0.0000%
+--> Retrieving solver results 
+Success! (Status: 2)
+--> Printing results
+
+Result: runtime = 0.0552549 sec; objective value = 16
+
+We place a fighter at position (900, 91)
+We place a fighter at position (890, 92)
+We place a fighter at position (897, 94)
+We place a fighter at position (892, 95)
+We place a fighter at position (288, 193)
+We place a fighter at position (278, 194)
+We place a fighter at position (290, 195)
+We place a fighter at position (279, 200)
+We place a fighter at position (69, 572)
+We place a fighter at position (1247, 588)
+We place a fighter at position (1242, 590)
+We place a fighter at position (1241, 595)
+We place a fighter at position (1244, 599)
+We place a fighter at position (470, 647)
+We place a fighter at position (476, 659)
+We place a fighter at position (467, 664)
+
+Writing result to ../solution/result_instance_3.ppm
