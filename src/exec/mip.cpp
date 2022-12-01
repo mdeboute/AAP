@@ -14,7 +14,8 @@ const string CONFIG_FILE = "/config.txt";
 
 void display_usage()
 {
-    cout << "Usage: ./mip <instance_directory>" << endl;
+    cout << "Usage: ./mip <instance_directory> (<time_limit>)" << endl;
+    cout << "Where <time_limit> is set to 600 seconds by default" << endl;
 }
 
 void display_solution(const vector<FighterVertex> solution)
@@ -46,10 +47,17 @@ const string get_result_file(const string data_dir)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc < 2 || argc > 3)
     {
         display_usage();
         return 1;
+    }
+
+    int time_limit = 600;
+
+    if (argc == 3)
+    {
+        time_limit = atoi(argv[2]);
     }
 
     const string data_dir = argv[1];
@@ -63,7 +71,7 @@ int main(int argc, char *argv[])
 
     Graph graph = calculate_graph_data(map, config, false, false, false);
 
-    vector<FighterVertex> bestTeam = mip_solve(graph, true);
+    vector<FighterVertex> bestTeam = mip_solve(graph, true, time_limit);
     display_solution(bestTeam);
     const string result_file = get_result_file(data_dir);
     write_solution(result_file, map, config, bestTeam);

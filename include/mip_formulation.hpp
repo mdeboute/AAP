@@ -8,6 +8,6 @@
 #include "utils.hpp"
 
 const std::vector<FighterVertex> mip_solve(
-    Graph &graph, bool verbose);
+    Graph &graph, bool verbose, int time_limit);
 
 #endif

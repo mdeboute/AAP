@@ -16,11 +16,12 @@ const string CONFIG_FILE = "/config.txt";
 
 void display_usage()
 {
-    cout << "Usage: ./test <instance_directory> <algorithm>" << endl;
+    cout << "Usage: ./test <instance_directory> <algorithm> (<time_limit>)" << endl;
     cout << "Where <algorithm> is one of:" << endl;
     cout << "-b or --bruteforce" << endl;
     cout << "-g or --greedy" << endl;
     cout << "-sa or --simulated_annealing" << endl;
+    cout << "And <time_limit> is set to 600 seconds by default" << endl;
 }
 
 void display_solution(const vector<FighterVertex> solution)
@@ -52,10 +53,17 @@ const string get_result_file(const string data_dir)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3)
+    if (argc < 3 || argc > 4)
     {
         display_usage();
         return 1;
+    }
+
+    int time_limit = 600;
+
+    if (argc == 4)
+    {
+        time_limit = atoi(argv[3]);
     }
 
     const string data_dir = argv[1];
@@ -107,3 +115,5 @@ int main(int argc, char *argv[])
     }
     return 0;
 }
+
+// TODO: add a time limit to the algorithms (already done for the mip exec)

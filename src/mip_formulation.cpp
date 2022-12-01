@@ -2,7 +2,7 @@
 #include "mip_formulation.hpp"
 
 const std::vector<FighterVertex> mip_solve(
-    Graph &graph, bool verbose)
+    Graph &graph, bool verbose, int time_limit)
 {
     std::vector<FireVertex> fireVertexList = graph.getFireVertexList();
     std::vector<FighterVertex> fighterVertexList = graph.getFigtherVertexList();
@@ -84,8 +84,8 @@ const std::vector<FighterVertex> mip_solve(
         // --- Solver configuration ---
         if (verbose)
             std::cout << "--> Configuring the solver" << std::endl;
-        model.set(GRB_DoubleParam_TimeLimit, 600.0); //< sets the time limit (in seconds)
-        model.set(GRB_IntParam_Threads, 3);          //< limits the solver to single thread usage
+        model.set(GRB_DoubleParam_TimeLimit, time_limit); //< sets the time limit (in seconds)
+        model.set(GRB_IntParam_Threads, 4);               //< limits the solver to single thread usage
 
         // --- Solver launch ---
         if (verbose)
