@@ -1,4 +1,5 @@
 #include "Graph/Graph.hpp"
+#include <chrono>
 
 Graph::Graph() {}
 
@@ -25,9 +26,11 @@ Graph::Graph(std::vector<FireVertex> fireTab,
 }
 
 void Graph::cutUselessFighters(bool verbose)
-{
+{   
     if (verbose)
         std::cout << "Start cutting useless fighters... (starting with " << fighterList.size() << " fighters)" << std::endl;
+    auto startingTime = std::chrono::steady_clock::now();
+
     std::vector<FighterVertex> usefullFighters;
     for (FighterVertex fighter : fighterList)
     {
@@ -37,34 +40,28 @@ void Graph::cutUselessFighters(bool verbose)
             for (int i = 0; i < usefullFighters.size(); i++)
             {
                 FighterVertex usefulFighter = usefullFighters[i];
-                if (fighter.betterThan(usefulFighter))
+                int bestFighterId = usefulFighter.compareFighters(fighter);
+                if (bestFighterId == usefulFighter.getID()) {
+                    usefullness = false;
+                    break;
+                }
+                else if (bestFighterId == fighter.getID())
                 {
                     usefullFighters.erase(usefullFighters.begin() + i);
                     i--;
                 }
-                else if (usefulFighter.betterThan(fighter))
-                {
-                    usefullness = false;
-                    break;
-                }
             }
         }
         if (usefullness)
-        {
             usefullFighters.push_back(fighter);
-        }
     }
     this->fighterList = usefullFighters;
     for (int i = 0; i < fighterList.size(); ++i)
-    {
         fighterList[i].setIndex(i);
-    }
-    for (int i = 0; i < fireList.size(); ++i)
-    {
-        fireList[i].setIndex(i);
-    }
+
+    std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
     if (verbose)
-        std::cout << "Finished cutting useless fighters! (" << fighterList.size() << " remainings)\n"
+        std::cout << "Finished cutting useless fighters in " << tt.count() << " sec! (" << fighterList.size() << " remainings)\n"
                   << std::endl;
 }
 
