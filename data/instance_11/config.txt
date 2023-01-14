@@ -1,0 +1,8 @@
+300             # nombre d'angles
+4.5             # rayon de fournaise
+1.6             # rayon d'action d'un pompier
+0 255  0   0    # rouge: Feu
+1  0  255  0    # vert: Pompier
+2  0   0   0    # noir: Ville
+3  0   0  255   # bleu: Inaccessible
+4 255 255  0    # jaune: Libre

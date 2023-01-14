@@ -15,10 +15,10 @@ private:
 
     std::vector<std::vector<int>> adjacencyMatrix;
 
-    // a list of adjacent FireVertex for each fireFighter. stocking id (position in list).
+    // a list of adjacent FireVertex for each fireFighter. Stocking id (position in list).
     std::vector<std::vector<FireVertex>> fighterAdjacencyList;
 
-    // a list of adjacent FighterVertex for each fire. stocking id (position in list).
+    // a list of adjacent FighterVertex for each fire. Stocking id (position in list).
     std::vector<std::vector<FighterVertex>> fireAdjacencyList;
     void cutUselessFighters(bool verbose);
     void generateAdjacency();

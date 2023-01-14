@@ -40,7 +40,7 @@ const string get_result_file(const string data_dir)
     vector<string> splitString = split_string(data_dir, "/");
     if (splitString[splitString.size() - 1].empty())
         splitString.erase(splitString.end() - 1);
-    const string result_file = "../solution/result_" + splitString[splitString.size() - 1] + ".ppm";
+    const string result_file = "solution/result_" + splitString[splitString.size() - 1] + ".ppm";
     cout << "\nWriting result to " << result_file << endl;
     return result_file;
 }

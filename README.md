@@ -18,11 +18,5 @@ make <target>
 In the build directory:
 
 ```shell
-./exec.out
+./<exec>.out
 ```
-
-### Second report, **deadline: Friday, October 28th**
-
-Write a small report (PDF file) explaining:
-
-~Bruteforce~ + ~Greedy algorithms~.

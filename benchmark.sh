@@ -71,7 +71,7 @@ if [ $2 == "--mip" ]; then
     echo
     # for all subdirectories in the data directory
     for dir in $1/*; do
-        #create a variable instance that contains the name of the instance (split by '/')
+        # create a variable instance that contains the name of the instance (split by '/')
         instance=${dir##*/}
         echo "Solving $instance"
         ./mip.out $dir $time_limit > ../log/$algo_dir/log_$instance.txt

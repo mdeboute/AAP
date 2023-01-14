@@ -379,7 +379,7 @@ bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList)
 //         }
 //     }
 //     return false;
-// } //TODO: fix this (doesn't work for the general case/genetic algorithm??)
+// } //TODO: fix this (doesn't work for the general case?)
 
 bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
 {
