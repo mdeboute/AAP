@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-Graph genVal1()
+Graph genVal1(bool verbose)
 {
     std::vector<FireVertex> fires;
     std::vector<FighterVertex> fighters;
@@ -33,10 +33,10 @@ Graph genVal1()
     fighters[5].addFire(fires[0]);
     fighters[5].addFire(fires[3]);
 
-    return Graph(fires, fighters, true, true);
+    return Graph(fires, fighters, true, true, verbose);
 }
 
-bool cutUselessFightersTest(Graph g)
+bool cutUselessFightersTest(Graph g, bool verbose)
 {
     std::vector<FighterVertex> figthers = g.getFigtherVertexList();
     std::vector<FireVertex> fires;
@@ -47,8 +47,11 @@ bool cutUselessFightersTest(Graph g)
         int id = f.getID();
         if (id == 1 || id == 3 || id == 4)
         {
-            const std::string msg = "[FAIL] cutUselessFighters: unexpected figther in the graph, id : " + std::to_string(id);
-            std::perror(msg.c_str());
+            if (verbose)
+            {
+                const std::string msg = "[FAIL] cutUselessFighters: unexpected figther in the graph, id : " + std::to_string(id);
+                std::perror(msg.c_str());
+            }
         }
         if (id == 0 || id == 2 || id == 5)
         {
@@ -57,13 +60,16 @@ bool cutUselessFightersTest(Graph g)
     }
     if (cpt != 3)
     {
-        printf("[FAIL] cutUselessFighters: Not enough figther in the graph, find %d insted of 3", cpt);
+        if (verbose)
+            printf("[FAIL] cutUselessFighters: Not enough figther in the graph, find %d insted of 3", cpt);
         return false;
     }
-    printf("[SUCCESS] cutUselessFighters\n");
+    if (verbose)
+        printf("[SUCCESS] cutUselessFighters\n");
     return true;
 }
-bool generateAdjacencyTest(Graph g)
+
+bool generateAdjacencyTest(Graph g, bool verbose)
 {
     std::vector<FighterVertex> figthers = g.getFigtherVertexList();
     std::vector<FireVertex> fires;
@@ -74,44 +80,67 @@ bool generateAdjacencyTest(Graph g)
         std::vector<FireVertex> cutFires = g.getFighterAdjacencyList(Index);
         if (cutFires.size() != 2)
         {
-            const std::string msg = "[FAIL] generateAdjacency: fire couth = " + std::to_string(cutFires.size());
-            std::perror(msg.c_str());
+            if (verbose)
+            {
+                const std::string msg = "[FAIL] generateAdjacency: fire couth = " + std::to_string(cutFires.size());
+                std::perror(msg.c_str());
+            }
             return false;
         }
         if (f.getFireCovered() != cutFires)
         {
-            const std::string msg = "[FAIL] generateAdjacency: wrong adjacent fire ligne for figther: " + std::to_string(f.getID());
-            std::perror(msg.c_str());
+            if (verbose)
+            {
+                const std::string msg = "[FAIL] generateAdjacency: wrong adjacent fire ligne for figther: " + std::to_string(f.getID());
+                std::perror(msg.c_str());
+            }
             return false;
         }
     }
-    printf("[SUCCESS] generateAdjacency\n");
+    if (verbose)
+        printf("[SUCCESS] generateAdjacency\n");
     return true;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    Graph g = genVal1();
-    printf("----- Graph: fires -----\n");
-    std::vector<FireVertex> fires = g.getFireVertexList();
-    for (FireVertex f : fires)
+    bool verbose = false;
+    if (argc > 1 && strcmp(argv[1], "-v") == 0)
     {
-        std::cout << f << std::endl;
+        verbose = true;
     }
-    printf("----- Graph: fighters -----\n");
-    std::vector<FighterVertex> fighters = g.getFigtherVertexList();
-    for (FighterVertex f : fighters)
+
+    Graph g = genVal1(verbose);
+
+    if (verbose)
     {
-        std::cout << f << std::endl;
+        printf("----- Graph: fires -----\n");
+        std::vector<FireVertex> fires = g.getFireVertexList();
+        for (FireVertex f : fires)
+        {
+            std::cout << f << std::endl;
+        }
     }
-    printf("----- [TEST] Graph -----\n");
-    bool cut = cutUselessFightersTest(g);
-    bool gen = generateAdjacencyTest(g);
+    if (verbose)
+    {
+        printf("----- Graph: fighters -----\n");
+        std::vector<FighterVertex> fighters = g.getFigtherVertexList();
+        for (FighterVertex f : fighters)
+        {
+            std::cout << f << std::endl;
+        }
+    }
+    if (verbose)
+        printf("----- [TEST] Graph -----\n");
+    bool cut = cutUselessFightersTest(g, verbose);
+    bool gen = generateAdjacencyTest(g, verbose);
     if (cut && gen)
     {
-        printf("----- [SUCCESS] Graph -----\n");
-        return 1;
+        if (verbose)
+            printf("----- [SUCCESS] Graph -----\n");
+        return 0;
     }
-    std::perror("----- [FAIL] Graph -----\n");
-    return 0;
+    if (verbose)
+        std::perror("----- [FAIL] Graph -----\n");
+    return 1;
 }

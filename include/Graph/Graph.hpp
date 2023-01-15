@@ -15,12 +15,12 @@ private:
 
     std::vector<std::vector<int>> adjacencyMatrix;
 
-    // a list of adjacent FireVertex for each fireFighter. stocking id (position in list).
+    // a list of adjacent FireVertex for each fireFighter. Stocking id (position in list).
     std::vector<std::vector<FireVertex>> fighterAdjacencyList;
 
-    // a list of adjacent FighterVertex for each fire. stocking id (position in list).
+    // a list of adjacent FighterVertex for each fire. Stocking id (position in list).
     std::vector<std::vector<FighterVertex>> fireAdjacencyList;
-    void cutUselessFighters();
+    void cutUselessFighters(bool verbose);
     void generateAdjacency();
 
 public:
@@ -30,7 +30,7 @@ public:
           std::vector<std::vector<FireVertex>> fighterAdjacencyList,
           std::vector<std::vector<FighterVertex>> fireAdjacencyList);
     Graph(std::vector<FireVertex> fireList,
-          std::vector<FighterVertex> fighterList, bool isReduced, bool addAdjacency);
+          std::vector<FighterVertex> fighterList, bool isReduced, bool addAdjacency, bool verbose);
 
     int isAdjacent(int fighterIndex, int fireIndex) const;
     int getNbFires() const;

@@ -32,10 +32,16 @@ std::vector<std::string> split_string(const std::string &s, const std::string &d
 
 Graph calculate_graph_data(
     std::vector<std::vector<Color>> &map,
-    const std::vector<float> &config, bool isReduced, bool addAdjacency);
+    const std::vector<float> &config, bool isReduced, bool addAdjacency, bool verbose);
 
 const std::vector<std::vector<Color>> &draw_details(
     std::vector<std::vector<Color>> &map,
     const std::vector<float> &config);
+
+bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
+int dichotomic_search(const std::vector<int> &list, int start, int end, int val);
+bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList);
+
+int get_nb_angles(const std::vector<std::vector<Color>> &map);
 
 #endif

@@ -1,4 +1,6 @@
 #include "utils.hpp"
+#include <climits>
+#include <cmath>
 
 std::vector<Position> circle_to_positions(Position center, float radius, int width, int height)
 {
@@ -32,7 +34,6 @@ std::vector<Position> circle_to_positions(Position center, float radius, int wid
             }
         }
     }
-
     return pixels;
 }
 
@@ -99,7 +100,6 @@ void calculate_ray_neighborhood(const std::vector<std::vector<int>> &feasibility
                                 int rayIndex,
                                 std::vector<std::vector<std::vector<int>>> &rayFightingMap)
 {
-    // make sure feasibility_map is a copy
     std::vector<std::vector<int>> explorationMap = feasibilityMap;
     int height = feasibilityMap.size();
     int width = feasibilityMap[0].size();
@@ -194,7 +194,7 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
             float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
             float intercept = y_r - slope * x_r;
-            Position source = fireCenters[f]; // possible copy of data. Can be improved later
+            Position source = fireCenters[f]; // possible copy of data, can be improved later
             direction dir;
             if (degrees > 90 && degrees <= 270)
                 dir = LEFT;
@@ -232,7 +232,7 @@ std::vector<std::string> split_string(const std::string &s, const std::string &d
     return elems;
 }
 
-Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vector<float> &config, bool isReduced, bool addAdjacency)
+Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vector<float> &config, bool isReduced, bool addAdjacency, bool verbose)
 {
     int nbRays = (int)config[0];
     float furnaceRadius = config[1];
@@ -244,7 +244,8 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
     std::vector<Position> fireCenters;
     std::vector<std::vector<int>> feasibilityMap;
     std::vector<std::vector<std::vector<int>>> rayFightingMap;
-    std::cout << "Start gathering data..." << std::endl;
+    if (verbose)
+        std::cout << "Start gathering data..." << std::endl;
 
     // We get the fire centers and a map overlay of places we can't put firefighters
     for (int y = 0; y < height; y++)
@@ -271,7 +272,8 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
 
     size_t nbFires = fireCenters.size();
 
-    std::cout << "Finished gathering firecenters and partial feasible placement data!" << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering firecenters and partial feasible placement data!" << std::endl;
 
     for (size_t f = 0; f < nbFires; f++)
     {
@@ -282,8 +284,9 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         }
     }
 
-    std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!"
-              << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering fire furnace areas and removed them from feasible placements!"
+                  << std::endl;
 
     std::vector<FireVertex> fireList;
 
@@ -315,8 +318,9 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         }
     }
 
-    std::cout << "Finished gathering ray paths and feasible fighter placements!"
-              << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering ray paths and feasible fighter placements!"
+                  << std::endl;
 
     std::vector<FighterVertex> fighterList;
     int fighterID = 0;
@@ -336,8 +340,95 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
         }
     }
 
-    std::cout << "Finished gathering data!\n"
-              << std::endl;
+    if (verbose)
+        std::cout << "Finished gathering data!\n"
+                  << std::endl;
 
-    return Graph(fireList, fighterList, isReduced, addAdjacency);
+    return Graph(fireList, fighterList, isReduced, addAdjacency, verbose);
+}
+
+int dichotomic_search(const std::vector<int> &list, int start, int end, int val)
+{
+    if (end - start <= 0)
+        return 0;
+    int middle = (int)((end + start) / 2);
+    if (list[middle] == val)
+        return -1;
+    if (list[middle] < val)
+        return dichotomic_search(list, middle + 1, end, val);
+    return dichotomic_search(list, start, middle, val);
+}
+
+bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList)
+{
+    int pos = dichotomic_search(fireIdList, 0, fireIdList.size(), fire.getID());
+    if (pos == -1)
+        return false;
+    fireIdList.insert(fireIdList.begin() + pos, fire.getID());
+    return true;
+}
+
+bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
+{
+    for (FireVertex fire : fireList)
+    {
+        bool find = false;
+        for (FighterVertex fighter : fighterList)
+        {
+            if (fighter.stopFire(fire))
+            {
+                find = true;
+                break;
+            }
+        }
+        if (!find)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// for all fire starts, we look at the furthest corner and check how many lines would be needed
+// to ensure that it is fully considered.
+int get_nb_angles(const std::vector<std::vector<Color>> &map)
+{
+    std::vector<Position> fires;
+    int width = map.size();
+    int height = map[0].size();
+    for (int i = 0; i < map.size(); ++i)
+    {
+        for (int j = 0; j < map.size(); ++j)
+        {
+            if (map[i][j] == RED)
+            {
+                fires.push_back(Position(i, j));
+            }
+        }
+    }
+    int nbAngles = INT_MIN;
+    for (Position p : fires)
+    {
+        int closerToLeft = (p.getX() < (width / 2));
+        int closerToTop = (p.getY() < (height / 2));
+
+        int cornerX = 1 + closerToLeft * (width - 2); // 1 if left corners and width-1 if right corners
+        int cornerY = 1 + closerToTop * (height - 2); // 1 if top corners and height-1 if bottom corners
+
+        Position p1(cornerX, 0);
+        Position p2(0, cornerY);
+
+        // by al kashi
+        double a = p1.dist(p2);
+        double b = p1.dist(p);
+        double c = p2.dist(p);
+        double CosMinusOneOfAngle = (b * b + c * c - a * a) / (2 * b * c);
+        double angle = std::acos(CosMinusOneOfAngle) * (180 / 3.141592); // acos give radians
+        int fireNbAngle = (360 / angle) + 1;
+        if (fireNbAngle > nbAngles)
+        {
+            nbAngles = fireNbAngle;
+        }
+    }
+    return nbAngles;
 }

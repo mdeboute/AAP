@@ -1,6 +1,6 @@
-100             # nombre d'angles
-4.5             # rayon de fournaise
-1.6             # rayon d'action d'un pompier
+10              # nombre d'angles
+2               # rayon de fournaise
+1.5             # rayon d'action d'un pompier
 0 255  0   0    # rouge: Feu
 1  0  255  0    # vert: Pompier
 2  0   0   0    # noir: Ville
