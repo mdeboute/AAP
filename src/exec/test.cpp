@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
         Graph graph = calculate_graph_data(map, config, true, true, true);
         int nb_iterations = graph.getFigtherVertexList().size() * 10;
         float initial_temperature = get_initial_temperature(graph, 0.8, 100, 1000);
+        // float initial_temperature = 50;
         cout << "Initial temperature: " << initial_temperature << endl;
         float final_temperature = 0.01;
         float coolingRate = 0.1;
