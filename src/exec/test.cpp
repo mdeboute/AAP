@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
     {
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
+        cout << endl << "necessary nbAngle : " << getNbAngles(map) << endl << endl;
         display_data(config, map);
         Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = better_bruteforce_solve(graph);
@@ -85,6 +86,7 @@ int main(int argc, char *argv[])
     {
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
+        cout << endl << "necessary nbAngle : " << getNbAngles(map) << endl << endl;
         display_data(config, map);
         Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = greedy_solve(graph, true);
@@ -96,6 +98,7 @@ int main(int argc, char *argv[])
     {
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
+        cout << endl << "necessary nbAngle : " << getNbAngles(map) << endl << endl;
         display_data(config, map);
         Graph graph = calculate_graph_data(map, config, true, true, true);
         int nb_iterations = graph.getFigtherVertexList().size() * 10;
