@@ -1,6 +1,6 @@
 # print usage function
 function usage {
-    echo "Usage: ./benchmark.sh <data_dir> <algo> (<time_limit>)"
+    echo "Usage: ./benchmark.sh <data_dir> <algo> (<time_limit> for the mip solver)"
     echo "Where algo can be one of these: --mip, --greedy, --bruteforce, --simulated_annealing"
     echo "<time_limit> is the time limit in seconds (default 600)."
     exit 1

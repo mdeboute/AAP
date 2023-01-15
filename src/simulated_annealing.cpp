@@ -1,5 +1,7 @@
 #include "simulated_annealing.hpp"
 #include "greedy.hpp"
+
+#include <climits>
 #include <numeric>
 #include <chrono>
 
