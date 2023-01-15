@@ -42,6 +42,6 @@ bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std:
 int dichotomic_search(const std::vector<int> &list, int start, int end, int val);
 bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList);
 
-int getNbAngles(const std::vector<std::vector<Color>> &map);
+int get_nb_angles(const std::vector<std::vector<Color>> &map);
 
 #endif

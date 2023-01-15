@@ -194,7 +194,7 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
             float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
             float intercept = y_r - slope * x_r;
-            Position source = fireCenters[f]; // possible copy of data. Can be improved later
+            Position source = fireCenters[f]; // possible copy of data, can be improved later
             direction dir;
             if (degrees > 90 && degrees <= 270)
                 dir = LEFT;
@@ -368,21 +368,6 @@ bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList)
     return true;
 }
 
-// bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
-// {
-//     std::vector<int> coveredFiresIds;
-//     for (FighterVertex fighter : fighterList)
-//     {
-//         for (const FireVertex &fire : fighter.getFireCovered())
-//         {
-//             bool success = insert_fireID(fire, coveredFiresIds);
-//             if (success && coveredFiresIds.size() == fireList.size())
-//                 return true;
-//         }
-//     }
-//     return false;
-// } //TODO: fix this (doesn't work for the general case?)
-
 bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
 {
     for (FireVertex fire : fireList)
@@ -404,40 +389,46 @@ bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std:
     return true;
 }
 
-// for all fire starts, we look at the furthest corner and check how many lines would be needed 
-// to be sure to consider him
-int getNbAngles(const std::vector<std::vector<Color>> &map){
+// for all fire starts, we look at the furthest corner and check how many lines would be needed
+// to ensure that it is fully considered.
+int get_nb_angles(const std::vector<std::vector<Color>> &map)
+{
     std::vector<Position> fires;
     int width = map.size();
     int height = map[0].size();
-    for (int i=0; i<map.size(); ++i){
-        for (int j=0; j<map.size(); ++j){
-            if (map[i][j]==RED){
-                fires.push_back(Position(i,j));
+    for (int i = 0; i < map.size(); ++i)
+    {
+        for (int j = 0; j < map.size(); ++j)
+        {
+            if (map[i][j] == RED)
+            {
+                fires.push_back(Position(i, j));
             }
         }
     }
-    int nbAngle = INT_MIN;
-    for (Position p : fires){
-        int closerToLeft = (p.getX()<(width/2));
-        int closerToTop = (p.getY()<(height/2));
+    int nbAngles = INT_MIN;
+    for (Position p : fires)
+    {
+        int closerToLeft = (p.getX() < (width / 2));
+        int closerToTop = (p.getY() < (height / 2));
 
-        int cornerX = 1 + closerToLeft*(width-2); // 1 if left corners and width-1 if right corners
-        int cornerY = 1 + closerToTop*(height-2); // 1 if top corners and height-1 if bottom corners
+        int cornerX = 1 + closerToLeft * (width - 2); // 1 if left corners and width-1 if right corners
+        int cornerY = 1 + closerToTop * (height - 2); // 1 if top corners and height-1 if bottom corners
 
-        Position p1(cornerX,0);
-        Position p2(0,cornerY);
+        Position p1(cornerX, 0);
+        Position p2(0, cornerY);
 
         // by al kashi
         double a = p1.dist(p2);
         double b = p1.dist(p);
         double c = p2.dist(p);
-        double CosMinusOneOfAngle = (b*b + c*c - a*a)/(2*b*c);
+        double CosMinusOneOfAngle = (b * b + c * c - a * a) / (2 * b * c);
         double angle = std::acos(CosMinusOneOfAngle) * (180 / 3.141592); // acos give radians
-        int fireNbAngle = (360/angle)+1;
-        if (fireNbAngle>nbAngle){
-            nbAngle = fireNbAngle;
+        int fireNbAngle = (360 / angle) + 1;
+        if (fireNbAngle > nbAngles)
+        {
+            nbAngles = fireNbAngle;
         }
     }
-    return nbAngle;
+    return nbAngles;
 }

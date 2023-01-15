@@ -5,7 +5,10 @@ std::vector<FighterVertex> greedy_solve(const Graph &graph, bool verbose)
 {
     std::vector<FighterVertex> fighters = graph.getFigtherVertexList();
     if (fighters.size() == 0)
+    {
         std::cout << "Invalid input for greedy algo!" << std::endl;
+        return std::vector<FighterVertex>();
+    }
     std::vector<FireVertex> fires = graph.getFireVertexList();
 
     auto startingTime = std::chrono::steady_clock::now();

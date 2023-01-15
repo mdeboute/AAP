@@ -74,8 +74,9 @@ int main(int argc, char *argv[])
     {
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
-        cout << endl << "necessary nbAngle : " << getNbAngles(map) << endl << endl;
         display_data(config, map);
+        cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
+        cout << endl;
         Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = better_bruteforce_solve(graph);
         display_solution(bestTeam);
@@ -86,8 +87,9 @@ int main(int argc, char *argv[])
     {
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
-        cout << endl << "necessary nbAngle : " << getNbAngles(map) << endl << endl;
         display_data(config, map);
+        cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
+        cout << endl;
         Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = greedy_solve(graph, true);
         display_solution(bestTeam);
@@ -98,12 +100,12 @@ int main(int argc, char *argv[])
     {
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
-        cout << endl << "necessary nbAngle : " << getNbAngles(map) << endl << endl;
         display_data(config, map);
+        cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
+        cout << endl;
         Graph graph = calculate_graph_data(map, config, true, true, true);
         int nb_iterations = graph.getFigtherVertexList().size() * 10;
         float initial_temperature = get_initial_temperature(graph, 0.8, 100, 1000);
-        // float initial_temperature = 50;
         cout << "Initial temperature: " << initial_temperature << endl;
         float final_temperature = 0.01;
         float coolingRate = 0.1;

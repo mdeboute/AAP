@@ -26,7 +26,7 @@ Graph::Graph(std::vector<FireVertex> fireTab,
 }
 
 void Graph::cutUselessFighters(bool verbose)
-{   
+{
     if (verbose)
         std::cout << "Start cutting useless fighters... (starting with " << fighterList.size() << " fighters)" << std::endl;
     auto startingTime = std::chrono::steady_clock::now();
@@ -41,7 +41,8 @@ void Graph::cutUselessFighters(bool verbose)
             {
                 FighterVertex usefulFighter = usefullFighters[i];
                 int bestFighterId = usefulFighter.compareFighters(fighter);
-                if (bestFighterId == usefulFighter.getID()) {
+                if (bestFighterId == usefulFighter.getID())
+                {
                     usefullness = false;
                     break;
                 }
