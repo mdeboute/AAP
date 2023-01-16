@@ -2,6 +2,7 @@
 #define FIGHTERVERTEX
 
 #include "FireVertex.hpp"
+
 #include <vector>
 
 class FighterVertex : public Vertex

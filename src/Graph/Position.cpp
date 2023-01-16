@@ -1,4 +1,5 @@
 #include "Graph/Position.hpp"
+
 #include <cmath>
 
 Position::Position(int x, int y)

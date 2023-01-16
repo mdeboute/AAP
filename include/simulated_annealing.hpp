@@ -2,6 +2,7 @@
 #define SIMULATED_ANNEALING_HPP
 
 #include <vector>
+
 #include "Graph/Graph.hpp"
 #include "utils.hpp"
 

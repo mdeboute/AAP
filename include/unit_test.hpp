@@ -1,5 +1,6 @@
 #ifndef UNIT_TEST
 #define UNIT_TEST
+
 #include "Graph/Graph.hpp"
 
 Graph genVal1(bool verbose);
