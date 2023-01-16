@@ -1,4 +1,4 @@
-# AAP
+# Optimal Firefighters Allocation
 
 ## Project report (read only)
 
