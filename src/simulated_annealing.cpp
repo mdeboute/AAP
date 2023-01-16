@@ -111,6 +111,11 @@ Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final
         iter = 0;
     }
     best_team = decode_solution(best_sol, data);
+    if (check_feasibility(best_team, data.getFireVertexList()) == false)
+    {
+        std::cout << "No feasible solution found!" << std::endl;
+        return Team();
+    }
     best_team = remove_useless_fire_fighters(best_team, data);
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
     std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << best_team.size() << std::endl;
