@@ -347,8 +347,8 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
 
 int dichotomic_search(const std::vector<int> &list, int start, int end, int val)
 {
-    if (end - start <= 0)
-        return 0;
+    if (end - start == 0)
+        return start;
     int middle = (int)((end + start) / 2);
     if (list[middle] == val)
         return -1;
@@ -366,38 +366,17 @@ bool insert_fireID(const FireVertex &fire, std::vector<int> &fireIdList)
     return true;
 }
 
-// bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
-// {
-//     std::vector<int> coveredFiresIds;
-//     for (FighterVertex fighter : fighterList)
-//     {
-//         for (const FireVertex &fire : fighter.getFireCovered())
-//         {
-//             bool success = insert_fireID(fire, coveredFiresIds);
-//             if (success && coveredFiresIds.size() == fireList.size())
-//                 return true;
-//         }
-//     }
-//     return false;
-// } //TODO: fix this (doesn't work for the general case?)
-
 bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList)
 {
-    for (FireVertex fire : fireList)
+    std::vector<int> coveredFiresIds;
+    for (FighterVertex fighter : fighterList)
     {
-        bool find = false;
-        for (FighterVertex fighter : fighterList)
+        for (const FireVertex &fire : fighter.getFireCovered())
         {
-            if (fighter.stopFire(fire))
-            {
-                find = true;
-                break;
-            }
-        }
-        if (!find)
-        {
-            return false;
+            bool success = insert_fireID(fire, coveredFiresIds);
+            if (success && coveredFiresIds.size() == fireList.size())
+                return true;
         }
     }
-    return true;
+    return false;
 }

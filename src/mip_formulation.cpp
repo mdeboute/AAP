@@ -66,7 +66,7 @@ const std::vector<FighterVertex> mip_solve(
             std::cout << "--> Creating the constraints" << std::endl;
 
         // Each ray must be in the action range of a firefigher
-        for (FireVertex fireRay : fireVertexList)
+        for (const FireVertex & fireRay : fireVertexList)
         {
             GRBLinExpr rayCover = 0;
             for (size_t i = 0; i < nbFirefighters; ++i)

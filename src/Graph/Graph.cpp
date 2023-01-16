@@ -26,7 +26,7 @@ Graph::Graph(std::vector<FireVertex> fireTab,
 }
 
 void Graph::cutUselessFighters(bool verbose)
-{   
+{
     if (verbose)
         std::cout << "Start cutting useless fighters... (starting with " << fighterList.size() << " fighters)" << std::endl;
     auto startingTime = std::chrono::steady_clock::now();
@@ -62,7 +62,7 @@ void Graph::cutUselessFighters(bool verbose)
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
     if (verbose)
         std::cout << "Finished cutting useless fighters in " << tt.count() << " sec! (" << fighterList.size() << " remainings)\n"
-                  << std::endl;
+        << std::endl;
 }
 
 const std::vector<FighterVertex> &Graph::getFireNeightborhood(int index) const
@@ -141,7 +141,7 @@ void Graph::generateAdjacency()
     {
         std::vector<FireVertex> fires = figther.getFireCovered();
         int figtherIndex = figther.getIndex();
-        for (FireVertex fire : fires)
+        for (const FireVertex & fire : fires)
         {
             int fireIndex = fire.getIndex();
             adjacencyMatrix[figtherIndex][fireIndex] = 1;
