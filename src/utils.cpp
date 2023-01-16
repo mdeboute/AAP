@@ -194,7 +194,7 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
             float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
             float intercept = y_r - slope * x_r;
-            Position & source = fireCenters[f];
+            Position &source = fireCenters[f];
             direction dir;
             if (degrees > 90 && degrees <= 270)
                 dir = LEFT;
@@ -412,7 +412,7 @@ int get_nb_angles(const std::vector<std::vector<Color>> &map)
         Position p1(cornerX, 0);
         Position p2(0, cornerY);
 
-        // by al kashi
+        // by Al-Kashi
         double a = p1.dist(p2);
         double b = p1.dist(p);
         double c = p2.dist(p);
