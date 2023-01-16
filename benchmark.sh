@@ -43,7 +43,10 @@ echo "Experimental Campaign:"
 echo "Data directory: $1"
 echo "Output directory: log/$algo_dir"
 echo "Algorithm: $2"
-echo "Time limit: $time_limit"
+# if the algorithm is mip, print the time limit
+if [ $2 == "--mip" ]; then
+    echo "Time limit: $time_limit"
+fi
 echo
 
 # Compile the code to have the latest versions of the executables

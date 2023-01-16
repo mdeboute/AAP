@@ -71,96 +71,74 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
     return bestSolution;
 }
 
-// void next(std::vector<bool> &partition)
-// {
-//     int listSize = partition.size();
-//     for (int i = 1; i < listSize; ++i)
-//     {
-//         if (partition[listSize - 1 - i] == 1 && partition[listSize - i] == 0)
-//         {
-//             partition[listSize - 1 - i] = 0;
-//             partition[listSize - i] = 1;
-//             int tmp = 0;
-//             for (int j = listSize - i + 1; j < listSize; ++j)
-//             {
-//                 if (partition[j] == 1)
-//                 {
-//                     tmp++;
-//                     partition[j] = 0;
-//                     partition[listSize - i + tmp] = 1;
-//                 }
-//             }
-//             break;
-//         }
-//     }
-// }
+void generate_partitions(int n, int k, int i, int nb_selected, std::vector<bool> &partition, std::vector<std::vector<bool>> &partitions)
+{
+    if (i + k - nb_selected > n)
+        return;
+    if (nb_selected == k || i == n)
+    {
+        std::vector<bool> complete_partition = partition;
+        partitions.push_back(complete_partition);
+        return;
+    }
+    partition.push_back(1);
+    generate_partitions(n, k, i + 1, nb_selected + 1, partition, partitions);
+    partition.pop_back();
+    partition.push_back(0);
+    generate_partitions(n, k, i + 1, nb_selected, partition, partitions);
+    partition.pop_back();
+    return;
+}
 
-// std::vector<std::vector<bool>> generate_partitions(int n, int k)
-// {
-//     std::vector<std::vector<bool>> partitions;
-//     std::vector<bool> partition(n, 0);
-//     for (int i = 0; i < k; ++i)
-//     {
-//         partition[i] = 1;
-//     }
-//     partitions.push_back(partition);
-//     double np = std::tgamma(n + 1) / (tgamma(k + 1) * tgamma(n - k + 1));
-//     for (int i = 0; i < np; ++i)
-//     {
-//         next(partition);
-//         partitions.push_back(partition);
-//     }
-//     return partitions;
-// }
+std::vector<FighterVertex> better_bruteforce_solve(const Graph &graph)
+{
+    std::vector<FighterVertex> fighters = graph.getFigtherVertexList();
+    std::vector<FireVertex> fires = graph.getFireVertexList();
 
-// std::vector<FighterVertex> better_bruteforce_solve(const Graph &graph)
-// {
-//     std::vector<FighterVertex> fighters = graph.getFigtherVertexList();
-//     std::vector<FireVertex> fires = graph.getFireVertexList();
+    auto startingTime = std::chrono::steady_clock::now();
 
-//     auto startingTime = std::chrono::steady_clock::now();
+    int n = fighters.size();
 
-//     int n = fighters.size();
+    std::cout << "Number of potential fighters: " << n << std::endl;
 
-//     std::cout << "Number of potential fighters: " << n << std::endl;
+    int upperBound = n;
+    int lowerBound = compute_lower_bound(fighters, fires);
 
-//     int upperBound = n;
-//     int lowerBound = compute_lower_bound(fighters, fires);
+    std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
+              { return a.getNbFireCovered() > b.getNbFireCovered(); });
 
-//     std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
-//               { return a.getNbFireCovered() > b.getNbFireCovered(); });
+    std::vector<FighterVertex> bestSolution;
+    int solFound = 0;
 
-//     std::vector<FighterVertex> bestSolution;
-//     int solFound = 0;
+    while (solFound == 0)
+    {
+        std::vector<std::vector<bool>> partitions;
+        std::vector<bool> partition;
+        generate_partitions(n, lowerBound, 0, 0, partition, partitions);
+        // std::cout << "Bound at " << lowerBound << " with " << partitions.size() << " partitions" << std::endl;
 
-//     while (solFound == 0)
-//     {
-//         // std::cout << "Bound at " << lowerBound << std::endl;
-//         std::vector<std::vector<bool>> partitions = generate_partitions(n, lowerBound);
+        for (std::vector<bool> partition : partitions)
+        {
+            std::vector<FighterVertex> potentialSol;
+            for (int i = 0; i < partition.size(); ++i)
+            {
+                if (partition[i] == 1)
+                {
+                    potentialSol.push_back(fighters[i]);
+                }
+            }
+            if (check_feasibility(potentialSol, fires))
+            {
+                std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
+                std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << potentialSol.size() << std::endl;
+                std ::cout << std::endl;
+                return potentialSol;
+            }
+        }
 
-//         for (std::vector<bool> partition : partitions)
-//         {
-//             std::vector<FighterVertex> potentialSol;
-//             for (int i = 0; i < partition.size(); ++i)
-//             {
-//                 if (partition[i] == 1)
-//                 {
-//                     potentialSol.push_back(fighters[i]);
-//                 }
-//             }
-//             if (check_feasibility(potentialSol, fires))
-//             {
-//                 std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
-//                 std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << potentialSol.size() << std::endl;
-//                 std ::cout << std::endl;
-//                 return potentialSol;
-//             }
-//         }
-
-//         lowerBound++;
-//     }
-//     std::cout << "No solution found!" << std::endl;
-//     std::cout << std::endl;
-//     return std::vector<FighterVertex>();
-// }
-// TODO: fix that
+        lowerBound++;
+    }
+    std::cout << "No solution found!" << std::endl;
+    std::cout << std::endl;
+    return std::vector<FighterVertex>();
+}
