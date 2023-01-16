@@ -1,4 +1,5 @@
 #include "greedy.hpp"
+
 #include <chrono>
 
 std::vector<FighterVertex> greedy_solve(const Graph &graph, bool verbose)

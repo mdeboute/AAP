@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+
 #include "mip_formulation.hpp"
 
 const std::vector<FighterVertex> mip_solve(

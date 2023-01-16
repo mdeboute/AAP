@@ -2,6 +2,7 @@
 #define BRUTE_FORCE_HPP
 
 #include <vector>
+
 #include "Graph/Graph.hpp"
 
 int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);

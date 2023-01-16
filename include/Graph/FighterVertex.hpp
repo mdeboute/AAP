@@ -2,6 +2,7 @@
 #define FIGHTERVERTEX
 
 #include "FireVertex.hpp"
+
 #include <vector>
 
 class FighterVertex : public Vertex
@@ -21,7 +22,6 @@ public:
     bool betterThan(FighterVertex f) const;
     int compareFighters(FighterVertex f) const;
     bool stopFire(FireVertex f) const;
-    int getFireCapacity() const;
     int getNbFireCovered() const;
     void print(int verbose = 0);
 

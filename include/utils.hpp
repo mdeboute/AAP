@@ -2,8 +2,10 @@
 #define UTILS_HPP
 
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <vector>
+
 #include "file_io.hpp"
 #include "Graph/FighterVertex.hpp"
 #include "Graph/FireVertex.hpp"
