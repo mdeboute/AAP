@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
         cout << endl;
         Graph graph = calculate_graph_data(map, config, true, true, true);
-        vector<FighterVertex> bestTeam = bruteforce_solve(graph);
+        vector<FighterVertex> bestTeam = better_bruteforce_solve(graph);
         display_solution(bestTeam);
         const string result_file = get_result_file(data_dir);
         write_solution(result_file, map, config, bestTeam);
