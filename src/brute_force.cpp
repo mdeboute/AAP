@@ -12,7 +12,7 @@ int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std
     int max = 0;
     for (FighterVertex fighter : fighterList)
     {
-        int capacity = fighter.getFireCapacity();
+        int capacity = fighter.getNbFireCovered();
         if (capacity > max)
         {
             max = capacity;
@@ -37,7 +37,7 @@ std::vector<FighterVertex> bruteforce_solve(const Graph &graph)
 
     // sort the fighters list by the number of fires they can stop (we earn ~10% of the time)
     std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
-              { return a.getFireCapacity() > b.getFireCapacity(); });
+              { return a.getNbFireCovered() > b.getNbFireCovered(); });
 
     std::vector<FighterVertex> bestSolution;
     int bestSize = upperBound;
@@ -127,7 +127,7 @@ std::vector<FighterVertex> better_bruteforce_solve(const Graph &graph)
     int lowerBound = compute_lower_bound(fighters, fires);
 
     std::sort(fighters.begin(), fighters.end(), [](FighterVertex &a, FighterVertex &b)
-              { return a.getFireCapacity() > b.getFireCapacity(); });
+              { return a.getNbFireCovered() > b.getNbFireCovered(); });
 
     std::vector<FighterVertex> bestSolution;
     int solFound = 0;

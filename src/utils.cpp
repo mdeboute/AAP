@@ -385,7 +385,7 @@ bool check_feasibility(const std::vector<FighterVertex> &fighterList, const std:
 
 // for all fire starts, we look at the furthest corner and check how many lines would be needed
 // to ensure that it is fully considered.
-int get_nb_angles(const std::vector<std::vector<Color>>& map)
+int get_nb_angles(const std::vector<std::vector<Color>> &map)
 {
     std::vector<Position> fires;
     int width = map.size();
