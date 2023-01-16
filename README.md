@@ -27,3 +27,13 @@ In the build directory:
 ```
 
 You can add the flag `-h` or `--help` to get help on the command line arguments.
+
+## How to run the benchmark script?
+
+In the root directory:
+
+```shell
+./benchmark.sh
+```
+
+You can add the flag `-h` or `--help` to get help on the command line arguments.
