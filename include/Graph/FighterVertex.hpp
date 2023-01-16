@@ -21,7 +21,6 @@ public:
     bool betterThan(FighterVertex f) const;
     int compareFighters(FighterVertex f) const;
     bool stopFire(FireVertex f) const;
-    int getFireCapacity() const;
     int getNbFireCovered() const;
     void print(int verbose = 0);
 
@@ -31,7 +30,7 @@ public:
 inline std::ostream &operator<<(std::ostream &os, FighterVertex v)
 {
     os << "Fighter of id: " << v.getID() << " at position: " << v.getPos() << " with " << v.getFireCovered().size() << " fire lines: " << std::endl;
-    for (FireVertex f : v.getFireCovered())
+    for (const FireVertex &f : v.getFireCovered())
     {
         os << " - " << f << std::endl;
     }

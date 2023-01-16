@@ -57,6 +57,32 @@ Solution pick_and_drop(const Solution &solution)
     return new_solution;
 }
 
+Team remove_useless_fire_fighters(const Team &team, const Data &data)
+{
+    // try to remove useless fire fighters by decreasing the number of fire fighters
+    // by selecting the fighter who covers the least number of fires
+    // and checking if the solution is still feasible
+
+    // sort the list by the fighter who covers the least number of fires
+    Team sorted_team = team;
+    std::sort(sorted_team.begin(), sorted_team.end(), [](const FighterVertex &f1, const FighterVertex &f2)
+              { return f1.getNbFireCovered() < f2.getNbFireCovered(); });
+
+    // try to remove the maximum number of fire fighters and check if the solution is still feasible
+    // do it recursively
+    Team new_team = sorted_team;
+    for (int i = 0; i < sorted_team.size(); i++)
+    {
+        new_team.erase(new_team.begin() + i);
+        if (check_feasibility(new_team, data.getFireVertexList()))
+        {
+            return remove_useless_fire_fighters(new_team, data);
+        }
+        new_team = sorted_team;
+    }
+    return sorted_team;
+}
+
 Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final_temparature, float cooling_rate)
 {
     auto startingTime = std::chrono::steady_clock::now();
@@ -83,12 +109,8 @@ Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final
         current_temperature *= cooling_rate;
         iter = 0;
     }
-    if (check_feasibility(best_team, data.getFireVertexList()) == false)
-    {
-        std::cout << "No feasible solution found!" << std::endl;
-        return Team();
-    }
     best_team = decode_solution(best_sol, data);
+    best_team = remove_useless_fire_fighters(best_team, data);
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;
     std::cout << "Result: runtime = " << tt.count() << " sec; objective value = " << best_team.size() << std::endl;
     std::cout << std::endl;

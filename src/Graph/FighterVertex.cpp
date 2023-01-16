@@ -83,11 +83,6 @@ bool FighterVertex::stopFire(FireVertex f) const
     return false;
 }
 
-int FighterVertex::getFireCapacity() const
-{
-    return fireCovered.size();
-}
-
 int FighterVertex::getNbFireCovered() const
 {
     return fireCovered.size();
