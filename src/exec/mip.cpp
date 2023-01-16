@@ -68,7 +68,8 @@ int main(int argc, char *argv[])
     vector<vector<Color>> map = parse_map(map_file);
 
     display_data(config, map);
-
+    cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
+    cout << endl;
     Graph graph = calculate_graph_data(map, config, false, false, false);
 
     vector<FighterVertex> bestTeam = mip_solve(graph, true, time_limit);

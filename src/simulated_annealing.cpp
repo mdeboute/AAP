@@ -1,5 +1,7 @@
 #include "simulated_annealing.hpp"
 #include "greedy.hpp"
+
+#include <climits>
 #include <numeric>
 #include <chrono>
 
@@ -43,19 +45,7 @@ int get_cost(const Solution &solution, const Data &data)
     {
         return team.size();
     }
-    return 10000;
-}
-
-Solution single_swap(const Solution &solution)
-{
-    // take a two random indices and swap their values
-    Solution new_solution = solution;
-    int index_1 = rand() % solution.size();
-    int index_2 = rand() % solution.size();
-    int temp = new_solution[index_1];
-    new_solution[index_1] = new_solution[index_2];
-    new_solution[index_2] = temp;
-    return new_solution;
+    return INT_MAX;
 }
 
 Solution pick_and_drop(const Solution &solution)
@@ -65,15 +55,6 @@ Solution pick_and_drop(const Solution &solution)
     int index = rand() % solution.size();
     new_solution[index] = 1 - new_solution[index];
     return new_solution;
-}
-
-Solution random_movement(const Solution &solution)
-{
-    if (rand() % 2 == 0)
-    {
-        return single_swap(solution);
-    }
-    return pick_and_drop(solution);
 }
 
 Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final_temparature, float cooling_rate)
@@ -101,6 +82,11 @@ Team sa_solve(const Data &data, int max_iter, int initial_temperature, int final
         }
         current_temperature *= cooling_rate;
         iter = 0;
+    }
+    if (check_feasibility(best_team, data.getFireVertexList()) == false)
+    {
+        std::cout << "No feasible solution found!" << std::endl;
+        return Team();
     }
     best_team = decode_solution(best_sol, data);
     std::chrono::duration<double> tt = std::chrono::steady_clock::now() - startingTime;

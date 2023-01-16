@@ -16,12 +16,11 @@ const string CONFIG_FILE = "/config.txt";
 
 void display_usage()
 {
-    cout << "Usage: ./test <instance_directory> <algorithm> (<time_limit>)" << endl;
+    cout << "Usage: ./test <instance_directory> <algorithm>" << endl;
     cout << "Where <algorithm> is one of:" << endl;
     cout << "-b or --bruteforce" << endl;
     cout << "-g or --greedy" << endl;
     cout << "-sa or --simulated_annealing" << endl;
-    cout << "And <time_limit> is set to 600 seconds by default" << endl;
 }
 
 void display_solution(const vector<FighterVertex> solution)
@@ -75,6 +74,8 @@ int main(int argc, char *argv[])
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
         display_data(config, map);
+        cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
+        cout << endl;
         Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = better_bruteforce_solve(graph);
         display_solution(bestTeam);
@@ -86,6 +87,8 @@ int main(int argc, char *argv[])
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
         display_data(config, map);
+        cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
+        cout << endl;
         Graph graph = calculate_graph_data(map, config, true, true, true);
         vector<FighterVertex> bestTeam = greedy_solve(graph, true);
         display_solution(bestTeam);
@@ -97,6 +100,8 @@ int main(int argc, char *argv[])
         vector<float> config = parse_config(config_file);
         vector<vector<Color>> map = parse_map(map_file);
         display_data(config, map);
+        cout << "Necessary number of angles: " << get_nb_angles(map) << endl;
+        cout << endl;
         Graph graph = calculate_graph_data(map, config, true, true, true);
         int nb_iterations = graph.getFigtherVertexList().size() * 10;
         float initial_temperature = get_initial_temperature(graph, 0.8, 100, 1000);
@@ -116,4 +121,4 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-// TODO: add a time limit to the algorithms (already done for the mip exec)
+// TODO: add a time limit to the algorithms? (already done for the mip exec)

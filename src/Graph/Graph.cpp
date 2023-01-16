@@ -41,7 +41,8 @@ void Graph::cutUselessFighters(bool verbose)
             {
                 FighterVertex usefulFighter = usefullFighters[i];
                 int bestFighterId = usefulFighter.compareFighters(fighter);
-                if (bestFighterId == usefulFighter.getID()) {
+                if (bestFighterId == usefulFighter.getID())
+                {
                     usefullness = false;
                     break;
                 }
