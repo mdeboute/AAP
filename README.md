@@ -1,8 +1,6 @@
 # Optimal Firefighters Allocation
 
-## Project report (read only)
-
-<https://www.overleaf.com/read/prktmpfwdwsf>
+## [French report](./report.pdf)
 
 ## How to compile executable files?
 
