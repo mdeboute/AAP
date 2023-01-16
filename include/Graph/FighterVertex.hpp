@@ -19,7 +19,6 @@ public:
     void addFire(FireVertex f);
 
     FireVertex getFireAtIndex(int index) const;
-    bool betterThan(FighterVertex f) const;
     int compareFighters(FighterVertex f) const;
     bool stopFire(FireVertex f) const;
     int getNbFireCovered() const;

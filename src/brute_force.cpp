@@ -115,7 +115,6 @@ std::vector<FighterVertex> better_bruteforce_solve(const Graph &graph)
         std::vector<std::vector<bool>> partitions;
         std::vector<bool> partition;
         generate_partitions(n, lowerBound, 0, 0, partition, partitions);
-        // std::cout << "Bound at " << lowerBound << " with " << partitions.size() << " partitions" << std::endl;
 
         for (std::vector<bool> partition : partitions)
         {

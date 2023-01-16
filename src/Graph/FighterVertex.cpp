@@ -49,28 +49,6 @@ int FighterVertex::compareFighters(FighterVertex f) const
     return bestFighter;
 }
 
-bool FighterVertex::betterThan(FighterVertex f) const
-{
-    std::vector<FireVertex> fireLines = f.getFireCovered();
-    for (const FireVertex &fire : fireLines)
-    {
-        bool find = false;
-        for (FireVertex myFire : fireCovered)
-        {
-            if (fire == myFire)
-            {
-                find = true;
-                break;
-            }
-        }
-        if (!find)
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool FighterVertex::stopFire(FireVertex f) const
 {
     for (const FireVertex &fire : fireCovered)

@@ -1,5 +1,4 @@
 #include "unit_test.hpp"
-#include "Graph/Graph.hpp"
 
 #include <vector>
 #include <string>
@@ -117,7 +116,7 @@ int main(int argc, char *argv[])
     {
         printf("----- Graph: fires -----\n");
         std::vector<FireVertex> fires = g.getFireVertexList();
-        for (FireVertex f : fires)
+        for (FireVertex & f : fires)
         {
             std::cout << f << std::endl;
         }
@@ -126,7 +125,7 @@ int main(int argc, char *argv[])
     {
         printf("----- Graph: fighters -----\n");
         std::vector<FighterVertex> fighters = g.getFigtherVertexList();
-        for (FighterVertex f : fighters)
+        for (FighterVertex & f : fighters)
         {
             std::cout << f << std::endl;
         }

@@ -11,7 +11,7 @@ using Solution = std::vector<int>;
 using Neighborhood = std::vector<Solution>;
 using Data = Graph;
 
-Team decode_solution(const Solution &solution);
+Team decode_solution(const Solution& solution, const Data& data);
 Solution decode_team(const Team &team, const Data &data);
 int get_cost(const Solution &solution, const Data &data);
 Solution pick_and_drop(const Solution &solution);

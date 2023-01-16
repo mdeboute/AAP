@@ -8,7 +8,6 @@
 int compute_lower_bound(const std::vector<FighterVertex> &fighterList, const std::vector<FireVertex> &fireList);
 std::vector<FighterVertex> bruteforce_solve(const Graph &graph);
 std::vector<FighterVertex> better_bruteforce_solve(const Graph &graph);
-std::vector<std::vector<bool>> generate_partitions(int n, int k);
-void next(std::vector<bool> &partition);
+void generate_partitions(int n, int k, int i, int nb_selected, std::vector<bool>& partition, std::vector<std::vector<bool>>& partitions);
 
 #endif

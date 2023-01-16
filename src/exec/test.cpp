@@ -120,5 +120,3 @@ int main(int argc, char *argv[])
     }
     return 0;
 }
-
-// TODO: add a time limit to the algorithms? (already done for the mip exec)

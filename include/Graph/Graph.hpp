@@ -33,7 +33,6 @@ public:
           std::vector<FighterVertex> fighterList, bool isReduced, bool addAdjacency, bool verbose);
 
     int isAdjacent(int fighterIndex, int fireIndex) const;
-    int getNbFires() const;
 
     FireVertex getFireVertex(int index) const;
     const FighterVertex &getFigtherVertex(int index) const;

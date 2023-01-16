@@ -5,7 +5,6 @@
 
 std::vector<Position> circle_to_positions(Position center, float radius, int width, int height)
 {
-    // possibly switch to float center coordinates and cast (int) to get pixels
     int x_bound_a = (int)floor(center.getX() + 0.5 - radius);
     int x_bound_b = (int)ceil(center.getX() + 0.5 + radius);
     int y_bound_a = (int)floor(center.getY() + 0.5 - radius);
@@ -163,7 +162,7 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
     {
         for (size_t x = 0; x < width; x++)
         {
-            if (map[y][x] == RED) //
+            if (map[y][x] == RED)
             {
                 Position fire(x, y);
                 fireCenters.push_back(fire);
@@ -195,7 +194,7 @@ const std::vector<std::vector<Color>> &draw_details(std::vector<std::vector<Colo
             float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
             float intercept = y_r - slope * x_r;
-            Position source = fireCenters[f]; // possible copy of data, can be improved later
+            Position & source = fireCenters[f];
             direction dir;
             if (degrees > 90 && degrees <= 270)
                 dir = LEFT;
@@ -300,7 +299,7 @@ Graph calculate_graph_data(std::vector<std::vector<Color>> &map, const std::vect
             float y_r = fireCenters[f].getY() + 0.5 + furnaceRadius * sin(degrees * (M_PI / 180.0));
             float slope = (y_r - (fireCenters[f].getY() + 0.5)) / (x_r - (fireCenters[f].getX() + 0.5));
             float intercept = y_r - slope * x_r;
-            Position source = fireCenters[f]; // Possible copy of data. Can be improved later.
+            Position source = fireCenters[f];
             direction dir;
             if (degrees > 90 && degrees <= 270)
                 dir = LEFT;
