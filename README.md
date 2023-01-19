@@ -14,7 +14,7 @@ make <target>
 `<target>` can be one of the following:
 
 - `test.out`: the test suite
-- `mip.out`: the MIP solver
+- `mip.out`: the MIP solver (make sure you have [Gurobi](https://www.gurobi.com) installed in your machine with a valid licence) 
 - `unit_test.out`: the unit test suite
 - `all`: all of the above
 
