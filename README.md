@@ -1,6 +1,6 @@
 # Optimal Firefighters Allocation
 
-## [French report](./report.pdf)
+## [French report](./report.pdf) & [French presentation](./slides.pdf)
 
 ## How to compile executable files?
 
